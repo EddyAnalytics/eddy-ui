@@ -5,13 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>eddy-ui</title>
+    <title>Eddy</title>
+
+    <!--Fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i" rel="stylesheet">
+
+    <!--Page loading animation-->
+    <link href="/css/page-loader.css" rel="stylesheet">
   </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but eddy-ui doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+    <body>
+      <div id="app">
+        <div class="page__loader">
+          <div class="double-bounce1"></div>
+          <div class="double-bounce2"></div>
+        </div>
+        <noscript>
+          <center>This browser does not have JavaScript enabled.</center>
+        </noscript>
+      </div>
+    </body>
 </html>

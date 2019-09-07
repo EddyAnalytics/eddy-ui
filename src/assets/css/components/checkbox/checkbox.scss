@@ -1,0 +1,118 @@
+$cb-dim: 1.6rem;
+
+.checkbox {
+    display: block;
+    margin: 0 $indent-5 $indent-1 0;
+    vertical-align: top;
+
+    .checkbox__cb {
+        position: absolute;
+
+        @include opacity(0);
+
+        + .checkbox__label {
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+            padding-left: 2.6rem;
+            line-height: $line-height-s;
+
+            @include no-user-select();
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            &:before,
+            &:after {
+                content: "";
+                position: absolute;
+                display: block;
+
+                @include transition(0.1s);
+            }
+
+            &:before {
+                left: 0.1rem;
+                top: 0.2rem;
+                width: $cb-dim;
+                height: $cb-dim;
+                border: 2px solid $color-border-dark;
+                background: transparent;
+            }
+
+            &:after {
+                left: 0.3rem;
+                top: 0.6rem;
+                width: 1.2rem;
+                height: 0.6rem;
+                border-left: 2px solid $color-default;
+                border-bottom: 2px solid $color-default;
+
+                @include rotate(-50deg);
+            }
+
+            .checkbox__img,
+            img {
+                float: right;
+                display: inline-block;
+                vertical-align: top;
+                margin: 0 0 0 $indent-1;
+                height: 2rem;
+
+                @include image-crisp();
+            }
+
+            .checkbox__img--left {
+                @extend .checkbox__img;
+
+                float: none;
+                margin: 0 $indent-1 0 0;
+            }
+        }
+
+        &:checked {
+            + .checkbox__label {
+                &:before {
+                    background: $color-theme;
+                    border-color: $color-theme;
+                }
+            }
+        }
+    }
+
+    &.is-inline {
+        display: inline-block;
+    }
+
+    &.is-disabled {
+        .checkbox__cb {
+            + .checkbox__label {
+                color: $color-disabled;
+                cursor: not-allowed;
+
+                img {
+                    display: none;
+                }
+
+                &:before {
+                    border-color: $color-disabled;
+                }
+
+                &:after {
+                    border-left-color: 2px solid $color-disabled;
+                    border-bottom-color: 2px solid $color-disabled;
+                }
+            }
+
+            &:checked {
+                + .checkbox__label {
+                    &:before {
+                        background: $color-disabled;
+                        border-color: $color-disabled;
+                    }
+                }
+            }
+        }
+    }
+}

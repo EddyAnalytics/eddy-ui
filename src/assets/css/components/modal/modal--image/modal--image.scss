@@ -1,0 +1,21 @@
+.modal--image {
+    @extend .modal;
+
+    .v--modal-box {
+        width: 100% !important;
+        margin: $indent-2 auto !important;
+        padding: $indent-4;
+        max-width: max-content;
+    }
+
+    .modal__close {
+        top: $indent-2;
+        right: $indent-2;
+    }
+
+    @media (max-width: $screen-xs) {
+        .v--modal-box {
+            margin: $indent-2 auto;
+        }
+    }
+}

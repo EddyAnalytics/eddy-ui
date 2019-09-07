@@ -1,0 +1,13 @@
+.tag--hover {
+    @extend .tag;
+
+    &:not(:hover) {
+        //Override inline styling
+        background: $color-grey-light !important;
+        color: $color-text !important;
+
+        .tag__icon {
+            color: $color-text !important;
+        }
+    }
+}

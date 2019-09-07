@@ -1,0 +1,26 @@
+.dropdown--large {
+    @extend .dropdown;
+
+    .dropdown-toggle {
+        .form-control,
+        .form-control:focus {
+            @include input-placeholder() {
+                font-size: $font-size-default;
+            }
+        }
+    }
+
+    .dropdown-menu {
+        li {
+            a {
+                font-size: $font-size-default;
+            }
+        }
+    }
+
+    &.single {
+        .selected-tag {
+            font-size: $font-size-default;
+        }
+    }
+}

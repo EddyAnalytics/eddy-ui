@@ -1,0 +1,70 @@
+.footer {
+    padding: $indent-3 $indent-base;
+    background: $color-theme-dark;
+    color: $color-default;
+
+    h2 {
+        margin: 0 0 2.2rem;
+        padding-top: 1rem;
+        line-height: 2.2rem;
+        text-transform: uppercase;
+        font-size: 1.6rem;
+        font-weight: 500;
+        color: $color-theme-light;
+
+        &:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4rem;
+            height: 0.2rem;
+            background: $color-theme-light;
+        }
+    }
+
+    .footer__logo
+    .footer__text {
+        padding-left: $indent-4;
+        margin-bottom: $indent-2;
+    }
+
+    .footer__text {
+        font-weight: $font-weight-light;
+
+        a {
+            display: block;
+            color: $color-default;
+
+            &:hover {
+                color: $color-default;
+                text-decoration: underline;
+                cursor: pointer;
+            }
+        }
+    }
+
+    @media (max-width: $screen-sm) {
+        .footer__nav {
+            text-align: center;
+
+            > li {
+                &:first-child {
+                    > a {
+                        &:before {
+                            right: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.add-footer-border {
+    + .footer {
+        &:before {
+            border-top: 0.2rem solid $color-default;
+        }
+    }
+}

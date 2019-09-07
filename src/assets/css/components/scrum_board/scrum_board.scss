@@ -1,0 +1,43 @@
+$column-min-width: $multiplier * 30;
+
+.scrum_board {
+    margin: $indent-6 $indent-5 0;
+    padding-bottom: $indent-2;
+    overflow-x: auto;
+
+    @include flexbox();
+
+    .scrum_board__column {
+        width: 0; //Make sure columns are always equal width
+        min-width: $column-min-width;
+        margin-left: $indent-1;
+        margin-right: $indent-1;
+
+        @include flex(1 1 auto);
+
+        .spinner,
+        .spinner--small {
+            margin: 0 auto;
+        }
+    }
+
+    .scrum_board__column__header {
+        background: $color-theme-light-50-o;
+        font-weight: bold;
+        padding: $indent-1 $indent-2;
+    }
+
+    .scrum_board__column__issues__extra {
+        background: $color-default;
+        padding: $indent-1 $indent-2;
+        text-align: center;
+        color: $color-grey;
+    }
+    .scrum_board__column__issues__extra--button {
+        width: 100%;
+    }
+
+    @media (max-width: $screen-xs) {
+        margin: $indent-1 $indent-1 0 0;
+    }
+}

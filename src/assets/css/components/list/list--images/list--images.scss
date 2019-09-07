@@ -1,0 +1,32 @@
+.list--images {
+    @extend .list;
+
+    padding-left: 0;
+
+    li {
+        list-style: none;
+
+        > span {
+            display: inline-block;
+
+            > i {
+                float: left;
+                margin: 0 $indent-xs 0 0;
+                font-size: $font-size-icon-m;
+            }
+        }
+    }
+
+    .list__button {
+        float: right;
+        margin: 0.1rem 0 0 $indent-1;
+
+        @include transition();
+
+        &:hover,
+        &:active {
+            cursor: pointer;
+            color: $color-alert;
+        }
+    }
+}

@@ -1,0 +1,11 @@
+.table--drag {
+    @extend .table;
+
+    tr {
+        &:hover {
+            td {
+                cursor: move;
+            }
+        }
+    }
+}

@@ -1,0 +1,243 @@
+$multiselect-height: 5 * $multiplier;
+
+.multiselect {
+    position: relative;
+    display: inline-block;
+    width: auto;
+    max-width: 100%;
+    min-width: $multiplier * 25;
+    font-weight: $font-weight-regular;
+    text-align: left;
+    overflow: visible;
+
+    .multiselect__tags {
+        height: auto;
+        min-height: $multiselect-height;
+        padding: $indent-1 $multiselect-height 0 $indent-3;
+        font-size: $font-size-m;
+        background: transparent;
+        border-radius: 0;
+        border: 1px solid $color-border-dark;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .multiselect__placeholder {
+        position: relative;
+        top: -0.1rem;
+        margin: 0;
+        padding-top: 0;
+        color: $color-text;
+        text-transform: uppercase;
+    }
+
+    .multiselect__tags-wrap {
+        display: inline-block;
+        margin-bottom: 0;
+    }
+
+    .multiselect__tag {
+        display: inline-block;
+        margin: 0 $indent-xs $indent-xs 0;
+        padding: 0 $indent-3 0 $indent-2;
+        line-height: $line-height-m;
+        vertical-align: top;
+        border-radius: 0;
+
+        .multiselect__tag-icon {
+            float: right;
+
+            @include transition();
+
+            &:after {
+                line-height: $line-height-m;
+                color: $color-default;
+                text-shadow: 0 0 2px $color-text;
+            }
+
+            &:hover,
+            &:active {
+                background: transparent;
+
+                @include opacity(0.7);
+
+                &:after {
+                    color: $color-default;
+                }
+            }
+        }
+    }
+
+    .multiselect__single {
+        display: block;
+        margin: 0;
+        padding: 0;
+    }
+
+    .multiselect__input,
+    .multiselect__single {
+        top: -0.1rem;
+        height: $line-height-default !important;
+        margin: 0;
+        padding: 0;
+        line-height: $line-height-m;
+        background: transparent;
+        border: none !important;
+        text-transform: none;
+
+        .capitalize {
+            text-transform: capitalize !important;
+        }
+
+        &::-webkit-input-placeholder {
+            color: $color-text-light;
+            font-weight: $font-weight-regular;
+        }
+
+        &::-moz-placeholder {
+            color: $color-text-light;
+            font-weight: $font-weight-regular;
+        }
+
+        &:-ms-input-placeholder {
+            color: $color-text-light;
+            font-weight: $font-weight-regular;
+        }
+
+        &:-moz-placeholder {
+            color: $color-text-light;
+            font-weight: $font-weight-regular;
+        }
+    }
+
+    .multiselect__select {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: $multiselect-height;
+        height: $multiselect-height;
+        padding: 0;
+
+        &:before {
+            content: $mdi-arrow-down;
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: inline-block;
+            width: $multiselect-height;
+            height: $multiselect-height;
+            line-height: 40px; //Needs to be in px for IE...
+            margin: auto;
+            color: $color-grey-dark;
+            font-family: $font-icon;
+            font-size: $font-size-icon-m;
+            text-align: center;
+            pointer-events: none;
+            border: none;
+            visibility: visible;
+        }
+    }
+
+    .multiselect__content-wrapper {
+        left: auto;
+        right: 0;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        z-index: 99;
+
+        @include drop-shadow-color(0, 2px, 6px, 0, $color-grey-dark);
+
+        .multiselect__element {
+            margin: 0;
+            padding: 0;
+            line-height: $line-height-default;
+            background: transparent;
+            text-align: left;
+
+            &.no-options {
+                padding: $indent-1 $input-height $indent-1 $indent-3;
+                color: $color-grey;
+                white-space: normal;
+                font-size: $font-size-m;
+            }
+
+            .multiselect__option {
+                display: block;
+                padding: $indent-1 $input-height $indent-1 $indent-3;
+                line-height: $line-height-m;
+                background: $color-default;
+                font-size: $font-size-m;
+                white-space: normal;
+
+                @include transition();
+
+                &:hover,
+                &:active {
+                    background: $color-grey-light;
+                    color: $color-text;
+                    text-decoration: none;
+                    cursor: pointer;
+
+                    @include opacity(1);
+                }
+
+                &:after {
+                    content: "\f12c";
+                    visibility: hidden;
+                    position: absolute;
+                    top: 0;
+                    right: $indent-1;
+                    display: inline-block;
+                    width: $input-height;
+                    height: $indent-5;
+                    line-height: 40px; //Must be px for IE...
+                    margin: auto;
+                    color: $color-grey-dark;
+                    font-family: $font-icon;
+                    font-size: $font-size-icon-s;
+                    text-align: center;
+                    pointer-events: none;
+                    z-index: 1;
+                }
+            }
+
+            .multiselect__option--highlight {
+                background: $color-grey-light;
+                color: $color-text;
+
+                &:hover,
+                &:active {
+                    text-decoration: none;
+                }
+            }
+
+            .multiselect__option--selected {
+                position: relative;
+                padding-right: $input-height;
+                background: $color-default;
+                color: $color-text;
+
+                &:after {
+                    visibility: visible;
+                }
+
+                &.multiselect__option--highlight {
+                    &:after {
+                        background: transparent;
+                    }
+                }
+            }
+        }
+    }
+
+    &--disabled {
+        cursor: not-allowed;
+
+        @include opacity($disabled-opacity);
+    }
+}

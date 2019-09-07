@@ -1,0 +1,137 @@
+.issues {
+    padding: $indent-2 0 $indent-10;
+
+    .button,
+    .multiselect,
+    .search {
+        margin: 0 0 $indent-2;
+    }
+
+    a {
+        span {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1rem;
+            vertical-align: middle;
+        }
+    }
+
+    .issues__actions {
+        .multiselect {
+            margin: 0 $indent-2 $indent-2 0;
+        }
+    }
+
+    .issues__topbar {
+        @include flexbox;
+
+        @media (min-width: $screen-sm) {
+            justify-content: space-between;
+            align-items: center;
+
+            .button--alt,
+            .button--margin {
+                margin-left: $indent-1;
+                margin-right: $indent-1;
+            }
+        }
+
+        @media (max-width: $screen-sm) {
+            @include flex-direction(column-reverse);
+        }
+    }
+
+    .table {
+        margin-bottom: $indent-2;
+    }
+
+    /* put some vertical space between the elements of the page, except for the topbar because the elements inside of it already have margin */
+    &.row > .col-12:not(.issues__topbar) {
+        margin-bottom: $indent-2;
+    }
+
+    .issues__links {
+        float: right;
+        display: inline-block;
+        line-height: $indent-5;
+        height: $indent-5;
+
+        a {
+            font-size: $font-size-icon-l;
+            text-align: center;
+            vertical-align: top;
+            color: $color-grey;
+
+            &.is-active {
+                color: $color-theme;
+            }
+
+            &:hover:not(.is-active) {
+                color: $color-theme-light;
+            }
+        }
+    }
+
+    .issues__status_text {
+        float: right;
+        display: inline-block;
+        padding: $indent-1 0;
+
+        i {
+            display: inline-block;
+            margin-right: $indent-1;
+            font-size: $font-size-icon-m;
+            color: $color-theme;
+            vertical-align: top;
+        }
+
+        &.saving {
+            margin: 0;
+            padding-left: $indent-5;
+
+            i {
+                display: none;
+            }
+
+            &:after {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: $indent-1;
+                display: inline-block;
+                width: $spinner-dim;
+                height: $spinner-dim;
+                margin: 0;
+                border: $spinner-border-dim solid $color-cta;
+                border-radius: 50%;
+                border-top: $spinner-border-dim solid $color-default;
+
+                @include spin();
+            }
+        }
+    }
+
+    @media (max-width: $screen-sm) {
+        .issues__status_text {
+            float: none;
+            margin-bottom: $indent-2;
+        }
+    }
+
+    @media (max-width: $screen-xs) {
+        padding: $indent-3 0;
+
+        .issues__actions {
+            .multiselect {
+                display: block;
+                margin: 0 0 $indent-2;
+            }
+        }
+
+        .button,
+        .multiselect,
+        .search {
+            display: block;
+        }
+    }
+}

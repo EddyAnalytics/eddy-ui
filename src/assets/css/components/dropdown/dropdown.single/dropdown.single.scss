@@ -1,0 +1,111 @@
+//https://sagalbot.github.io/vue-select/
+
+$dropdown-toggle-inner-height: 4.8rem;
+
+.dropdown.single {
+    @extend .dropdown;
+
+    vertical-align: top;
+    display: inline-block;
+    width: auto;
+    margin: $indent-2 0;
+
+    .dropdown-toggle {
+        min-width: $indent-10 * 2;
+        height: $dropdown-toggle-inner-height;
+        padding: 0;
+        font-family: $font-default;
+        font-size: $font-size-default;
+        font-weight: $font-weight-regular;
+        text-transform: uppercase;
+        text-decoration: none;
+        line-height: $dropdown-toggle-inner-height;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        border-radius: 0;
+        border: none;
+
+        .form-control {
+            display: block;
+            position: absolute;
+            height: $dropdown-toggle-inner-height;
+            font-size: $font-size-default;
+            color: $color-default;
+
+            @include input-placeholder() {
+                color: $color-default;
+            }
+        }
+
+        &:after {
+            height: $dropdown-toggle-inner-height;
+            color: $color-default;
+            font-size: $font-size-icon-m;
+            line-height: 48px;
+        }
+    }
+
+    .vs__selected-options {
+        .form-control,
+        .form-control:focus {
+            float: none;
+            width: 100%;
+        }
+    }
+
+    .selected-tag {
+        position: relative;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: $dropdown-toggle-inner-height;
+        line-height: $dropdown-toggle-inner-height;
+        font-size: $font-size-default;
+        margin: 0;
+        padding: 0 $input-height 0 $indent-3;
+        color: $color-default;
+        text-transform: uppercase;
+        border: none;
+        background: transparent;
+        pointer-events: none;
+    }
+
+    .dropdown-toggle {
+        background: $color-theme;
+        color: $color-default;
+    }
+
+    &.open {
+        .selected-tag {
+            color: $color-default;
+            text-transform: uppercase;
+        }
+    }
+
+    .dropdown-menu {
+        top: $dropdown-toggle-inner-height;
+        border-radius: 0;
+
+        > li {
+            > a {
+                background: $color-default;
+                font-size: $font-size-m;
+                white-space: normal;
+
+                &:hover,
+                &:active {
+                    background: $color-theme-light;
+                    color: $color-text;
+                    text-decoration: none;
+
+                    @include opacity(1);
+                }
+            }
+        }
+    }
+
+    @media (max-width: $screen-sm) {
+        width: 100%;
+    }
+}

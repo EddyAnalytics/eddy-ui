@@ -1,0 +1,43 @@
+.breadcrumb {
+    display: block;
+    margin: 0;
+    padding: $indent-2 0 0;
+    overflow: hidden;
+
+    li {
+        list-style: none;
+        float: left;
+
+        a {
+            display: inline-block;
+            position: relative;
+            margin-right: $indent-1;
+            padding-right: $indent-3 / 2;
+            color: $color-text;
+            font-size: $font-size-xs;
+
+            &:hover,
+            &:active {
+                color: $color-theme;
+                text-decoration: none;
+
+                &:after {
+                    color: $color-text;
+                }
+            }
+
+            &:after {
+                content: "/";
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+
+            &:last-child {
+                &:after {
+                    display: none;
+                }
+            }
+        }
+    }
+}

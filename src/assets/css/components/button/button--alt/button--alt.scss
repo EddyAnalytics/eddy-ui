@@ -1,0 +1,33 @@
+.button--alt {
+    @extend .button;
+
+    background: $color-grey-20-o;
+    color: $color-grey-dark;
+
+    &:hover,
+    &:focus {
+        background: $color-grey-40-o;
+        color: $color-grey-dark;
+    }
+
+    &:disabled,
+    &[disabled="disabled"],
+    &.is-disabled {
+        &:hover,
+        &:active {
+            background: $color-grey-20-o;
+            color: $color-grey-dark;
+        }
+    }
+
+    &:active {
+        background: $color-grey;
+    }
+
+    &.loading {
+        &:after {
+            border: $spinner-border-dim solid $color-grey-light;
+            border-top: $spinner-border-dim solid $color-grey-dark;
+        }
+    }
+}

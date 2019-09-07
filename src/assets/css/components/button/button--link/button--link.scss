@@ -1,0 +1,27 @@
+.button--link {
+    @extend .button;
+
+    background: transparent;
+    color: $color-grey;
+
+    @include no-shadow;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $color-cta;
+        background: transparent;
+
+        @include no-shadow;
+    }
+
+    &:disabled,
+    &[disabled="disabled"],
+    &.is-disabled {
+        &:hover,
+        &:active {
+            background: transparent;
+            color: $color-grey;
+        }
+    }
+}

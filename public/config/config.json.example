@@ -1,0 +1,16 @@
+{
+    "cookies": {
+        "enabled": false
+    },
+    "analytics": {
+        "enabled": false,
+        "id": "XXX"
+    },
+    "api": {
+        "url": "https://api-url.com/"
+    },
+    "errorTracking": {
+        "enabled": false,
+        "url": "XXX"
+    }
+}

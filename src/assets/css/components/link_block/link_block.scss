@@ -1,0 +1,15 @@
+.link_block {
+    margin: $indent-3 0;
+
+    a {
+        display: inline-block;
+        margin: 0 0 $indent-1;
+        color: $color-grey;
+
+        &:hover,
+        &:active {
+            color: $color-cta;
+            text-decoration: none;
+        }
+    }
+}

@@ -1,0 +1,220 @@
+*,
+:after,
+:before {
+    outline: none;
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+    font-size: 62.5%;
+}
+
+body {
+    position: relative;
+    min-width: 32rem;
+    width: 100%;
+    height: initial;
+    margin: 0;
+    padding: 0;
+    font-family: $font-default;
+    font-size: $font-size-default;
+    font-weight: $font-weight-regular;
+    line-height: $line-height-default;
+    background: $color-default;
+    color: $color-text;
+}
+
+div,
+section,
+article,
+aside,
+main,
+header,
+footer {
+    display: block; //Necessary for IE
+    position: relative;
+}
+
+img,
+video,
+iframe {
+    border: none; //Prevent IE form adding borders
+    max-width: 100%;
+
+    @include image-crisp;
+}
+
+h1,
+.is-heading-h1 {
+    margin: $indent-4 0;
+    line-height: 5 * $multiplier;
+    font-size: 4 * $multiplier;
+    font-weight: $font-weight-regular;
+    color: $color-theme-dark;
+
+    @media (max-width: $screen-xs) {
+        margin: 0 0 $indent-3;
+        font-size: 2.8rem;
+        line-height: 3.6rem;
+    }
+}
+
+h2,
+.is-heading-h2 {
+    margin: 0 0 $indent-3;
+    line-height: 4 * $multiplier;
+    font-size: 3 * $multiplier;
+    font-weight: $font-weight-regular;
+    color: $color-theme-dark;
+
+    span,
+    strong,
+    b {
+        white-space: nowrap;
+
+        @include emphasize($color-default, $color-theme);
+    }
+
+    @media (max-width: $screen-xs) {
+        font-size: 3 * $multiplier;
+        line-height: 4 * $multiplier;
+    }
+}
+
+h3,
+.is-heading-h3 {
+    position: relative;
+    display: inline-block;
+    margin: 0 0 2.2rem;
+    padding: 0 0 $indent-3;
+    line-height: 1.9rem;
+    font-size: $font-size-default;
+    color: $color-theme;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+}
+
+h4,
+.is-heading-h4 {
+    margin: 5rem 0 $indent-2;
+    padding: 0;
+    line-height: 1.9rem;
+    font-size: $font-size-default;
+    color: $color-theme;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+
+    @media (max-width: $screen-sm) {
+        line-height: 1.8rem;
+        margin-top: 1rem;
+    }
+}
+
+h5 {
+    margin: $indent-3 0 0;
+    padding: 0;
+    line-height: $line-height-m;
+    font-size: $font-size-m;
+    color: $color-text;
+    font-weight: $font-weight-semibold;
+
+    + p,
+    + div p,
+    + .markdown-editor {
+        margin-top: $indent-2;
+    }
+
+    @media (max-width: $screen-sm) {
+        line-height: 1.8rem;
+        margin-top: 1rem;
+        font-size: $font-size-s;
+    }
+
+    + p,
+    + div p,
+    + .markdown-editor {
+        margin-top: $indent-2;
+    }
+}
+
+p {
+    margin: 0 0 $indent-4;
+    font-size: $font-size-default;
+    overflow: hidden;
+}
+
+a {
+    color: $color-theme;
+    text-decoration: none;
+
+    @include transition();
+
+    &:hover,
+    &:active {
+        cursor: pointer;
+        color: $color-theme;
+        text-decoration: underline;
+    }
+}
+
+input,
+a,
+button {
+    &:focus {
+        outline: none;
+    }
+}
+
+::selection {
+    background: $color-theme;
+    color: $color-default;
+}
+
+input,
+textarea {
+    @include input-placeholder {
+        color: $color-grey;
+        font-weight: $font-weight-light;
+    }
+}
+
+.pull-right {
+    float: right !important;
+}
+
+.pull-left {
+    float: left !important;
+}
+
+.capitalize {
+    text-transform: capitalize !important;
+}
+
+.uppercase {
+    text-transform: uppercase !important;
+}
+
+.visible-xs {
+    display: none !important;
+}
+
+@media (max-width: $screen-sm) {
+    .hidden-xs {
+        display: none !important;
+    }
+
+    .visible-xs {
+        display: block !important;
+    }
+}
+
+//Remove select arrow from IE
+select::-ms-expand {
+    display: none;
+}
+
+[v-cloak] {
+    display: none;
+}

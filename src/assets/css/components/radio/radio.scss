@@ -1,0 +1,63 @@
+$radio-dim: 1.8rem;
+
+.radio {
+    display: inline-block;
+    margin: 0 $indent-5 $indent-1 0;
+    vertical-align: top;
+
+    .radio__rb {
+        position: absolute;
+
+        @include opacity(0);
+
+        + .radio__label {
+            display: block;
+            position: relative;
+            cursor: pointer;
+            padding-left: 2.6rem;
+            line-height: $line-height-s;
+
+            @include no-user-select();
+
+            &:before,
+            &:after {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0rem;
+                display: block;
+                width: $radio-dim;
+                height: $radio-dim;
+                border-radius: 50%;
+
+                @include transition(0.1s);
+            }
+
+            &:before {
+                border: 4px solid $color-default;
+                background: transparent;
+            }
+
+            &:after {
+                border: 2px solid $color-border-dark;
+                background: transparent;
+            }
+        }
+
+        &:checked {
+            + .radio__label {
+                &:before {
+                    background: $color-border-dark;
+                }
+            }
+        }
+
+        &:focus {
+            + .radio__label {
+                &:before {
+                    background: $color-theme;
+                }
+            }
+        }
+    }
+}

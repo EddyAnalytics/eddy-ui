@@ -1,0 +1,18 @@
+//Spin 360 degrees continuously
+@-webkit-keyframes spin {
+    from {
+        @include rotate(0deg);
+    }
+    to {
+        @include rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    from {
+        @include rotate(0deg);
+    }
+    to {
+        @include rotate(360deg);
+    }
+}

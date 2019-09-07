@@ -1,0 +1,33 @@
+.block_list--ordered {
+    @extend .block_list;
+
+    width: 100%;
+    margin: 0 0 $indent-3;
+    counter-reset: block_list-ordered;
+
+    li {
+        counter-increment: block_list-ordered;
+        margin-top: $indent-1;
+
+        a {
+            line-height: $line-height-m;
+            font-weight: $font-weight-regular;
+            vertical-align: top;
+
+            &:hover,
+            &:active {
+                cursor: pointer;
+                background: $color-grey-40-o;
+            }
+        }
+
+        a:before {
+            content: counter(block_list-ordered);
+            margin-right: $indent-2;
+            line-height: $line-height-m;
+            vertical-align: top;
+            font-size: 2rem;
+            font-weight: $font-weight-semibold;
+        }
+    }
+}

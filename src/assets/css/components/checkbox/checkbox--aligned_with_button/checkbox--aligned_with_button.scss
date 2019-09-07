@@ -1,0 +1,11 @@
+.checkbox--aligned_with_button {
+    @extend .checkbox;
+
+    display: inline-block;
+    margin: $indent-1 0 0 $indent-3;
+
+    @media (max-width: $screen-sm) {
+        display: block;
+        margin: $indent-2 0 0;
+    }
+}

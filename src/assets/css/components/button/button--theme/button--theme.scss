@@ -1,0 +1,24 @@
+.button--theme {
+    @extend .button;
+
+    background: $color-theme;
+    color: $color-default;
+
+    &:hover,
+    &:focus {
+        background: $color-theme-dark;
+        color: $color-default;
+    }
+
+    &:active {
+        background: $color-theme-dark;
+        color: $color-default;
+    }
+
+    &.loading {
+        &:after {
+            border: $spinner-border-dim solid $color-default;
+            border-top: $spinner-border-dim solid $color-theme-dark;
+        }
+    }
+}

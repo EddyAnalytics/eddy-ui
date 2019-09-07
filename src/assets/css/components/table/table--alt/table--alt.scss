@@ -1,0 +1,26 @@
+.table--alt {
+    @extend .table;
+
+    th {
+        background: $color-grey-dark;
+        color: $color-default;
+    }
+
+    td {
+        background: $color-grey-light;
+    }
+
+    tr {
+        &.selected {
+            td {
+                background: $color-default;
+            }
+        }
+
+        &:hover {
+            td {
+                background: $color-default;
+            }
+        }
+    }
+}

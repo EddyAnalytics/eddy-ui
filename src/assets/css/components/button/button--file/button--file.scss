@@ -1,0 +1,62 @@
+$button-file-image-height: 15 * $multiplier;
+
+.button--file {
+    @extend .button--alt;
+
+    position: relative;
+    display: block;
+    min-height: $button-file-image-height;
+    height: auto;
+    margin: $indent-2 0 0;
+    overflow: hidden;
+    border: 1px dashed $color-border;
+    background: $color-default;
+
+    .button--file__title {
+        display: block;
+        margin: $indent-5 0;
+        text-transform: uppercase;
+    }
+
+    .button--file__info {
+        display: block;
+    }
+
+    .button--file__image {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: $button-file-image-height;
+        overflow: hidden;
+        margin: $indent-1 0 $indent-3;
+
+        img {
+            position: absolute;
+            display: block;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: auto;
+            max-width: 100%;
+            max-height: 100%;
+            margin: auto;
+        }
+    }
+
+    &:hover,
+    &:active {
+        background: $color-default;
+        border-color: $color-border-dark;
+    }
+
+    &:disabled,
+    &[disabled="disabled"],
+    &.is-disabled {
+        &:hover,
+        &:active {
+            background: $color-default;
+            border-color: $color-border;
+        }
+    }
+}

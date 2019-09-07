@@ -1,0 +1,400 @@
+$form-float-label-line-height: 1.8rem;
+
+.form {
+    margin: $indent-2 0 $indent-3;
+
+    @include clearfix;
+
+    h2 {
+        padding: 0;
+        color: $color-text;
+        font-size: $font-size-xl;
+        font-weight: $font-weight-semibold;
+    }
+
+    .form__fields {
+        h4 {
+            margin: 0 0 $indent-5;
+            color: $color-theme;
+        }
+    }
+
+    .form__fields.row {
+        .form__field {
+            margin: $indent-1 0;
+        }
+    }
+
+    .form__buttons {
+        overflow: hidden;
+    }
+
+    .error-list {
+        padding: $indent-1;
+        background: $color-alert-20-o;
+        color: $color-alert;
+        text-align: left;
+        border-radius: $border-radius;
+    }
+
+    .form__field {
+        display: block;
+        position: relative;
+        margin: $indent-4 0;
+
+        &:last-of-type {
+            margin-right: 0;
+        }
+
+        .form__label {
+        }
+
+        .form__label--secondary {
+            @extend .form__label;
+
+            float: right;
+            font-size: 0.8em;
+            color: $color-grey;
+        }
+
+        .form__field__float_label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 0;
+            line-height: $form-float-label-line-height;
+            margin: 0;
+            color: $color-theme-dark;
+            font-size: $font-size-m;
+
+            @include opacity(0);
+            @include transition();
+        }
+
+        textarea {
+            display: block;
+            width: 100%;
+            min-height: 20rem;
+            padding: $indent-1;
+            font-family: $font-default;
+            font-size: $font-size-m;
+            resize: vertical;
+            border: 1px solid $color-border-dark;
+        }
+
+        .dropdown {
+            display: block;
+            margin-top: 0 !important;
+
+            .dropdown-toggle {
+                background: transparent;
+                color: $color-text;
+                border: 1px solid $color-border-dark;
+
+                .form-control {
+                    color: $color-text;
+
+                    @include input-placeholder() {
+                        color: $color-text;
+                    }
+                }
+
+                &:after {
+                    color: $color-text;
+                }
+            }
+
+            .selected-tag {
+                color: $color-text;
+            }
+        }
+
+        input {
+            padding: 0 $indent-2;
+
+            @include input-placeholder() {
+                color: $color-default;
+                text-transform: uppercase;
+                font-weight: $font-weight-light;
+            }
+
+            &:focus {
+                @include input-placeholder() {
+                    color: transparent;
+
+                    @include transition();
+                }
+
+                + .form__field__float_label {
+                    height: auto;
+                    top: $form-float-label-line-height;
+
+                    @include opacity(1);
+                }
+            }
+
+            &:read-only,
+            &:disabled {
+                pointer-events: none;
+                background: $color-grey-light;
+
+                @include opacity($disabled-opacity);
+
+                + .vdp-datepicker__clear-button {
+                    right: $indent-5;
+                    z-index: 3;
+
+                    @include opacity($disabled-opacity);
+                }
+
+                &:hover {
+                    cursor: default;
+                }
+            }
+
+            &:-moz-read-only {
+                pointer-events: none;
+                background: $color-grey-light;
+
+                @include opacity($disabled-opacity);
+
+                + .vdp-datepicker__clear-button {
+                    right: $indent-5;
+
+                    @include opacity($disabled-opacity);
+                }
+
+                &:hover {
+                    cursor: default;
+                }
+            }
+
+            &:disabled {
+                &:hover {
+                    cursor: not-allowed;
+                }
+
+                + .vdp-datepicker__clear-button {
+                    pointer-events: none;
+                }
+            }
+        }
+
+        .vdp-datepicker {
+            position: relative;
+
+            &:after {
+                content: "\F0ED";
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: $indent-5;
+                height: $indent-5;
+                line-height: 40px;
+                text-align: center;
+                font-family: $font-icon;
+                font-size: $font-size-icon;
+                pointer-events: none;
+            }
+
+            input {
+                padding-right: $indent-5;
+
+                &:read-only {
+                    pointer-events: auto;
+                    background: $color-default;
+
+                    @include opacity(1);
+
+                    + .vdp-datepicker__clear-button {
+                        right: $indent-5;
+
+                        @include opacity($disabled-opacity);
+                    }
+                }
+
+                &:-moz-read-only {
+                    pointer-events: auto;
+                    background: $color-default;
+
+                    @include opacity(1);
+
+                    + .vdp-datepicker__clear-button {
+                        right: $indent-5;
+
+                        @include opacity($disabled-opacity);
+                    }
+                }
+
+                &:disabled,
+                &:read-only:disabled {
+                    background: $color-grey-light;
+
+                    @include opacity($disabled-opacity);
+
+                    + .vdp-datepicker__clear-button {
+                        pointer-events: none;
+                    }
+                }
+
+                &:-moz-read-only:disabled {
+                    background: $color-grey-light;
+
+                    @include opacity($disabled-opacity);
+                }
+            }
+        }
+
+        .multiselect {
+            display: block;
+            width: 100%;
+        }
+
+        .vue-swatches__trigger {
+            border-radius: 0 !important; //Override inline styling
+        }
+
+        .markdown-editor .editor-statusbar {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .markdown-editor--readonly {
+            pointer-events: none;
+
+            @include opacity($disabled-opacity);
+
+            .CodeMirror {
+                background-color: $color-grey-light;
+            }
+
+            &:hover {
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    input[type="text"],
+    input[type="email"] {
+        width: 100%;
+        height: $input-height;
+        border-radius: 0;
+        font-size: $font-size-m;
+        font-weight: normal;
+        color: $color-theme-dark;
+        background: transparent;
+        border: 1px solid $color-border-dark;
+
+        @include transition();
+
+        &:focus,
+        &:hover,
+        &:active {
+            outline: none;
+        }
+    }
+
+    input[type="date"] {
+        display: block;
+        padding: $indent-1 $indent-2;
+        font-family: $font-default;
+        font-size: $font-size-m;
+        border: 1px solid $color-border-dark;
+    }
+
+    @media (max-width: $screen-sm) {
+        margin: $indent-2 0;
+
+        h2 {
+            margin: 0 0 4 $indent-5;
+        }
+
+        .form__field {
+            float: none;
+            width: 100%;
+            margin: 0 0 $indent-4;
+        }
+
+        input[type="text"] {
+            border-width: 0.1rem;
+            border-radius: 0;
+        }
+
+        .button--cta--light_bg {
+            float: right;
+            margin: $indent-2 0 0;
+        }
+    }
+
+    @media (max-width: $screen-xs) {
+        .button--cta--light_bg {
+            float: none;
+        }
+    }
+}
+
+.form__result {
+    margin: $indent-5 0;
+    color: $color-theme-dark;
+    font-size: 4.5rem;
+    line-height: 1.5;
+    font-weight: $font-weight-light;
+
+    .form__result__hide {
+        display: none;
+    }
+}
+
+.form__alert {
+    @extend .box;
+
+    display: none;
+    margin: 0 0 6rem;
+    padding: 1rem $indent-2;
+    line-height: 2rem;
+    font-size: 1 $indent-5;
+    font-weight: $font-weight-semibold;
+    color: $color-success;
+    border: none;
+    border-radius: 0;
+    background: $color-default;
+    vertical-align: middle;
+
+    @include no-shadow;
+
+    i {
+        float: left;
+        font-size: 2rem;
+        margin-right: 1rem;
+    }
+
+    &.error {
+        color: $color-alert;
+    }
+}
+
+.markdown-editor {
+    z-index: 0;
+
+    .editor-toolbar,
+    .CodeMirror {
+        border-radius: 0;
+        border-color: $color-border-dark;
+
+        @include opacity(1);
+
+        /* the package uses CodeMirror which sets z-index to 1, this breaks other elements with z-index
+        and the z-index is not needed for the component to function, unset it. Marked as important because
+        in production the CodeMirror styles will be inserted by the module and the css is an external stylesheet */
+        z-index: unset !important;
+    }
+}
+
+input::-ms-clear,
+input::-ms-reveal {
+    display: none;
+}
+
+@include input-placeholder() {
+    color: $color-text;
+}

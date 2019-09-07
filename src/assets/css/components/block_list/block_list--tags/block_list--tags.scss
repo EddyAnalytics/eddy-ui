@@ -1,0 +1,11 @@
+.block_list--tags {
+    @extend .block_list;
+
+    li {
+        margin-top: $indent-1;
+
+        a {
+            padding: 0;
+        }
+    }
+}

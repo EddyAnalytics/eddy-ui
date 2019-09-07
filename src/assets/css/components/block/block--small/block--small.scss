@@ -1,0 +1,23 @@
+.block--small {
+    @extend .block;
+
+    max-width: 77rem;
+    margin: $indent-10 auto;
+    padding: $indent-4 $indent-5 $indent-7;
+    background: transparent;
+    text-align: left;
+
+    @media (max-width: $screen-md) {
+        width: 80%;
+    }
+
+    @media (max-width: $screen-sm) {
+        width: 100%;
+        margin-top: $indent-2;
+    }
+
+    @media (max-width: $screen-xs) {
+        margin: 0 auto $indent-2;
+        padding: 0;
+    }
+}

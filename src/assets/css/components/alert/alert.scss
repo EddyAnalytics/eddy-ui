@@ -1,0 +1,12 @@
+$spinner-dim: 2.5 * $multiplier;
+$spinner-border-dim: $multiplier / 4;
+
+.alert {
+    color: $color-default;
+    margin: 0 0 $indent-3;
+    padding: $indent-3;
+    text-align: center;
+    border-radius: $border-radius;
+    font-weight: $font-weight-semibold;
+    background: $color-grey-dark;
+}

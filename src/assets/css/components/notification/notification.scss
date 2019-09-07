@@ -1,0 +1,35 @@
+.notification {
+    color: $color-default;
+    background-color: $color-theme;
+
+    ::selection {
+        background: $color-default;
+        color: $color-theme;
+    }
+
+    text-align: center;
+
+    padding: $indent-1 $indent-xs;
+
+    .mdi {
+        font-size: 3rem;
+        vertical-align: text-bottom;
+        margin-right: 1rem;
+    }
+    .button {
+        vertical-align: baseline;
+        @media (min-width: $screen-sm) {
+            /* On SM and XS the button becomes full-width so the margin only applies on screens above SM */
+            margin-left: 1.5rem;
+        }
+    }
+    .button--link {
+        color: white;
+    }
+}
+
+.notification--error {
+    @extend .notification;
+
+    background-color: $color-alert;
+}

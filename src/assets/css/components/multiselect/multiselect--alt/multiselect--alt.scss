@@ -1,0 +1,36 @@
+.multiselect--alt {
+    @extend .multiselect;
+    background: $color-theme;
+
+    .multiselect__select {
+        &:before {
+            color: $color-default;
+        }
+    }
+
+    .multiselect__tags {
+        color: $color-default;
+        border: none;
+    }
+
+    .multiselect__input,
+    .multiselect__single {
+        color: $color-default;
+
+        &::-webkit-input-placeholder {
+            color: $color-default;
+        }
+
+        &::-moz-placeholder {
+            color: $color-default;
+        }
+
+        &:-ms-input-placeholder {
+            color: $color-default;
+        }
+
+        &:-moz-placeholder {
+            color: $color-default;
+        }
+    }
+}

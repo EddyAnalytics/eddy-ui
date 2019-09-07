@@ -1,0 +1,246 @@
+.table__responsive {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table {
+    width: 100%;
+    min-width: $screen-sm;
+    border-collapse: collapse;
+    border-bottom: 1px solid $color-border;
+
+    th,
+    td {
+        width: 0;
+        padding: $indent-3 / 2 0 $indent-3 / 2 $indent-3;
+        text-align: left;
+        vertical-align: middle;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:last-child {
+            padding-right: $indent-3;
+            text-align: right;
+        }
+    }
+
+    th {
+        padding: $indent-1 0 $indent-1 $indent-3;
+        background: $color-theme-light-50-o;
+        color: $color-text;
+        font-weight: $font-weight-semibold;
+        white-space: nowrap;
+    }
+
+    td {
+        background: $color-default;
+        border-top: 1px solid $color-border;
+
+        @include transition();
+    }
+
+    tbody {
+        &:first-child {
+            tr {
+                &:first-child {
+                    td {
+                        border: none;
+                    }
+                }
+            }
+        }
+    }
+
+    tr {
+        overflow: scroll;
+
+        &.selected {
+            td {
+                background: $color-grey-light;
+                border-top: 1px solid $color-default;
+
+                &:first-child {
+                    @include inner-shadow-color(3px, 0, 0, 0, $color-theme);
+                }
+            }
+        }
+
+        &:hover {
+            td {
+                background: $color-grey-light;
+                cursor: pointer;
+
+                &:first-child {
+                    @include inner-shadow-color(3px, 0, 0, 0, $color-theme);
+                }
+            }
+        }
+    }
+
+    .table__icon {
+        font-size: $font-size-icon;
+        color: $color-text;
+
+        @include transition();
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .table__sort {
+        &:after {
+            position: absolute;
+            content: "\F045";
+            margin: 0 0 0 $indent-1;
+            font-family: $font-icon;
+            color: inherit;
+            font-size: 1.8rem;
+            font-weight: $font-weight-light;
+
+            @include transition(0.1s);
+            @include transform-origin(center, center);
+        }
+
+        &:hover,
+        &:active {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        &.active {
+            &:after {
+                @include rotate(180deg);
+            }
+        }
+    }
+
+    .table__cell--id {
+        width: $indent-8;
+    }
+
+    .table__cell--icon {
+        width: $indent-6;
+    }
+
+    .table__cell--date {
+        width: 12rem;
+    }
+
+    .table__cell--center {
+        text-align: center;
+
+        &:last-child {
+            text-align: center;
+        }
+    }
+
+    .table__row--spinner {
+        &:hover {
+            .table__cell--spinner {
+                cursor: default;
+                background: $color-default;
+
+                @include no-shadow();
+            }
+        }
+    }
+
+    .table__cell--spinner {
+        position: relative;
+        height: ($indent-3 * 2) + $indent-8; //cell padding (top and bottom!) + spinner height
+
+        .spinner {
+            position: absolute;
+            top: $indent-3;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+    }
+
+    .table__row--no_results {
+        &:hover {
+            .table__cell--no_results {
+                cursor: default;
+                background: $color-default;
+
+                @include no-shadow();
+            }
+        }
+    }
+
+    .table__cell--no_results {
+        padding: $indent-6 0;
+    }
+
+    .table__cell--alert {
+        color: $color-alert;
+    }
+
+    .table__cell--success {
+        color: $color-success;
+    }
+
+    th,
+    td {
+        &.table__cell--draghandle {
+            padding-left: 0;
+        }
+    }
+
+    .table__row--sortable {
+        td,
+        th {
+            &:not(:hover) i.mdi-sort {
+                color: transparent;
+            }
+        }
+
+        th {
+            @include transition();
+
+            &:hover,
+            &:active {
+                color: $color-theme-dark;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .table__row--ghost {
+        visibility: hidden;
+    }
+
+    .table__row--sub {
+        display: none;
+
+        td {
+            border: none;
+        }
+
+        &.active {
+            display: table-row;
+        }
+    }
+
+    .table__cell--deadline {
+        white-space: nowrap;
+    }
+
+    .table__row--alert {
+        .table__cell--deadline {
+            color: $color-alert;
+
+            &:before {
+                content: "\f5d6";
+                float: left;
+                margin: 0 $indent-1 0 0;
+                font-family: $font-icon;
+                color: $color-alert;
+                font-size: $font-size-icon-m;
+            }
+        }
+    }
+}

@@ -1,0 +1,76 @@
+{
+    "common": {
+        "back": "Back",
+        "close": "Close",
+        "add": "Add",
+        "cancel": "Cancel",
+        "remove": "Remove",
+        "save": "Save",
+        "edit": "Edit",
+        "errors": {
+            "unknown": "Something went wrong while executing your request, please try again later.",
+            "credentials": "You are not authorized to perform this action.",
+            "forbidden": "You are not allowed to perform this action.",
+            "not_found": "The server was unable to find the information you requested.",
+            "conflict": "A conflict occurred.",
+            "server_offline": "The server is offline, the system is temporarily unavailable.",
+            "server_timeout": "The server took too long to respond, please try again. If this keeps happening, please contact the administrator",
+            "bad_request": "Incomplete request sent, please check it and try again.",
+            "payload_too_large": "The file is too large to be uploaded.",
+            "wrong_current_password": "The filled in current password is incorrect."
+        }
+    },
+    "menu": {
+        "home": "Home",
+        "styleguide": "Styleguide",
+        "auth": "Authentication",
+        "signout": "Log out"
+    },
+    "auth": {
+        "header_signin": "Log in with username and password",
+        "header_forgotten_password": "Forgot your password?",
+        "header_reset_password": "Change your password",
+        "message_forgotten_password": "Enter your e-mail address below and we will send you an e-mail to reset your password.",
+        "hint_email": "E-mail address",
+        "hint_password": "Password",
+        "button_signin": "Log in",
+        "button_reset_password": "Reset password",
+        "header_reset_completed": "Password reset sent",
+        "message_reset_completed": "An email has been send to you with instructions to reset your password.",
+        "button_complete_reset": "Back to login page",
+        "button_cancel": "Cancel",
+        "button_change_password": "Change password",
+        "button_reset": "Change password",
+        "new_password": "New password",
+        "new_password_repeat": "New password (repeat)",
+        "header_password_changed": "Password changed",
+        "message_password_changed": "Your password has been successfully updated, you can now login with the new password.",
+        "message_invalid_hash": "The used reset token is invalid or has already been used, please check if you used the correct link or request a new password reset.",
+        "password_mismatch": "The entered passwords do not match",
+        "password_no_difference": "The new password cannot be the same as the old password",
+        "link_no_account": "Don't have an account?",
+        "link_forgot_password": "Forgot your password?",
+        "wrong_credentials": "The combination of the username and password is incorrect. Please try again.",
+        "log_in_with": "Log in with your",
+        "email": "E-mail address",
+        "and": "and",
+        "password": "password"
+    },
+    "footer": {
+        "copyrights": "All rights reserved"
+    },
+    "profile": {
+        "header_info": "Profile information",
+        "label_username": "User",
+        "link_change_password": "Change password"
+    },
+    "change_password": {
+        "header": "Change password",
+        "message_success": "Your password has been successfully changed, you now have to login with the new password.",
+        "label_old": "Current password",
+        "label_new": "New password",
+        "label_repeat": "New password (repeated)",
+        "button_submit": "Change password",
+        "button_to_login": "Continue to login"
+    }
+}

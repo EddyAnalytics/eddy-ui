@@ -1,0 +1,48 @@
+.guidelines {
+    .guidelines__list {
+        margin: $indent-2 0;
+
+        > li {
+            position: relative;
+            margin: $indent-xs 0;
+            padding-left: $indent-3;
+            list-style: none;
+
+            &:before {
+                position: absolute;
+                left: 0;
+                display: inline-block;
+            }
+        }
+    }
+
+    .guidelines__list--bullets {
+        @extend .guidelines__list;
+
+        > li {
+            &:before {
+                content: "";
+                top: $indent-1;
+                width: $indent-1;
+                height: $indent-1;
+                border-radius: 50%;
+                background: $color-theme;
+            }
+        }
+    }
+
+    .guidelines__list--numbers {
+        @extend .guidelines__list;
+
+        > li {
+            counter-increment: item;
+
+            &:before {
+                content: counter(item) ")";
+                counter-increment: reset;
+                color: $color-theme;
+                font-weight: $font-weight-semibold;
+            }
+        }
+    }
+}

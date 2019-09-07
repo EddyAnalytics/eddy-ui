@@ -1,0 +1,5 @@
+.alert--error {
+    @extend .alert;
+
+    background: $color-alert;
+}

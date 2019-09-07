@@ -1,0 +1,9 @@
+.tag--dark {
+    @extend .tag;
+
+    color: $color-default;
+
+    .tag__icon {
+        color: $color-default;
+    }
+}

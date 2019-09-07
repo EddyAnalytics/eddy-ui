@@ -1,0 +1,10 @@
+.alert--auth {
+    @extend .alert;
+
+    background: $color-default;
+
+    p {
+        margin: 0;
+        color: $color-alert !important;
+    }
+}

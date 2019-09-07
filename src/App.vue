@@ -1,29 +1,36 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div class="wrapper" id="app" :class="{ 'wrapper--auth': isAuth() }">
+        <the-header :class="{ auth: isAuth() }"></the-header>
+        <main class="main">
+            <div class="container-fluid">
+                <transition>
+                    <router-view></router-view>
+                </transition>
+            </div>
+        </main>
+        <the-footer></the-footer>
     </div>
-    <router-view />
-  </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
+<script>
+import '@mdi/font/css/materialdesignicons.css';
+import { Vue, Component } from 'vue-property-decorator';
+import TheFooter from '@/components/general/TheFooter';
+import TheHeader from '@/components/general/TheHeader';
+
+@Component({
+    components: {
+        TheFooter,
+        TheHeader,
+    },
+})
+export default class App extends Vue {
+    isAuth() {
+        const currentPage = window.location.href;
+        return currentPage.indexOf('auth') > -1;
     }
-  }
 }
-</style>
+</script>
+
+<!-- Import SCSS boilerplate -->
+<style src="./assets/css/styles.scss" lang="scss"></style>

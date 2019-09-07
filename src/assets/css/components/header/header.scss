@@ -1,0 +1,72 @@
+.header {
+    position: relative;
+    min-height: $header-height;
+    padding: $indent-1 $indent-6;
+    background: $color-default;
+    line-height: $line-height-default;
+    text-align: center;
+    border-bottom: 1px solid $color-theme-dark;
+
+    .header__link {
+        border: none;
+        text-decoration: none;
+        background: transparent;
+        font-weight: $font-weight-light;
+        font-size: inherit;
+        padding: 0;
+
+        @include transition();
+
+        &:hover,
+        &:active {
+            background: transparent;
+            color: $color-cta;
+            cursor: pointer;
+        }
+    }
+
+    .logo {
+        position: absolute;
+        top: 1.4rem;
+        left: $indent-6;
+        display: block;
+        max-height: $indent-7;
+        width: auto;
+        margin: auto;
+        z-index: 100;
+    }
+
+    &.auth {
+        .auth__nav--hide {
+            display: none;
+        }
+        .nav__item {
+            border-right: none;
+        }
+    }
+
+    .dropdown--alt {
+        min-width: initial;
+    }
+
+    @media (max-width: $screen-md) {
+        .logo {
+            left: $indent-4;
+        }
+    }
+
+    @media (max-width: $screen-sm) {
+        padding: $indent-3 $indent-2;
+        text-align: right;
+
+        .logo {
+            left: $indent-2;
+        }
+
+        &.auth {
+            &:after {
+                height: 8rem;
+            }
+        }
+    }
+}

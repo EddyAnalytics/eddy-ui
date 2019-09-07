@@ -1,0 +1,61 @@
+//Add only fonts to this file! Styling for icons (.icon, .icon-folder etc. can be added in seperate icons.scss
+
+$font-path: "../../assets/fonts/";
+
+//Aller
+
+@font-face {
+    //Light
+    font-family: "Aller";
+    src: url("#{$font-path}Aller/Aller_Lt.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    //Light Italic
+    font-family: "Aller";
+    src: url("#{$font-path}Aller/Aller_LtIt.ttf") format("truetype");
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    //Regular
+    font-family: "Aller";
+    src: url("#{$font-path}Aller/Aller_Rg.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    //Regular Italic
+    font-family: "Aller";
+    src: url("#{$font-path}Aller/Aller_It.ttf") format("truetype");
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    //Bold
+    font-family: "Aller";
+    src: url("#{$font-path}Aller/Aller_Bd.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    //Bold Italic
+    font-family: "Aller";
+    src: url("#{$font-path}Aller/Aller_BdIt.ttf") format("truetype");
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    //Display
+    font-family: "Aller";
+    src: url("#{$font-path}Aller/AllerDisplay.ttf") format("truetype");
+    font-weight: 900;
+    font-style: normal;
+}

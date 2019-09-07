@@ -1,0 +1,46 @@
+.tag {
+    position: relative;
+    display: block;
+    margin: 0 0 $indent-xs 0;
+    padding: $indent-1 $indent-2;
+    line-height: $line-height-s;
+    background: $color-grey-light;
+    color: $color-text;
+    font-size: $font-size-s;
+
+    @include transition();
+
+    .tag__close {
+        position: absolute;
+        display: block;
+        top: $indent-xs;
+        right: $indent-1;
+        width: $indent-2;
+        margin: 0 0 0 $indent-1;
+        text-align: center;
+
+        @include transition();
+
+        &:hover,
+        &:active {
+            cursor: pointer;
+            font-size: 110%;
+        }
+    }
+
+    .tag__icon {
+        float: right;
+        display: inline-block;
+        margin: 0 0 0 $indent-1;
+        color: inherit;
+
+        @include transition();
+
+        &:hover,
+        &:active {
+            color: inherit;
+
+            @include opacity(0.7);
+        }
+    }
+}

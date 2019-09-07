@@ -1,0 +1,5 @@
+.toaster--error {
+    @extend .toaster;
+
+    background: $color-alert;
+}

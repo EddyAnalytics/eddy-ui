@@ -1,0 +1,5 @@
+.toaster--success {
+    @extend .toaster;
+
+    background: $color-success;
+}

@@ -1,0 +1,87 @@
+.table--mobile {
+    @extend .table;
+
+    @media (max-width: $screen-sm) {
+        min-width: initial;
+        display: block;
+
+        thead {
+            display: none;
+        }
+
+        tbody {
+            display: block;
+            width: 100%;
+        }
+
+        tr {
+            position: relative;
+            display: block;
+            margin: 0 0 $indent-2;
+            padding: $indent-base $indent-base ($indent-5 + $indent-base);
+            background: $color-default;
+
+            td {
+                display: block;
+                width: 100%;
+                padding: 0;
+                border: none;
+                background: transparent;
+
+                &.capitalize {
+                    font-size: $font-size-s;
+                    color: $color-text-light;
+                }
+
+                &.table__cell--title {
+                    margin: 0;
+                    font-size: 1.8rem;
+                }
+
+                &.table__cell--date {
+                    float: left;
+                    width: 50%;
+                    margin-top: $indent-1;
+                    font-size: $font-size-s;
+                    color: $color-text-light;
+                }
+
+                &.table__cell--deadline {
+                    float: right;
+                    width: 50%;
+                    margin-top: $indent-1;
+                    text-align: right;
+                    font-size: $font-size-s;
+
+                    &:before {
+                        float: none !important;
+                        vertical-align: top !important;
+                        font-size: 2rem !important;
+                    }
+                }
+
+                &:last-child,
+                &:nth-last-child(2) {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 50%;
+                    height: $indent-5;
+                    padding: $indent-1 $indent-base;
+                    background: $color-theme;
+                    color: $color-default !important;
+
+                    .table__icon {
+                        color: inherit;
+                    }
+                }
+
+                &:last-child {
+                    left: auto;
+                    right: 0;
+                    text-align: right;
+                }
+            }
+        }
+    }
+}

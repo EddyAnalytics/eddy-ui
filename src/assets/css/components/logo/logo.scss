@@ -1,0 +1,288 @@
+.logo {
+    display: inline-block;
+    white-space: nowrap;
+
+    .logo__subtitle {
+        position: relative;
+        top: -$indent-xs;
+        display: inline-block;
+        margin: 0;
+        padding-left: $indent-5;
+        color: $color-theme-dark;
+        font-size: 2.4rem;
+        font-weight: $font-weight-light;
+        cursor: default;
+        vertical-align: middle;
+        pointer-events: none;
+
+        &:after {
+            content: "";
+            position: relative;
+            top: -1.2rem;
+            left: -$indent-3;
+            display: block;
+            background: $color-theme-dark;
+            width: $indent-2;
+            height: 0.2rem;
+        }
+    }
+
+    .logo__shape {
+        position: relative;
+        display: inline-block;
+        width: 5.2rem;
+        height: 5.2rem;
+        margin: 0 1rem 0 0;
+        vertical-align: top;
+    }
+
+    .logo__text {
+        display: inline-block;
+        text-decoration: none;
+        vertical-align: bottom;
+        margin-bottom: 1.1rem;
+
+        img {
+            height: 3.4rem;
+            max-width: none;
+            vertical-align: bottom;
+        }
+    }
+
+    .logo__block {
+        position: absolute;
+        display: block;
+        width: 1.6rem;
+        height: 1.6rem;
+        margin: 0 0.2rem 0.2rem 0;
+        background-image: url("../images/logo/elnino-dot.svg");
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+
+        @include transition(0.4s);
+
+        &:nth-child(3n + 3) {
+            margin-right: 0;
+        }
+
+        &.block-1 {
+            left: 0;
+            top: 0;
+            background-image: url("../images/logo/elnino-e.svg");
+        }
+
+        &.block-2 {
+            left: 1.8rem;
+            top: 0;
+            background-image: url("../images/logo/elnino-l.svg");
+        }
+
+        &.block-3 {
+            left: 3.6rem;
+            top: 0;
+        }
+
+        &.block-4 {
+            left: 0;
+            top: 1.8rem;
+        }
+
+        &.block-5 {
+            left: 1.8rem;
+            top: 1.8rem;
+            background-image: url("../images/logo/elnino-n.svg");
+        }
+
+        &.block-6 {
+            left: 3.6rem;
+            top: 1.8rem;
+            background-image: url("../images/logo/elnino-i.svg");
+        }
+
+        &.block-7 {
+            left: 0px;
+            top: 3.6rem;
+            background-image: url("../images/logo/elnino-nj.svg");
+        }
+
+        &.block-8 {
+            left: 1.8rem;
+            top: 3.6rem;
+            background-image: url("../images/logo/elnino-o.svg");
+        }
+
+        &.block-9 {
+            left: 3.6rem;
+            top: 3.6rem;
+        }
+
+        &.block-7,
+        &.block-8,
+        &.block-9 {
+            margin-bottom: 0;
+        }
+    }
+
+    &:hover {
+        text-decoration: none;
+
+        .logo__block {
+            &.block-1 {
+                top: 3.6rem;
+                left: 3.6rem;
+            }
+
+            &.block-2 {
+                left: 0;
+                top: 1.8rem;
+            }
+
+            &.block-3 {
+                top: 0;
+                left: 0;
+            }
+
+            &.block-4 {
+                top: 3.6rem;
+                left: 0;
+            }
+
+            &.block-5 {
+                top: 0;
+                left: 3.6rem;
+            }
+
+            &.block-6 {
+                left: 1.8rem;
+                top: 1.8rem;
+            }
+
+            &.block-7 {
+                top: 3.6rem;
+                left: 1.8rem;
+                background-image: url("../images/logo/elnino-n.svg");
+            }
+
+            &.block-8 {
+                top: 0;
+                left: 1.8rem;
+            }
+
+            &.block-9 {
+                left: 3.6rem;
+                top: 1.8rem;
+            }
+        }
+    }
+
+    @media (max-width: $screen-xs) {
+        height: 4.4rem;
+
+        .logo__shape {
+            width: 4.4rem;
+            height: 4.4rem;
+            margin-right: 1rem;
+        }
+
+        .logo__block {
+            width: 1.4rem;
+            height: 1.4rem;
+            margin: 0 0.1rem 0.1rem 0;
+            font-size: 1.5rem;
+
+            &.block-2 {
+                left: 1.5rem;
+            }
+
+            &.block-3 {
+                left: 3rem;
+            }
+
+            &.block-4 {
+                top: 1.5rem;
+            }
+
+            &.block-5 {
+                left: 1.5rem;
+                top: 1.5rem;
+            }
+
+            &.block-6 {
+                left: 3rem;
+                top: 1.5rem;
+            }
+
+            &.block-7 {
+                top: 3rem;
+            }
+
+            &.block-8 {
+                left: 1.5rem;
+                top: 3rem;
+            }
+
+            &.block-9 {
+                left: 3rem;
+                top: 3rem;
+            }
+        }
+
+        &:hover {
+            .logo__block {
+                &.block-1 {
+                    top: 3rem;
+                    left: 3rem;
+                }
+
+                &.block-2 {
+                    top: 1.5rem;
+                }
+
+                &.block-4 {
+                    top: 3rem;
+                }
+
+                &.block-5 {
+                    left: 3rem;
+                }
+
+                &.block-6 {
+                    left: 1.5rem;
+                    top: 1.5rem;
+                }
+
+                &.block-7 {
+                    top: 3rem;
+                    left: 1.5rem;
+                }
+
+                &.block-8 {
+                    left: 1.5rem;
+                }
+
+                &.block-9 {
+                    left: 3rem;
+                    top: 1.5rem;
+                }
+            }
+        }
+
+        .logo__text {
+            margin-bottom: 1.1rem;
+        }
+    }
+}
+
+@media (max-width: $screen-xs) {
+    .logo {
+        .logo__text {
+            display: none;
+        }
+    }
+
+    .logo__sub-title {
+        padding-left: $indent-3;
+        font-size: $font-size-l;
+    }
+}

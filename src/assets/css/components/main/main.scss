@@ -1,0 +1,13 @@
+.main {
+    display: block;
+
+    @include flex(1 0 auto);
+
+    @media (min-width: $screen-xs) {
+        padding-bottom: $indent-5;
+    }
+
+    @media (max-width: $screen-xs) {
+        padding-bottom: $indent-2;
+    }
+}
