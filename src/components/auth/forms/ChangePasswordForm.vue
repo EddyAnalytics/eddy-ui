@@ -2,6 +2,8 @@
     <form class="form--login" @submit.prevent="submit">
         <div class="block--small">
             <h2>{{ $t('change_password.header') }}</h2>
+        </div>
+        <div class="block--small--bg">
             <template v-if="success">
                 <p>{{ $t('change_password.message_success') }}</p>
                 <router-link :to="{ name: 'sign-in' }" type="button" class="button--cta">

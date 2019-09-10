@@ -2,7 +2,7 @@
     @extend .block;
 
     max-width: 77rem;
-    margin: $indent-10 auto;
+    margin: $indent-3 auto;
     padding: $indent-4 $indent-5 $indent-7;
     background: transparent;
     text-align: left;
@@ -20,4 +20,11 @@
         margin: 0 auto $indent-2;
         padding: 0;
     }
+}
+
+.block--small--bg {
+    @extend .block--small;
+
+    background: $color-default;
+    @include drop-shadow(0, 0.1rem, 0.6rem, 0, 0.1);
 }

@@ -1,6 +1,6 @@
 <template>
-    <div class="wrapper" id="app" :class="{ 'wrapper--auth': isAuth() }">
-        <the-header :class="{ auth: isAuth() }"></the-header>
+    <div class="wrapper" id="app">
+        <the-header></the-header>
         <main class="main">
             <div class="container-fluid">
                 <transition>
@@ -24,12 +24,7 @@ import TheHeader from '@/components/general/TheHeader';
         TheHeader,
     },
 })
-export default class App extends Vue {
-    isAuth() {
-        const currentPage = window.location.href;
-        return currentPage.indexOf('auth') > -1;
-    }
-}
+export default class App extends Vue {}
 </script>
 
 <!-- Import SCSS boilerplate -->

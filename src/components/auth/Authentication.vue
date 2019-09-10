@@ -3,7 +3,6 @@
         <router-view></router-view>
     </transition>
 </template>
-
 <script>
 import { Vue, Component } from 'vue-property-decorator';
 

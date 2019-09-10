@@ -4,13 +4,16 @@
             <div class="block--small">
                 <h2>
                     {{ $t('auth.log_in_with') }}
-                    <strong>{{ $t('auth.email') }}</strong>
+                    <strong>{{ $t('auth.email').toLowerCase() }}</strong>
                     {{ $t('auth.and') }}
                     <strong>{{ $t('auth.password') }}</strong>
                 </h2>
+
                 <div v-if="errorCode" class="alert--auth">
                     <p>{{ localizedErrorMessage }}</p>
                 </div>
+            </div>
+            <div class="block--small--bg">
                 <div class="form__field">
                     <input
                         type="email"

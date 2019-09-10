@@ -20,6 +20,14 @@ module.exports = {
         }
     },
     css: {
+        loaderOptions: {
+            sass: {
+                data: `
+                  @import "@/assets/css/general/settings.scss";
+                  @import "@/assets/css/general/mixins.scss";
+                `,
+            },
+        },
         extract:
             process.env.NODE_ENV === 'production'
                 ? {
