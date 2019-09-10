@@ -25,5 +25,6 @@ yarn-error.log*
 
 # Local overrides of the client side config.
 /public/config/development.json
-/public/config/config.json
 
+# Local Netlify folder
+.netlify

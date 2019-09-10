@@ -1,0 +1,16 @@
+{
+    "cookies": {
+        "enabled": false
+    },
+    "analytics": {
+        "enabled": false,
+        "id": "XXX"
+    },
+    "api": {
+        "url": "https://reqres.in/api/"
+    },
+    "errorTracking": {
+        "enabled": false,
+        "url": "XXX"
+    }
+}
