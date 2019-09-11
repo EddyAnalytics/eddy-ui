@@ -23,6 +23,10 @@
             color: $color-cta;
             cursor: pointer;
         }
+
+        &.is-active {
+            color: $color-cta;
+        }
     }
 
     .logo {
@@ -34,15 +38,6 @@
         width: auto;
         margin: auto;
         z-index: 100;
-    }
-
-    &.auth {
-        .auth__nav--hide {
-            display: none;
-        }
-        .nav__item {
-            border-right: none;
-        }
     }
 
     .dropdown--alt {

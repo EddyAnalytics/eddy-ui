@@ -1,6 +1,6 @@
 <template>
     <header class="header">
-        <router-link :to="{ name: 'Home' }" class="logo" title="El Niño">
+        <router-link :to="{ name: 'Dashboard' }" class="logo" title="El Niño">
             <span class="logo__shape">
                 <span class="logo__block block-1"></span>
                 <span class="logo__block block-2"></span>
@@ -30,11 +30,39 @@
             </a>
             <nav class="nav" :class="{ 'is-active': showMobileMenu }">
                 <ul>
+                    <!--
                     <li class="nav__item nav__item--dropdown nav__item--vertical">
                         <LangDropdown />
-                    </li>
+                    </li> -->
                     <template v-if="isLoggedIn">
-                        <li class="nav__item header__username auth__nav--hide">
+                        <li class="nav__item">
+                            <router-link
+                                tag="button"
+                                :to="{ name: 'Dashboard' }"
+                                class="header__link"
+                            >
+                                {{ $t('menu.dashboard') }}
+                            </router-link>
+                        </li>
+                        <li class="nav__item">
+                            <router-link
+                                tag="button"
+                                :to="{ name: 'Integrations' }"
+                                class="header__link"
+                            >
+                                {{ $t('menu.integrations') }}
+                            </router-link>
+                        </li>
+                        <li class="nav__item">
+                            <router-link
+                                tag="button"
+                                :to="{ name: 'Settings' }"
+                                class="header__link"
+                            >
+                                {{ $t('menu.settings') }}
+                            </router-link>
+                        </li>
+                        <li class="nav__item header__username">
                             <router-link
                                 tag="button"
                                 :to="{ name: 'Profile' }"
@@ -43,16 +71,7 @@
                                 {{ username }}
                             </router-link>
                         </li>
-                        <li class="nav__item header__username--mobile auth__nav--hide">
-                            <router-link
-                                tag="button"
-                                :to="{ name: 'Profile' }"
-                                class="header__link header__profile"
-                            >
-                                {{ $t('menu.profile') }}
-                            </router-link>
-                        </li>
-                        <li class="nav__item auth__nav--hide">
+                        <li class="nav__item">
                             <button
                                 @click="signOut"
                                 @click.native="toggleMobileMenu"

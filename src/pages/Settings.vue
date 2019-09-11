@@ -1,6 +1,6 @@
 <template>
-    <div class="block--small">
-        <h2>Home</h2>
+    <div>
+        <h1>Settings</h1>
     </div>
 </template>
 
@@ -9,5 +9,5 @@ import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 
 @Component
-export default class Home extends Vue {}
+export default class Settings extends Vue {}
 </script>

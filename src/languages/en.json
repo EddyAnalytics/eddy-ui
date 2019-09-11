@@ -21,7 +21,9 @@
         }
     },
     "menu": {
-        "home": "Home",
+        "dashboard": "Dashboard",
+        "integrations": "Integrations",
+        "settings": "Settings",
         "styleguide": "Styleguide",
         "auth": "Authentication",
         "signout": "Log out"

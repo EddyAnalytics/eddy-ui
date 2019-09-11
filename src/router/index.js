@@ -1,7 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import Home from '@/pages/Home';
+import Dashboard from '@/pages/Dashboard';
+import Integrations from '@/pages/Integrations';
+import Settings from '@/pages/Dashboard';
 
 import AuthenticationPage from '@/pages/AuthenticationPage';
 import Profile from '@/pages/Profile';
@@ -23,9 +25,25 @@ let router = new Router({
     linkActiveClass: 'is-active',
     routes: [
         {
-            path: '/',
-            name: 'Home',
-            component: Home,
+            path: '/dashboard',
+            name: 'Dashboard',
+            component: Dashboard,
+            meta: {
+                auth: true,
+            },
+        },
+        {
+            path: '/integrations',
+            name: 'Integrations',
+            component: Integrations,
+            meta: {
+                auth: true,
+            },
+        },
+        {
+            path: '/settings',
+            name: 'Settings',
+            component: Settings,
             meta: {
                 auth: true,
             },
