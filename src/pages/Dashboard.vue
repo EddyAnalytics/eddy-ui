@@ -10,6 +10,8 @@
                 </block>
             </div>
         </div>
+
+        <apollo-example />
     </div>
 </template>
 
@@ -17,10 +19,12 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import Block from '@/components/general/Block';
+import ApolloExample from '@/components/ApolloExample';
 
 @Component({
     components: {
         Block,
+        ApolloExample,
     },
 })
 export default class Dashboard extends Vue {

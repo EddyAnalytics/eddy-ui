@@ -13,8 +13,8 @@ export const AUTH = Object.freeze({
 export default {
     state: () => {
         return {
-            token: window.localStorage.getItem('token'),
-            username: window.localStorage.getItem('username'),
+            token: localStorage.getItem('eddy-ui-token'),
+            username: localStorage.getItem('username'),
         };
     },
     mutations: {
@@ -22,13 +22,13 @@ export default {
             if (details) {
                 state.token = details.token;
                 state.username = details.name;
-                window.localStorage.setItem('token', details.token);
-                window.localStorage.setItem('username', details.name);
+                localStorage.setItem('eddy-ui-token', details.token);
+                localStorage.setItem('username', details.name);
             } else {
                 state.token = false;
                 state.username = null;
-                window.localStorage.removeItem('token');
-                window.localStorage.removeItem('username');
+                localStorage.removeItem('eddy-ui-token');
+                localStorage.removeItem('username');
             }
         },
     },
@@ -40,6 +40,7 @@ export default {
                         token: data.token,
                         name: email,
                     });
+                    // TODO: Reset apollo socket and cache
                 },
                 error => {
                     commit(AUTH.SET_USER, null);
@@ -49,6 +50,7 @@ export default {
         },
         [AUTH.LOGOUT]: ({ commit }) => {
             commit(AUTH.SET_USER, null);
+            // TODO: Reset apollo socket and cache
         },
     },
     getters: {

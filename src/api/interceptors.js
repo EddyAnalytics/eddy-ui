@@ -19,11 +19,6 @@ api.interceptors.response.use(
 // Redirect user to sign-in page when requests fail with unauthorized status
 api.interceptors.response.use(
     response => {
-        // token needs to be refreshed after each request, otherwise user will be logged out after 30 minutes.
-        const token = response.headers.authorization;
-        if (token) {
-            if (token.startsWith('Bearer ')) window.localStorage.setItem('token', token);
-        }
         return response.data;
     },
     error => {
@@ -44,8 +39,8 @@ api.interceptors.response.use(
 api.interceptors.request.use(
     request => {
         // Assign the refreshed token on every request.
-        const token = window.localStorage.getItem('token');
-        const lang = window.localStorage.getItem('lang');
+        const token = localStorage.getItem('eddy-ui-token');
+        const lang = localStorage.getItem('lang');
         if (token) request.headers['Authorization'] = token;
         request.headers['Accept-Language'] = lang || 'en';
         return Promise.resolve(request);

@@ -8,12 +8,16 @@ import i18n from '@/languages';
 import store from '@/store';
 import vmodal from 'vue-js-modal';
 import VTooltip from 'v-tooltip';
-import VueAxios from 'vue-axios';
 import Raven from 'raven-js';
 import RavenVue from 'raven-js/plugins/vue';
 import '@/components/general/VueSelect';
 import '@/filters';
+
+import VueAxios from 'vue-axios';
 import { api } from '@/api';
+
+import VueApollo from 'vue-apollo';
+import { createProvider } from '@/services/vue-apollo';
 
 Vue.config.productionTip = false;
 
@@ -22,18 +26,29 @@ Vue.use(vmodal);
 Vue.use(VTooltip);
 
 // Override the config with the one from /static/config
-const configFileName =
-    process.env.NODE_ENV === 'production' ? 'config.json' : process.env.NODE_ENV + '.json';
+const nodeEnvName = process.env.NODE_ENV;
+const configFileName = nodeEnvName === 'production' ? 'config.json' : nodeEnvName + '.json';
 
 api.get('/config/' + configFileName).then(
     config => {
-        Vue.prototype.$config = config;
-        Vue.prototype.$config.debug = process.env.NODE_ENV === 'development';
+        Vue.prototype.$config = {
+            ...config,
+            debug: config.debug || nodeEnvName === 'development',
+        };
 
-        // Set the baseURL according to the latest config and register the instance.
-        api.defaults.baseURL = Vue.prototype.$config.api.url;
+        // Set the API default URL
+        api.defaults.baseURL = config.api.url;
 
+        // Register Axios HTTP client
         Vue.use(VueAxios, api);
+
+        // Register the Apollo GraphQL client
+        Vue.use(VueApollo);
+
+        const apolloOptions = {
+            httpEndpoint: config.graphql.httpEndpoint,
+            wsEndpint: config.graphql.wsEndpoint,
+        };
 
         connectRaven();
         connectAnalytics();
@@ -43,6 +58,7 @@ api.get('/config/' + configFileName).then(
             router,
             i18n,
             store,
+            apolloProvider: createProvider(apolloOptions),
             render: h => h(App),
         });
     },

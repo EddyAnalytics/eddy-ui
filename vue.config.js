@@ -12,6 +12,7 @@ module.exports = {
             clientsClaim: true,
         },
     },
+
     chainWebpack: config => {
         if (process.env.NODE_ENV === 'production') {
             // Add version suffix to file names to force cache invalidation (CDN, Browser, and SW) in exceptional cases
@@ -19,6 +20,7 @@ module.exports = {
             config.output.chunkFilename(`js/[name].[contenthash:8].v${VERSION}.js`);
         }
     },
+
     css: {
         loaderOptions: {
             sass: {
@@ -36,4 +38,11 @@ module.exports = {
                   }
                 : undefined,
     },
+
+    pluginOptions: {
+      apollo: {
+        enableMocks: true,
+        enableEngine: true
+      }
+    }
 };

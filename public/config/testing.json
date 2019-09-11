@@ -1,4 +1,5 @@
 {
+    "debug": false,
     "cookies": {
         "enabled": false
     },
@@ -8,6 +9,11 @@
     },
     "api": {
         "url": "https://reqres.in/api/"
+    },
+    "graphql": {
+        "filesRoot": "http://localhost:4000",
+        "httpEndpoint": "http://localhost:4000/graphql",
+        "wsEndpoint": "ws://localhost:4000/graphql"
     },
     "errorTracking": {
         "enabled": false,
