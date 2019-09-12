@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import Dashboard from '@/pages/Dashboard';
 import Project from '@/pages/Project';
+import Pipeline from '@/pages/Pipeline';
 import Integrations from '@/pages/Integrations';
 import Settings from '@/pages/Settings';
 
@@ -37,6 +38,14 @@ let router = new Router({
             path: '/project/:projectId',
             name: 'Project',
             component: Project,
+            meta: {
+                auth: true,
+            },
+        },
+        {
+            path: '/pipeline/:pipelineId',
+            name: 'Pipeline',
+            component: Pipeline,
             meta: {
                 auth: true,
             },

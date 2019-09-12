@@ -21,7 +21,16 @@
 
         <div class="col-12">
             <h2>Pipelines</h2>
+            <router-link
+                :to="{ name: 'Pipeline', params: { pipelineId: 0 } }"
+                tag="button"
+                class="button--cta"
+            >
+                Add new
+            </router-link>
         </div>
+
+        <br />
 
         <div class="col-12">
             <h2>Activity</h2>
@@ -30,6 +39,8 @@
                 {{ entry.content }}
             </div>
         </div>
+
+        <br />
 
         <div class="col-12">
             <h2>Dashboards</h2>
