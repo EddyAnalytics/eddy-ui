@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="col-12">
-            <h1>Dashboard</h1>
+            <h1>Projects</h1>
         </div>
         <div class="col-12">
             <div class="row">
@@ -15,13 +15,20 @@
         </div>
 
         <div class="col-12">
+            <h1>Activity</h1>
+        </div>
+        <div class="col-12">
+            <div class="row"></div>
+        </div>
+
+        <!-- <div class="col-12">
             <h1>Apollo GraphQL Examples</h1>
         </div>
         <div class="col-12">
             <div class="row">
                 <apollo-example />
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 

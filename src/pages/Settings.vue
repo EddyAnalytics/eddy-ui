@@ -4,6 +4,8 @@
         <h2>System Status</h2>
         <h2>System Settings</h2>
         <h2>Kafka</h2>
+        <h2>Flink</h2>
+        <h2>Spark</h2>
     </div>
 </template>
 

@@ -1,13 +1,65 @@
 <template>
     <div>
-        <h1>Integrations</h1>
+        <div class="col-12">
+            <h1>Integrations</h1>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <integration-block
+                    v-for="integration in integrations"
+                    :key="integration.id"
+                    :integration="integration"
+                ></integration-block>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
+import IntegrationBlock from '@/components/integrations/IntegrationBlock';
 
-@Component
-export default class Integrations extends Vue {}
+@Component({
+    components: {
+        IntegrationBlock,
+    },
+})
+export default class Integrations extends Vue {
+    integrations = [
+        {
+            id: 0,
+            logo: '/img/integrations/debezium.svg',
+            name: 'Debezium ',
+            description: `
+                        SQL DB Connector for Kafka allowing streaming a SQL
+                        database from the begining or observing it in real time
+            `,
+        },
+        {
+            id: 1,
+            logo: '/img/integrations/spark.svg',
+            name: 'External Spark Cluster',
+            description: `
+                    User an external Spark Cluster for running the pipeline jobs
+            `,
+        },
+        {
+            id: 2,
+            logo: '/img/integrations/flink.png',
+            name: 'External Flink Cluster',
+            description: `
+                    User an external Flink for running the pipeline jobs
+            `,
+        },
+        {
+            id: 3,
+            logo: '/img/integrations/hadoop.svg',
+            name: 'External Hadoop Cluster',
+            description: `
+                    User an external Hadoop Cluster for running the pipeline jobs
+            `,
+        },
+    ];
+}
 </script>

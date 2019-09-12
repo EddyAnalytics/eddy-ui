@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="horizontal-bg"></div>
+        <!-- <div class="horizontal-bg"></div> -->
         <authentication></authentication>
     </div>
 </template>
