@@ -6,6 +6,7 @@
 @import "general/states";
 @import "general/tooltips";
 @import "general/general";
+
 //Components
 @import "components/alert/alert";
 @import "components/alert/alert--auth/alert--auth";
@@ -81,3 +82,6 @@
 @import "components/toaster/toaster--error/toaster--error";
 @import "components/toaster/toaster--success/toaster--success";
 @import "components/toaster/toaster--warning/toaster--warning";
+
+// Spacing overrides
+@import "general/spacing";

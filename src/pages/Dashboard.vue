@@ -5,35 +5,45 @@
         </div>
         <div class="col-12">
             <div class="row">
-                <block v-for="project in projects" :key="project.id">
-                    {{ project.name }}
-                </block>
+                <project-block
+                    v-for="project in projects"
+                    :key="project.id"
+                    :project="project"
+                    @click.native="redirectToProject(project)"
+                ></project-block>
             </div>
         </div>
 
-        <apollo-example />
+        <div class="col-12">
+            <h1>Apollo GraphQL Examples</h1>
+        </div>
+        <div class="col-12">
+            <div class="row">
+                <apollo-example />
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import Block from '@/components/general/Block';
+import ProjectBlock from '@/components/dashboard/ProjectBlock';
 import ApolloExample from '@/components/ApolloExample';
 
 @Component({
     components: {
-        Block,
+        ProjectBlock,
         ApolloExample,
     },
 })
 export default class Dashboard extends Vue {
-    projects = [
-        {
-            id: 0,
-            name: 'dsa',
-        },
-        { id: 1, name: 'dsaeweq' },
-    ];
+    get projects() {
+        return this.$store.state.projects.projects;
+    }
+
+    redirectToProject(project) {
+        this.$router.push({ name: 'Project', params: { projectId: project.id } });
+    }
 }
 </script>

@@ -2,8 +2,9 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Dashboard from '@/pages/Dashboard';
+import Project from '@/pages/Project';
 import Integrations from '@/pages/Integrations';
-import Settings from '@/pages/Dashboard';
+import Settings from '@/pages/Settings';
 
 import AuthenticationPage from '@/pages/AuthenticationPage';
 import Profile from '@/pages/Profile';
@@ -28,6 +29,14 @@ let router = new Router({
             path: '/dashboard',
             name: 'Dashboard',
             component: Dashboard,
+            meta: {
+                auth: true,
+            },
+        },
+        {
+            path: '/project/:projectId',
+            name: 'Project',
+            component: Project,
             meta: {
                 auth: true,
             },

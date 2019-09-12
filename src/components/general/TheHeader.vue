@@ -13,7 +13,7 @@
                 <span class="logo__block block-9"></span>
             </span>
             <span class="logo__text">
-                <img src="../../assets/images/logo/logo-elnino.svg" alt="El Niño" title="El Niño" />
+                <img src="../../assets/img/logo/logo-elnino.svg" alt="El Niño" title="El Niño" />
                 <span class="logo__subtitle">Eddy</span>
             </span>
         </router-link>

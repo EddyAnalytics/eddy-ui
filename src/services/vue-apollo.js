@@ -39,11 +39,6 @@ export function createProvider(options = {}) {
         ...options,
     });
 
-    console.log(apolloClient, {
-        ...defaultOptions,
-        ...options,
-    });
-
     apolloClient.wsClient = wsClient;
 
     // Create vue apollo provider
