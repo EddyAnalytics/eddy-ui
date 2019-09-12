@@ -1,12 +1,38 @@
 <template>
     <div>
         <div class="col-12">
-            <h1>Project</h1>
+            <h1>Project {{ project.name }}</h1>
         </div>
+
         <div class="col-12">
+            <h2>Data sources</h2>
             <div class="row">
-                {{ project }}
+                <div
+                    class="col-xs-12 col-md-2"
+                    v-for="dataSource in dataSources"
+                    :key="dataSource.id"
+                >
+                    <data-source-block :dataSource="dataSource"></data-source-block>
+                </div>
             </div>
+        </div>
+
+        <br />
+
+        <div class="col-12">
+            <h2>Pipelines</h2>
+        </div>
+
+        <div class="col-12">
+            <h2>Activity</h2>
+            <div class="scrum_card" v-for="entry in activityEntries" :key="entry.content">
+                {{ entry.type }}
+                {{ entry.content }}
+            </div>
+        </div>
+
+        <div class="col-12">
+            <h2>Dashboards</h2>
         </div>
     </div>
 </template>
@@ -14,9 +40,12 @@
 <script>
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
+import DataSourceBlock from '@/components/project/DataSourceBlock';
 
 @Component({
-    components: {},
+    components: {
+        DataSourceBlock,
+    },
 })
 export default class Project extends Vue {
     get projects() {
@@ -30,5 +59,20 @@ export default class Project extends Vue {
     created() {
         this.projectId = this.$route.params.projectId;
     }
+
+    activityEntries = [
+        {
+            type: 'debezium-kafka',
+            content: 'DB Change',
+        },
+    ];
+
+    dataSources = [
+        {
+            id: 0,
+            logo: '/img/data-sources/data-source-db.svg',
+            name: 'SQL Database ',
+        },
+    ];
 }
 </script>
