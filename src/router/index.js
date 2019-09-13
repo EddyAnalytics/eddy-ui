@@ -27,6 +27,10 @@ let router = new Router({
     linkActiveClass: 'is-active',
     routes: [
         {
+            path: '/',
+            redirect: '/dashboard',
+        },
+        {
             path: '/dashboard',
             name: 'Dashboard',
             component: Dashboard,
