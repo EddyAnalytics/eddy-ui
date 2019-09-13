@@ -18,11 +18,16 @@ export default {
                 },
                 {
                     id: 1,
+                    name: 'El Nino - Sentiment Analysis',
+                    logo: '/img/projects/elnino.svg',
+                },
+                {
+                    id: 2,
                     name: 'Takeaway.com - Loyalty',
                     logo: '/img/projects/thuisbezorgd.svg',
                 },
                 {
-                    id: 2,
+                    id: 3,
                     name: 'WGV - ePortfolio',
                     logo: '/img/projects/eportfolio.svg',
                 },

@@ -60,6 +60,14 @@ export default class Integrations extends Vue {
                     User an external Hadoop Cluster for running the pipeline jobs
             `,
         },
+        {
+            id: 4,
+            logo: '/img/integrations/twitter.svg',
+            name: 'Twitter API',
+            description: `
+                    Use the Twitter API to query data or observe streams
+            `,
+        },
     ];
 }
 </script>
