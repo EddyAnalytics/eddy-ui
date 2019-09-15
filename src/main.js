@@ -3,6 +3,7 @@ import '@/router/class-component-hooks';
 import '@/api/interceptors';
 import Vue from 'vue';
 import App from '@/App';
+import Buefy from 'buefy';
 import router from '@/router';
 import i18n from '@/languages';
 import store from '@/store';
@@ -12,6 +13,8 @@ import Raven from 'raven-js';
 import RavenVue from 'raven-js/plugins/vue';
 import '@/components/general/VueSelect';
 import '@/filters';
+
+Vue.use(Buefy);
 
 import VueAxios from 'vue-axios';
 import { api } from '@/api';

@@ -29,3 +29,6 @@ export default class App extends Vue {}
 
 <!-- Import SCSS boilerplate -->
 <style src="./assets/css/styles.scss" lang="scss"></style>
+
+<!-- Import Bulma -->
+<!-- <style src="./assets/css/bulma.scss" lang="scss"></style> -->
