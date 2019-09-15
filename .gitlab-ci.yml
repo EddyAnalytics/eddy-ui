@@ -20,8 +20,10 @@ build-static:
 build-image:
     stage: build-image
     image: docker:latest
+    services:
+        - docker:dind
     before_script:
         - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     script:
-        - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA" .
-        - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
+        - docker build --pull -t "$CI_REGISTRY_IMAGE" .
+        - docker push "$CI_REGISTRY_IMAGE"
