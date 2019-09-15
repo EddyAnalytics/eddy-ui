@@ -19,15 +19,14 @@ module.exports = {
           htmlWhitespaceSensitivity: 'ignore'
         }
       ],
-    // TODO: Needs env dependent remote schema fetching: grapql-cli or apollow-codegen
-    //   'graphql/template-strings': [
-    //     'error',
-    //     {
-    //       env: 'literal',
-    //       projectName: 'eddy-ui',
-    //       schemaJsonFilepath: 'node_modules/.temp/graphql/schema.json'
-    //     }
-    //   ]
+      'graphql/template-strings': [
+        'error',
+        {
+          env: 'apollo',
+          projectName: 'eddy-ui',
+          schemaJsonFilepath: 'src/graphql/schema.json'
+        }
+      ]
     },
 
     parserOptions: {

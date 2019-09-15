@@ -6,14 +6,23 @@ const env = loadEnv([path.resolve(__dirname, '.env'), path.resolve(__dirname, '.
 
 module.exports = {
     client: {
-        service: env.VUE_APP_APOLLO_ENGINE_SERVICE,
         includes: ['src/**/*.{js,jsx,ts,tsx,vue,gql}'],
+        service: {
+            name: env.APOLLO_ENGINE_SERVICE,
+            localSchemaFile: 'src/graphql/schema.json',
+        },
     },
     service: {
-        name: env.VUE_APP_APOLLO_ENGINE_SERVICE,
+        name: env.APOLLO_ENGINE_SERVICE,
+        endpoint: {
+            url: 'http://localhost:8000',
+            headers: {
+                authorization: 'Bearer token',
+            },
+            skipSSLValidation: true,
+        },
     },
     engine: {
-        endpoint: process.env.APOLLO_ENGINE_API_ENDPOINT,
-        apiKey: env.VUE_APP_APOLLO_ENGINE_KEY,
+        apiKey: env.APOLLO_ENGINE_KEY,
     },
 };

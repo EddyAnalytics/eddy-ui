@@ -6,9 +6,9 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "apollo:schema:generate": "vue-cli-service apollo:schema:generate",
-    "apollo:schema:publish": "vue-cli-service apollo:schema:publish",
-    "apollo:start": "vue-cli-service apollo:start",
+    "apollo:schema:download": "apollo service:download src/graphql/schema.json",
+    "apollo:schema:check": "apollo service:check",
+    "apollo:schema:publish": "apollo service:push",
     "build:report": "vue-cli-service build --report",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit"
