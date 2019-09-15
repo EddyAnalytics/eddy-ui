@@ -1,0 +1,27 @@
+stages:
+  - build-static
+  - build-image
+
+build-static:
+    stage: build-static
+    image: node:10.15.3
+    script:
+        - yarn install
+        - yarn run build
+    artifacts:
+        paths:
+            - ./dist
+        expire_in: 7 days
+    cache:
+        paths:
+            - node_modules/
+            - .yarn
+
+build-image:
+    stage: build-image
+    image: docker:latest
+    before_script:
+        - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    script:
+        - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA" .
+        - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
