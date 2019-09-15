@@ -20,15 +20,6 @@
         <div class="col-12">
             <div class="row"></div>
         </div>
-
-        <!-- <div class="col-12">
-            <h1>Apollo GraphQL Examples</h1>
-        </div>
-        <div class="col-12">
-            <div class="row">
-                <apollo-example />
-            </div>
-        </div> -->
     </div>
 </template>
 
@@ -36,12 +27,10 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import ProjectBlock from '@/components/dashboard/ProjectBlock';
-import ApolloExample from '@/components/ApolloExample';
 
 @Component({
     components: {
         ProjectBlock,
-        ApolloExample,
     },
 })
 export default class Dashboard extends Vue {
