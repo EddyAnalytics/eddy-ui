@@ -11,10 +11,11 @@
         "url": "https://reqres.in/api/"
     },
     "graphql": {
-        "filesRoot": "http://localhost:4000",
-        "httpEndpoint": "http://localhost:4000/graphql",
-        "wsEndpoint": "ws://localhost:4000/graphql"
+        "enabled": true,
+        "httpEndpoint": "http://localhost:8000",
+        "wsEndpoint": "ws://localhost:8000/subscriptions"
     },
+    "resourcesRootPath": "http://localhost:8000",
     "errorTracking": {
         "enabled": false,
         "url": "XXX"

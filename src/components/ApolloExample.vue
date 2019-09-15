@@ -64,7 +64,7 @@
 
         <div class="images">
             <div v-for="file of files" :key="file.id" class="image-item">
-                <img :src="`${$config.graphql.filesRoot}/${file.path}`" class="image" />
+                <img :src="`${$config.resourcesRootPath}/${file.path}`" class="image" />
             </div>
         </div>
 
