@@ -12,8 +12,7 @@
     "apollo:start": "vue-cli-service apollo:start",
     "build:report": "vue-cli-service build --report",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit",
-    "start": "yarn apollo"
+    "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
     "@mdi/font": "^2.8.94",
