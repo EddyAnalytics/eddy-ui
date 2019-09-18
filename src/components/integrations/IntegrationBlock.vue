@@ -1,46 +1,49 @@
 <template>
-    <block v-if="integration">
-        <div class="integration-block">
-            <div class="row">
-                <div class="col-xs-12 col-md-2">
-                    <img :src="integration.logo" class="integration-block__logo" />
+    <b-collapse v-if="integration" class="card" :open="false">
+        <div slot="trigger" slot-scope="props" class="card-header" role="button">
+            <article class="media">
+                <figure class="media-left">
+                    <p class="image is-64x64 m-md">
+                        <img :src="integration.logo" />
+                    </p>
+                </figure>
+
+                <div class="media-content">
+                    <div class="content p-md">
+                        <p>
+                            <strong>{{ integration.name }}</strong>
+                            <br />
+                            {{ integration.description }}
+                        </p>
+                    </div>
                 </div>
-                <div class="col-xs-12 col-md-8">
-                    <div class="integration-block__title">{{ integration.name }}</div>
-                    <div class="integration-block__description">{{ integration.description }}</div>
-                </div>
-                <div class="col-xs-12 col-md-2">
-                    <i class="mdi mdi-pencil"></i>
-                    <span>Edit</span>
-                </div>
+            </article>
+
+            <a class="card-header-icon">
+                <b-icon :icon="props.open ? 'menu-up' : 'menu-down'"></b-icon>
+            </a>
+        </div>
+
+        <div class="card-content">
+            <div class="content">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis
+                mauris.
             </div>
         </div>
-    </block>
-</template>
-<style lang="scss" scoped>
-.integration-block {
-    .integration-block__logo {
-        max-width: 10rem;
-    }
 
-    .integration-block__title,
-    .integration-block__description {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-}
-</style>
+        <footer class="card-footer">
+            <a class="card-footer-item">Edit</a>
+            <a class="card-footer-item">Cancel</a>
+            <a class="card-footer-item has-text-danger">Delete</a>
+        </footer>
+    </b-collapse>
+</template>
+
 <script>
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import Block from '@/components/general/Block';
 
-@Component({
-    components: {
-        Block,
-    },
-})
+@Component
 export default class IntegrationBlock extends Vue {
     @Prop() integration;
 }

@@ -1,10 +1,10 @@
 <template>
-    <block v-if="dataSource">
+    <div v-if="dataSource">
         <div class="data-source-block">
             <img :src="dataSource.logo" class="data-source-block__logo" />
             <div class="data-source-block__title">{{ dataSource.name }}</div>
         </div>
-    </block>
+    </div>
 </template>
 <style lang="scss" scoped>
 .data-source-block {
@@ -27,13 +27,8 @@
 <script>
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import Block from '@/components/general/Block';
 
-@Component({
-    components: {
-        Block,
-    },
-})
+@Component
 export default class DataSourceBlock extends Vue {
     @Prop() dataSource;
 }
