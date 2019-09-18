@@ -20,6 +20,12 @@
     </footer>
 </template>
 
+<style lang="scss">
+.footer {
+    flex: 1;
+}
+</style>
+
 <script>
 import { Vue, Component } from 'vue-property-decorator';
 

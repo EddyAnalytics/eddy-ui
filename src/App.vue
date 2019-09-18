@@ -1,7 +1,7 @@
 <template>
     <div>
         <the-header></the-header>
-        <main class="container-fluid">
+        <main class="main container-fluid">
             <transition>
                 <router-view></router-view>
             </transition>
@@ -9,6 +9,14 @@
         <the-footer></the-footer>
     </div>
 </template>
+
+<style lang="scss">
+.main {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+</style>
 
 <script>
 import '@mdi/font/css/materialdesignicons.css';
