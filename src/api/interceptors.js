@@ -41,7 +41,7 @@ api.interceptors.request.use(
         // Assign the refreshed token on every request.
         const token = localStorage.getItem('eddy-ui-token');
         const lang = localStorage.getItem('lang');
-        if (token) request.headers['Authorization'] = token;
+        if (token) request.headers['Authorization'] = 'Bearer ' + token;
         request.headers['Accept-Language'] = lang || 'en';
         return Promise.resolve(request);
     },

@@ -34,10 +34,18 @@
 
         <div class="col-12">
             <h2>Activity</h2>
-            <div class="scrum_card" v-for="entry in activityEntries" :key="entry.content">
-                {{ entry.type }}
-                {{ entry.content }}
-            </div>
+
+            <v-select
+                :options="[
+                    'mysql1.inventory.customers',
+                    'mysql1.inventory.products',
+                    'mysql1.inventory.orders',
+                ]"
+                v-model="topic"
+            ></v-select>
+
+            {{ topic }}
+            <pre>{{ activity }}</pre>
         </div>
 
         <br />
@@ -47,18 +55,45 @@
         </div>
     </div>
 </template>
-
+<style lang="scss" scoped>
+pre {
+    max-height: 20rem;
+    overflow: auto;
+}
+</style>
 <script>
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import DataSourceBlock from '@/components/project/DataSourceBlock';
+import gql from 'graphql-tag';
 
 @Component({
     components: {
         DataSourceBlock,
     },
+    apollo: {
+        $subscribe: {
+            kafkaTopic: {
+                query: gql`
+                    subscription kafkaTopic($topic: String!) {
+                        kafka(topic: $topic)
+                    }
+                `,
+                variables() {
+                    return {
+                        topic: this.topic,
+                    };
+                },
+                result({ data }) {
+                    this.activity = data;
+                },
+            },
+        },
+    },
 })
 export default class Project extends Vue {
+    activity = {};
+    topic = 'mysql1.inventory.customers';
     get projects() {
         return this.$store.state.projects.projects;
     }

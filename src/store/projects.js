@@ -23,7 +23,7 @@ export default {
                 },
                 {
                     id: 2,
-                    name: 'Takeaway.com - Loyalty',
+                    name: 'Takeaway.com',
                     logo: '/img/projects/thuisbezorgd.svg',
                 },
                 {

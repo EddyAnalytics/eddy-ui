@@ -50,7 +50,7 @@ api.get('/config/' + configFileName).then(
 
         const apolloOptions = {
             httpEndpoint: config.graphql.httpEndpoint,
-            wsEndpint: config.graphql.wsEndpoint,
+            wsEndpoint: config.graphql.wsEndpoint,
         };
 
         connectRaven();
