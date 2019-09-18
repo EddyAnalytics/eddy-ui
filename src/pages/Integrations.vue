@@ -1,12 +1,14 @@
 <template>
-    <section class="section">
-        <h1 class="title">Integrations</h1>
-        <integration-block
-            v-for="integration in integrations"
-            :key="integration.id"
-            :integration="integration"
-        />
-    </section>
+    <main class="container">
+        <section class="section">
+            <h1 class="title">Integrations</h1>
+            <integration-block
+                v-for="integration in integrations"
+                :key="integration.id"
+                :integration="integration"
+            />
+        </section>
+    </main>
 </template>
 
 <script>

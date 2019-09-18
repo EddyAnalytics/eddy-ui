@@ -1,10 +1,12 @@
 <template>
-    <div class="block--small">
-        <h2>Sorry, deze pagina bestaat niet...</h2>
-        <p>
-            <router-link :to="{ name: 'Dashboard' }" class="button--cta">Ga terug</router-link>
-        </p>
-    </div>
+    <main class="container">
+        <section class="section content">
+            <h2>Sorry, this page does not exist</h2>
+            <p>
+                <router-link :to="{ name: 'Dashboard' }" class="button--cta">Go back</router-link>
+            </p>
+        </section>
+    </main>
 </template>
 
 <script>

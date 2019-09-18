@@ -9,12 +9,9 @@
 <script>
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import DataSourceBlock from '@/components/project/DataSourceBlock';
 
 @Component({
-    components: {
-        DataSourceBlock,
-    },
+    components: {},
 })
 export default class Pipeline extends Vue {
     created() {

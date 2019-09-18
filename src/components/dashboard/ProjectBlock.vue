@@ -1,30 +1,35 @@
 <template>
-    <div v-if="project">
-        <div class="project-block">
-            <img :src="project.logo" class="project-block__logo" />
-            <div class="project-block__title">{{ project.name }}</div>
-            <div class="project-block__description">{{ project.description }}</div>
+    <article class="column is-narrow">
+        <div v-if="project" class="card project-card">
+            <div class="card-image">
+                <figure class="image is-128x128 is-inline-block">
+                    <img :src="project.logo" alt="Project logo" />
+                </figure>
+            </div>
+            <div class="card-content">
+                <div class="content">
+                    <h5>{{ project.name }}</h5>
+                    {{ project.description }}
+                </div>
+            </div>
         </div>
-    </div>
+    </article>
 </template>
+
 <style lang="scss" scoped>
-.project-block {
-    width: 20rem;
+.project-card {
+    min-width: 20rem;
     cursor: pointer;
 
-    .project-block__logo {
-        min-height: 10rem;
-    }
-
-    .project-block__title,
-    .project-block__description {
+    .card-image {
         text-align: center;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        .image {
+            padding-top: 15%;
+        }
     }
 }
 </style>
+
 <script>
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';

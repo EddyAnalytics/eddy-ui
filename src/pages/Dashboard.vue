@@ -1,10 +1,8 @@
 <template>
-    <div>
-        <div class="col-12">
-            <h1>Projects</h1>
-        </div>
-        <div class="col-12">
-            <div class="row">
+    <main>
+        <section class="section">
+            <h1 class="title">Projects</h1>
+            <div class="columns is-multiline">
                 <project-block
                     v-for="project in projects"
                     :key="project.id"
@@ -12,15 +10,8 @@
                     @click.native="redirectToProject(project)"
                 ></project-block>
             </div>
-        </div>
-
-        <div class="col-12">
-            <h1>Activity</h1>
-        </div>
-        <div class="col-12">
-            <div class="row"></div>
-        </div>
-    </div>
+        </section>
+    </main>
 </template>
 
 <script>
