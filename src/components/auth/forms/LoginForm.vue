@@ -1,44 +1,31 @@
 <template>
-    <div>
-        <form class="form--login" @submit.prevent="login">
-            <div class="block--small">
-                <h2>
-                    {{ $t('auth.log_in_with') }}
-                    <strong>{{ $t('auth.email').toLowerCase() }}</strong>
-                    {{ $t('auth.and') }}
-                    <strong>{{ $t('auth.password') }}</strong>
-                </h2>
+    <section>
+        <h2 class="is-size-2 has-text-weight-semibold has-text-centered">
+            {{ $t('auth.log_in_with') }}
+            <strong>{{ $t('auth.email').toLowerCase() }}</strong>
+            {{ $t('auth.and') }}
+            <strong>{{ $t('auth.password').toLowerCase() }}</strong>
+        </h2>
+        <hr />
 
-                <div v-if="errorCode" class="alert--auth">
-                    <p>{{ localizedErrorMessage }}</p>
-                </div>
-            </div>
-            <div class="block--small--bg">
-                <div class="form__field">
-                    <input
-                        type="email"
-                        name="email"
-                        required
-                        v-model="email"
-                        class="form__input--text"
-                        :class="{ 'has-value': email }"
-                    />
-                    <label class="form__label">{{ $t('auth.email') }}</label>
-                </div>
-                <password-field name="password" v-model="password" :label="$t('auth.password')" />
-                <div class="link_block">
-                    <router-link :to="{ name: 'reset' }">
-                        {{ $t('auth.link_forgot_password') }}
-                    </router-link>
-                </div>
-                <div class="form__buttons">
-                    <button type="submit" class="button--cta">
-                        {{ $t('auth.button_signin') }}
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
+        <b-field :label="$t('auth.email')">
+            <b-input type="email" maxlength="30" v-model="email"></b-input>
+        </b-field>
+
+        <b-field :label="$t('auth.password')">
+            <b-input type="password" v-model="password" password-reveal></b-input>
+        </b-field>
+
+        <div class="is-pulled-right">
+            <router-link :to="{ name: 'reset' }">
+                {{ $t('auth.link_forgot_password') }}
+            </router-link>
+        </div>
+
+        <b-button type="is-primary" class="m-t-md" @click="login">
+            {{ $t('auth.button_signin') }}
+        </b-button>
+    </section>
 </template>
 
 <script>
@@ -46,21 +33,12 @@ import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { AUTH } from '@/store/auth';
 import { ERROR_CODE, localizeErrorCode } from '@/api/errors';
-import PasswordField from '@/components/general/PasswordField';
 
-@Component({
-    components: { PasswordField },
-})
+@Component()
 export default class LoginForm extends Vue {
     email = 'eve.holt@reqres.in';
     password = 'cityslicka';
-    passwordVisible = false;
-    busy = false;
     errorCode = ERROR_CODE.NONE;
-
-    togglePassword() {
-        this.passwordVisible = !this.passwordVisible;
-    }
 
     get passwordType() {
         return this.passwordVisible ? 'text' : 'password';

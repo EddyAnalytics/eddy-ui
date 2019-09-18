@@ -28,7 +28,7 @@
                             {{ $t('auth.email') }}
                         </label>
                     </div>
-                    <password-field
+                    <!-- <password-field
                         v-model="password"
                         :label="$t('auth.new_password')"
                         @input="verifyPassword"
@@ -41,7 +41,7 @@
                         @input="verifyPassword"
                         @invalid="enableMismatchWarning"
                         ref="passwordRepeat"
-                    />
+                    /> -->
                     <div class="alert--auth" v-if="showMismatchWarning">
                         <p>{{ mismatchWarning }}</p>
                     </div>
@@ -68,11 +68,8 @@
 import Vue from 'vue';
 import { Component, Watch } from 'vue-property-decorator';
 import { ERROR_CODE, localizeErrorCode } from '@/api/errors';
-import PasswordField from '@/components/general/PasswordField';
 
-@Component({
-    components: { PasswordField },
-})
+@Component
 export default class PasswordResetForm extends Vue {
     newPasswordSent = false;
     token = '';

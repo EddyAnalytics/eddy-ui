@@ -1,7 +1,7 @@
 <template>
-    <b-navbar>
+    <b-navbar fixed-top>
         <template #brand>
-            <b-navbar-item tag="router-link" :to="{ name: 'Dashboard' }">
+            <b-navbar-item tag="router-link" :to="{ name: isLoggedIn ? 'Dashboard' : 'Landing' }">
                 <img
                     src="@/assets/img/logo.svg"
                     width="100"
@@ -12,15 +12,17 @@
         </template>
 
         <template #start>
-            <b-navbar-item tag="router-link" :to="{ name: isLoggedIn ? 'Dashboard' : 'Landing' }">
-                {{ $t('menu.dashboard') }}
-            </b-navbar-item>
-            <b-navbar-item tag="router-link" :to="{ name: 'Integrations' }">
-                {{ $t('menu.integrations') }}
-            </b-navbar-item>
-            <b-navbar-item tag="router-link" :to="{ name: 'Settings' }">
-                {{ $t('menu.settings') }}
-            </b-navbar-item>
+            <template v-if="isLoggedIn">
+                <b-navbar-item tag="router-link" :to="{ name: 'Dashboard' }">
+                    {{ $t('menu.dashboard') }}
+                </b-navbar-item>
+                <b-navbar-item tag="router-link" :to="{ name: 'Integrations' }">
+                    {{ $t('menu.integrations') }}
+                </b-navbar-item>
+                <b-navbar-item tag="router-link" :to="{ name: 'Settings' }">
+                    {{ $t('menu.settings') }}
+                </b-navbar-item>
+            </template>
         </template>
 
         <template #end>
@@ -48,6 +50,12 @@
         </template>
     </b-navbar>
 </template>
+
+<style lang="scss" scoped>
+.navbar {
+    box-shadow: 0 2px 0 0 whitesmoke;
+}
+</style>
 
 <script>
 import Vue from 'vue';

@@ -17,7 +17,7 @@
                     @input="verifyPassword"
                     ref="oldPassword"
                 />
-                <password-field
+                <!-- <password-field
                     v-model="newPassword"
                     :label="$t('change_password.label_new')"
                     @input="verifyPassword"
@@ -29,7 +29,7 @@
                     @input="verifyPassword"
                     @invalid="enableMismatchWarning"
                     ref="newPasswordRepeat"
-                />
+                /> -->
                 <div v-if="showMismatchWarning" class="alert--auth">
                     <p>{{ passwordError.error }}</p>
                 </div>
@@ -56,14 +56,11 @@
 <script>
 import Vue from 'vue';
 import { Component, Watch } from 'vue-property-decorator';
-import PasswordField from '@/components/general/PasswordField';
 import { ERROR_CODE, localizeErrorCode } from '@/api/errors';
 import { api } from '@/api';
 import { AUTH } from '@/store/auth';
 
-@Component({
-    components: { PasswordField },
-})
+@Component
 export default class ChangePasswordForm extends Vue {
     oldPassword = '';
     newPassword = '';
