@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+import Landing from '@/pages/Landing';
 import Dashboard from '@/pages/Dashboard';
 import Project from '@/pages/Project';
 import Pipeline from '@/pages/Pipeline';
@@ -28,7 +29,13 @@ let router = new Router({
     routes: [
         {
             path: '/',
-            redirect: '/dashboard',
+            name: 'Landing',
+            component: Landing,
+            // Redirect to the Dashboard if authenticated on landing
+            redirect: store.getters[AUTH.IS_AUTHENTICATED] && '/dashboard',
+            meta: {
+                auth: false,
+            },
         },
         {
             path: '/dashboard',

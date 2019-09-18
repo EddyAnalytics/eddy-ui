@@ -1,9 +1,0 @@
-.wrapper {
-    display: block;
-    min-height: 100vh;
-    height: auto; //For IE
-    background: $color-grey-light;
-
-    @include flexbox();
-    @include flex-direction(column);
-}

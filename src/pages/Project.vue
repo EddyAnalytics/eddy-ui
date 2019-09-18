@@ -35,14 +35,14 @@
         <div class="col-12">
             <h2>Activity</h2>
 
-            <v-select
+            <select
                 :options="[
                     'mysql1.inventory.customers',
                     'mysql1.inventory.products',
                     'mysql1.inventory.orders',
                 ]"
                 v-model="topic"
-            ></v-select>
+            ></select>
 
             {{ topic }}
             <pre>{{ activity }}</pre>

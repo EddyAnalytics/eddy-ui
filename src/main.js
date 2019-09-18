@@ -7,11 +7,8 @@ import Buefy from 'buefy';
 import router from '@/router';
 import i18n from '@/languages';
 import store from '@/store';
-import vmodal from 'vue-js-modal';
-import VTooltip from 'v-tooltip';
 import Raven from 'raven-js';
 import RavenVue from 'raven-js/plugins/vue';
-import '@/components/general/VueSelect';
 import '@/filters';
 
 Vue.use(Buefy);
@@ -23,10 +20,6 @@ import VueApollo from 'vue-apollo';
 import { createProvider } from '@/services/vue-apollo';
 
 Vue.config.productionTip = false;
-
-// Register the config independent modules.
-Vue.use(vmodal);
-Vue.use(VTooltip);
 
 // Override the config with the one from /static/config
 const nodeEnvName = process.env.NODE_ENV;

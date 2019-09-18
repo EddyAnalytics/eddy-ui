@@ -25,8 +25,9 @@ module.exports = {
         loaderOptions: {
             sass: {
                 data: `
-                  @import "@/assets/css/general/settings.scss";
-                  @import "@/assets/css/general/mixins.scss";
+                  @import "@/assets/scss/theme.scss";
+                  @import "@/assets/scss/mixins.scss";
+                  @import "@/assets/scss/spacing.scss";
                 `,
             },
         },

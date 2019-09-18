@@ -1,0 +1,353 @@
+//Gradients
+@mixin gradient ($startColor, $endColor)
+{
+    background-color: $endColor;
+    background-image: -o-linear-gradient(top, $startColor, $endColor);
+    background: -moz-linear-gradient(top, $startColor, $endColor);
+    background: -webkit-linear-gradient(top, $startColor, $endColor);
+    background: linear-gradient(to bottom, $startColor 0%, $endColor 100%);
+}
+
+@mixin gradient-horizontal ($startColor, $endColor)
+{
+    background-color: $endColor;
+    background-image: -o-linear-gradient(left, $startColor, $endColor);
+    background: -moz-linear-gradient(left, $startColor, $endColor);
+    background: -webkit-linear-gradient(left, $startColor, $endColor);
+    background: linear-gradient(to right, $startColor 0%, $endColor 100%);
+
+}
+//Drop shadow
+@mixin drop-shadow ($x, $y, $blur, $spread, $alpha)
+{
+    -webkit-box-shadow:	$x $y $blur $spread rgba(0, 0, 0, $alpha);
+    -moz-box-shadow:	$x $y $blur $spread rgba(0, 0, 0, $alpha);
+    box-shadow:		    $x $y $blur $spread rgba(0, 0, 0, $alpha);
+}
+
+//Drop shadow color
+@mixin drop-shadow-color ($x, $y, $blur, $spread, $color)
+{
+    -webkit-box-shadow:	$x $y $blur $spread $color;
+    -moz-box-shadow:	$x $y $blur $spread $color;
+    box-shadow:		    $x $y $blur $spread $color;
+}
+
+//Inner shadow
+@mixin inner-shadow ($x, $y, $blur, $spread, $alpha)
+{
+    -webkit-box-shadow: inset $x $y $blur $spread rgba(0, 0, 0, $alpha);
+    -moz-box-shadow:    inset $x $y $blur $spread rgba(0, 0, 0, $alpha);
+    box-shadow:         inset $x $y $blur $spread rgba(0, 0, 0, $alpha);
+}
+
+//No box shadow
+@mixin no-shadow
+{
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+//Flexbox
+@mixin flexbox
+{
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+@mixin flex($width)
+{
+    -moz-box-flex: $width;
+    -webkit-flex: $width;
+    -ms-flex: $width;
+    flex: $width;
+}
+
+@mixin flex-direction($direction)
+{
+    -ms-flex-direction: $direction;
+    -webkit-flex-direction: $direction;
+    flex-direction: $direction;
+}
+
+/// Slightly lighten a color
+@function tint($color, $percentage)
+{
+    @return mix(white, $color, $percentage);
+}
+
+/// Slightly darken a color
+@function shade($color, $percentage)
+{
+    @return mix(black, $color, $percentage);
+}
+
+
+//Opacity
+@mixin opacity ($opacity)
+{
+    -webkit-opacity: 	$opacity;
+    -moz-opacity: 		$opacity;
+    opacity:            $opacity;
+}
+
+//Top,right,bottom,left
+@mixin offset($top, $right, $bottom, $left)
+{
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+}
+
+//Transition
+@mixin transition($transition: all 0.2s)
+{
+    -moz-transition: $transition ease-in-out;
+    -webkit-transition: $transition ease-in-out;
+    -o-transition: $transition ease-in-out;
+    transition: $transition ease-in-out;
+}
+
+@mixin transition-delay($transition-time: 0.5s)
+{
+    -webkit-transition-delay: $transition-time;
+    -moz-transition-delay: $transition-time;
+    -o-transition-delay: $transition-time;
+    transition-delay: $transition-time;
+}
+
+//No transition
+@mixin no-transition
+{
+    -moz-transition: none;
+    -webkit-transition: none;
+    -o-transition: none;
+    transition: none;
+}
+
+//Rotate
+@mixin rotate($deg)
+{
+    -webkit-transform: rotate($deg);
+    -moz-transform: rotate($deg);
+    -ms-transform: rotate($deg);
+    -o-transform: rotate($deg);
+}
+
+//Scale
+@mixin scale($scale: 0.5)
+{
+    -ms-transform: scale($scale);
+    -webkit-transform: scale($scale);
+    transform: scale($scale);
+}
+
+//Transform origin
+@mixin transform-origin ($hor, $ver)
+{
+    -webkit-transform-origin: $hor $ver;
+    -moz-transform-origin: $hor $ver;
+    -ms-transform-origin: $hor $ver;
+    -o-transform-origin: $hor $ver;
+    transform-origin: $hor $ver;
+}
+
+//default = horizontal center
+@mixin translate($percentage1: -50%, $percentage2: 0)
+{
+    -webkit-transform: translate($percentage1, $percentage2);
+    -moz-transform: translate($percentage1, $percentage2);
+    -ms-transform: translate($percentage1, $percentage2);
+    transform: translate($percentage1, $percentage2);
+}
+
+//Keep ratio of element
+@mixin responsive-ratio($x,$y, $pseudo: false)
+{
+    $padding: unquote( ( $y / $x ) * 100 + '%' );
+
+    @if $pseudo
+    {
+        &:before
+        {
+            @include pseudo($pos: relative);
+            width: 100%;
+            padding-top: $padding;
+        }
+    }
+    @else
+    {
+        padding-top: $padding;
+    }
+}
+
+//Remove webkit appearance
+@mixin no-appearance
+{
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+//No user select
+@mixin no-user-select()
+{
+    /* Disable selection on checkbox/radio label, necessary to be able to select and deselect the element very fast */
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+//Box-sizing
+@mixin box-sizing($box)
+{
+    -webkit-box-sizing: $box;
+    -moz-box-sizing: $box;
+    box-sizing: $box;
+}
+
+//Center block horizontally
+@mixin horizontal-center
+{
+    margin:
+    {
+        left: auto;
+        right: auto;
+    }
+}
+
+//Standard pseudo element factors
+@mixin pseudo($display: block, $pos: absolute, $content: '')
+{
+    content: $content;
+    position: $pos;
+    display: $display;
+}
+
+//Placeholder
+@mixin input-placeholder
+{
+    &.placeholder { @content; }
+    &:-moz-placeholder { @content; }
+    &::-moz-placeholder { @content; }
+    &:-ms-input-placeholder { @content; }
+    &::-webkit-input-placeholder { @content; }
+}
+
+//Sharper resized images/illustrations
+@mixin image-crisp  //Cross browser pretty ok, do not remove anything or change order!
+{
+    image-rendering: crisp-edges;
+    image-rendering: optimizeSpeed;             /*                     */
+    image-rendering: optimize-contrast;         /* CSS3 Proposed       */
+    -ms-interpolation-mode: nearest-neighbor;   /* IE8+                */
+    image-rendering: -moz-crisp-edges;          /* Firefox             */
+    image-rendering: -webkit-optimize-contrast; /* Chrome (and Safari) */
+    image-rendering: optimizeQuality;
+}
+
+//Css triangle
+@mixin css-triangle($color, $direction, $size: 6px, $position: absolute, $round: false)
+{
+    @include pseudo($pos: $position);
+
+    width: 0;
+    height: 0;
+
+    @if $round
+    {
+        border-radius: 3px;
+    }
+
+    @if $direction == down
+    {
+        border-left: $size solid transparent;
+        border-right: $size solid transparent;
+        border-top: $size solid $color;
+        margin-top: 0 - round( $size / 2.5 );
+    }
+    @else if $direction == up
+    {
+        border-left: $size solid transparent;
+        border-right: $size solid transparent;
+        border-bottom: $size solid $color;
+        margin-bottom: 0 - round( $size / 2.5 );
+    }
+    @else if $direction == right
+    {
+        border-top: $size solid transparent;
+        border-bottom: $size solid transparent;
+        border-left: $size solid $color;
+        margin-right: -$size;
+    }
+    @else if  $direction == left
+    {
+        border-top: $size solid transparent;
+        border-bottom: $size solid transparent;
+        border-right: $size solid $color;
+        margin-left: -$size;
+    }
+}
+
+
+//Keyframe animations
+@mixin animation($kf, $duration, $timing, $iterationCount)
+{
+    -webkit-animation: $kf $duration $timing $iterationCount;
+    -moz-animation: $kf $duration $timing $iterationCount;
+    -ms-animation: $kf $duration $timing $iterationCount;
+    -o-animation: $kf $duration $timing $iterationCount;
+    animation: $kf $duration $timing $iterationCount;
+}
+
+@mixin spin
+{
+    @include animation(spin, 1s, linear, infinite);
+}
+
+
+@mixin keyframes($animationName)
+{
+    @-webkit-keyframes #{$animationName}
+    {
+        @content;
+    }
+    @-moz-keyframes #{$animationName}
+    {
+        @content;
+    }
+    @-o-keyframes #{$animationName}
+    {
+        @content;
+    }
+    @keyframes #{$animationName}
+    {
+        @content;
+    }
+}
+
+//Clearfix
+@mixin clearfix()
+{
+    &:before,
+    &:after
+    {
+        content: " ";
+        display: table;
+    }
+
+    &:after
+    {
+        clear: both;
+    }
+}
+

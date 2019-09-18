@@ -2777,6 +2777,11 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
+bezier-easing@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/bezier-easing/-/bezier-easing-2.1.0.tgz#c04dfe8b926d6ecaca1813d69ff179b7c2025d86"
+  integrity sha1-wE3+i5JtbsrKGBPWn/F5t8ICXYY=
+
 bfj@^6.1.1:
   version "6.1.2"
   resolved "https://registry.yarnpkg.com/bfj/-/bfj-6.1.2.tgz#325c861a822bcb358a41c78a33b8e6e2086dde7f"
@@ -6005,7 +6010,7 @@ graceful-fs@4.1.11:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
   integrity sha1-Dovf5NHduIVNZOBOp8AOKgJuVlg=
 
-graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.3, graceful-fs@^4.1.6, graceful-fs@^4.2.0:
+graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0:
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.2.tgz#6f0952605d0140c1cfdb138ed005775b92d67b02"
   integrity sha512-IItsdsea19BoLC7ELy13q1iJFNmd7ofZH5+X/pJr90/nRoPEX0DJo1dHDbgtYWOhJhcCgMDTOw84RZ72q6lB+Q==
@@ -8170,11 +8175,6 @@ lodash.templatesettings@^4.0.0:
   dependencies:
     lodash._reinterpolate "^3.0.0"
 
-lodash.throttle@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
-  integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
-
 lodash.transform@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.transform/-/lodash.transform-4.6.0.tgz#12306422f63324aed8483d3f38332b5f670547a0"
@@ -8185,7 +8185,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-lodash@4, lodash@4.17.15, lodash@^4.0.0, lodash@^4.11.1, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.3.0, lodash@~4.17.10:
+lodash@4.17.15, lodash@^4.0.0, lodash@^4.11.1, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.3.0, lodash@~4.17.10:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
@@ -8245,17 +8245,6 @@ loud-rejection@^1.0.0:
   dependencies:
     currently-unhandled "^0.4.1"
     signal-exit "^3.0.0"
-
-lowdb@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/lowdb/-/lowdb-1.0.0.tgz#5243be6b22786ccce30e50c9a33eac36b20c8064"
-  integrity sha512-2+x8esE/Wb9SQ1F9IHaYWfsC9FIecLOPrK4g17FGEayjUWH172H6nwicRovGvSE2CPZouc2MCIqCI7h9d+GftQ==
-  dependencies:
-    graceful-fs "^4.1.3"
-    is-promise "^2.1.0"
-    lodash "4"
-    pify "^3.0.0"
-    steno "^0.4.1"
 
 lower-case-first@^1.0.0:
   version "1.0.2"
@@ -8713,11 +8702,6 @@ nan@^2.12.1, nan@^2.13.2:
   version "2.14.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
   integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
-
-nanoid@^2.1.0:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-2.1.1.tgz#524fd4acd45c126e0c87cd43ab5ee8346e695df9"
-  integrity sha512-0YbJdaL4JFoejIOoawgLcYValFGJ2iyUuVDIWL3g8Es87SSOWFbWdRUMV3VMSiyPs3SQ3QxCIxFX00q5DLkMCw==
 
 nanomatch@^1.2.9:
   version "1.2.13"
@@ -9704,11 +9688,6 @@ pn@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/pn/-/pn-1.1.0.tgz#e2f4cef0e219f463c179ab37463e4e1ecdccbafb"
   integrity sha512-2qHaIQr2VLRFoxe2nASzsV6ef4yOOH+Fi9FBOVH6cqeSgUnoyySPZkxzLuzd+RYOQTRpROA0ztTMqxROKSb/nA==
-
-popper.js@^1.15.0:
-  version "1.15.0"
-  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.15.0.tgz#5560b99bbad7647e9faa475c6b8056621f5a4ff2"
-  integrity sha512-w010cY1oCUmI+9KwwlWki+r5jxKfTFDVoadl7MSrIujHU5MJ5OR6HTDj6Xo8aoR/QsA56x8jKjA59qGH4ELtrA==
 
 portfinder@^1.0.20, portfinder@^1.0.21:
   version "1.0.24"
@@ -11122,13 +11101,6 @@ shellwords@^0.1.1:
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.1.tgz#d6b9181c1a48d397324c84871efbcfc73fc0654b"
   integrity sha512-vFwSUfQvqybiICwZY5+DAWIPLKsWO31Q91JSKl3UYv+K5c2QRPzn0qzec6QPu1Qc9eHYItiP3NdJqNVqetYAww==
 
-shortid@^2.2.8:
-  version "2.2.15"
-  resolved "https://registry.yarnpkg.com/shortid/-/shortid-2.2.15.tgz#2b902eaa93a69b11120373cd42a1f1fe4437c122"
-  integrity sha512-5EaCy2mx2Jgc/Fdn9uuDuNIIfWBpzY4XIlhoqtXF6qsf+/+SGZ+FxDdX/ZsMZiWupIWNqAEmiNY4RC+LSmCeOw==
-  dependencies:
-    nanoid "^2.1.0"
-
 sigmund@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/sigmund/-/sigmund-1.0.1.tgz#3ff21f198cad2175f9f3b781853fd94d0d19b590"
@@ -11428,13 +11400,6 @@ stealthy-require@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/stealthy-require/-/stealthy-require-1.1.1.tgz#35b09875b4ff49f26a777e509b3090a3226bf24b"
   integrity sha1-NbCYdbT/SfJqd35QmzCQoyJr8ks=
-
-steno@^0.4.1:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/steno/-/steno-0.4.4.tgz#071105bdfc286e6615c0403c27e9d7b5dcb855cb"
-  integrity sha1-BxEFvfwobmYVwEA8J+nXtdy4Vcs=
-  dependencies:
-    graceful-fs "^4.1.3"
 
 stream-browserify@^2.0.1:
   version "2.0.2"
@@ -12396,22 +12361,6 @@ uuid@^3.0.1, uuid@^3.1.0, uuid@^3.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.3.tgz#4568f0216e78760ee1dbf3a4d2cf53e224112866"
   integrity sha512-pW0No1RGHgzlpHJO1nsVrHKpOEIxkGg1xB+v0ZmdNH5OAeAwzAVrCnI2/6Mtx+Uys6iaylxa+D3g4j63IKKjSQ==
 
-v-media-query@^1.0.3:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/v-media-query/-/v-media-query-1.0.4.tgz#f3b6f9bd5e348d28755299e48317721087aa2f4c"
-  integrity sha512-Rq8t4O2mK7pchYQLj3I/jsARI+pZ0TR+684L61CCFC3Kh47L8YjownJTUxKMh9XQGOmzbVr0yTztlpyr5I/ncA==
-  dependencies:
-    lodash.throttle "^4.1.1"
-
-v-tooltip@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/v-tooltip/-/v-tooltip-2.0.2.tgz#8610d9eece2cc44fd66c12ef2f12eec6435cab9b"
-  integrity sha512-xQ+qzOFfywkLdjHknRPgMMupQNS8yJtf9Utd5Dxiu/0n4HtrxqsgDtN2MLZ0LKbburtSAQgyypuE/snM8bBZhw==
-  dependencies:
-    lodash "^4.17.11"
-    popper.js "^1.15.0"
-    vue-resize "^0.4.5"
-
 validate-npm-package-license@^3.0.1:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/validate-npm-package-license/-/validate-npm-package-license-3.0.4.tgz#fc91f6b9c7ba15c857f4cb2c5defeec39d4f410a"
@@ -12587,11 +12536,6 @@ vue-jest@^3.0.4:
     tsconfig "^7.0.0"
     vue-template-es2015-compiler "^1.6.0"
 
-vue-js-modal@^1.3.4:
-  version "1.3.31"
-  resolved "https://registry.yarnpkg.com/vue-js-modal/-/vue-js-modal-1.3.31.tgz#fdece823d4f2816c8b1075c1fd8f667df11f5a42"
-  integrity sha512-gwt2904sWbMUuUcHwKQ510IEs4G7S3bqVWLYeTOc2eEyWMmmnT9UmojDsXIexFnPVM7cZTua37z3Jm/h0i0y8Q==
-
 vue-loader@^15.7.0:
   version "15.7.1"
   resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.7.1.tgz#6ccacd4122aa80f69baaac08ff295a62e3aefcfd"
@@ -12603,11 +12547,6 @@ vue-loader@^15.7.0:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
-vue-multiselect@^2.1.6:
-  version "2.1.6"
-  resolved "https://registry.yarnpkg.com/vue-multiselect/-/vue-multiselect-2.1.6.tgz#5be5d811a224804a15c43a4edbb7485028a89c7f"
-  integrity sha512-s7jmZPlm9FeueJg1RwJtnE9KNPtME/7C8uRWSfp9/yEN4M8XcS/d+bddoyVwVnvFyRh9msFo0HWeW0vTL8Qv+w==
-
 vue-property-decorator@^6.0.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-6.1.0.tgz#ef97bcc1bfe794ec060133ca04a5aca02e808828"
@@ -12616,20 +12555,17 @@ vue-property-decorator@^6.0.0:
     reflect-metadata "^0.1.10"
     vue-class-component "^6.1.0"
 
-vue-resize@^0.4.5:
-  version "0.4.5"
-  resolved "https://registry.yarnpkg.com/vue-resize/-/vue-resize-0.4.5.tgz#4777a23042e3c05620d9cbda01c0b3cc5e32dcea"
-  integrity sha512-bhP7MlgJQ8TIkZJXAfDf78uJO+mEI3CaLABLjv0WNzr4CcGRGPIAItyWYnP6LsPA4Oq0WE+suidNs6dgpO4RHg==
-
 vue-router@^3.0.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.1.3.tgz#e6b14fabc0c0ee9fda0e2cbbda74b350e28e412b"
   integrity sha512-8iSa4mGNXBjyuSZFCCO4fiKfvzqk+mhL0lnKuGcQtO1eoj8nq3CmbEG8FwK5QqoqwDgsjsf1GDuisDX4cdb/aQ==
 
-vue-select@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/vue-select/-/vue-select-3.1.0.tgz#ccebbc17e48f1e3be5f082224a0c45ceb07b8551"
-  integrity sha512-DDC4W3s/wLlJ/oeR7tqwaN+Fw9CXQc4zNnOD8Lr8J2cyWgQOWnHuYAUvpGrWIt7PRea4jSu6quixEv5yTInpuQ==
+vue-scrollto@^2.17.1:
+  version "2.17.1"
+  resolved "https://registry.yarnpkg.com/vue-scrollto/-/vue-scrollto-2.17.1.tgz#cd62ee0b98cf7e2ba9fd94f029addcd093978a48"
+  integrity sha512-uxOJXg6cZL88B+hTXRHDJMR+gHGiaS70ZTNk55fE5Z2TdwyIx9K/IHoNeTrtBrM6u3FASAIymKjZaQLmDf8Ykg==
+  dependencies:
+    bezier-easing "2.1.0"
 
 vue-style-loader@^4.1.0:
   version "4.1.2"

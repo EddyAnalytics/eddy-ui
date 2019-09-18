@@ -1,141 +1,70 @@
 <template>
-    <header class="header">
-        <router-link :to="{ name: 'Dashboard' }" class="logo" title="El Niño">
-            <span class="logo__shape">
-                <span class="logo__block block-1"></span>
-                <span class="logo__block block-2"></span>
-                <span class="logo__block block-3"></span>
-                <span class="logo__block block-4"></span>
-                <span class="logo__block block-5"></span>
-                <span class="logo__block block-6"></span>
-                <span class="logo__block block-7"></span>
-                <span class="logo__block block-8"></span>
-                <span class="logo__block block-9"></span>
-            </span>
-            <span class="logo__text">
-                <img src="../../assets/img/logo/logo-elnino.svg" alt="El Niño" title="El Niño" />
-                <span class="logo__subtitle">Eddy</span>
-            </span>
-        </router-link>
-        <template>
-            <a href="#" class="nav__toggle_mobile" @click="toggleMobileMenu">
-                <span class="nav__toggle_mobile__icon">
-                    <transition name="fade">
-                        <i class="mdi mdi-menu" v-show="!showMobileMenu"></i>
-                    </transition>
-                    <transition name="fade">
-                        <i v-show="showMobileMenu" class="mdi mdi-close"></i>
-                    </transition>
-                </span>
-            </a>
-            <nav class="nav" :class="{ 'is-active': showMobileMenu }">
-                <ul>
-                    <!--
-                    <li class="nav__item nav__item--dropdown nav__item--vertical">
-                        <LangDropdown />
-                    </li> -->
-                    <template v-if="isLoggedIn">
-                        <li class="nav__item">
-                            <router-link
-                                tag="button"
-                                :to="{ name: 'Dashboard' }"
-                                class="header__link"
-                            >
-                                {{ $t('menu.dashboard') }}
-                            </router-link>
-                        </li>
-                        <li class="nav__item">
-                            <router-link
-                                tag="button"
-                                :to="{ name: 'Integrations' }"
-                                class="header__link"
-                            >
-                                {{ $t('menu.integrations') }}
-                            </router-link>
-                        </li>
-                        <li class="nav__item">
-                            <router-link
-                                tag="button"
-                                :to="{ name: 'Settings' }"
-                                class="header__link"
-                            >
-                                {{ $t('menu.settings') }}
-                            </router-link>
-                        </li>
-                        <li class="nav__item header__username">
-                            <router-link
-                                tag="button"
-                                :to="{ name: 'Profile' }"
-                                class="header__link header__profile"
-                            >
-                                {{ username }}
-                            </router-link>
-                        </li>
-                        <li class="nav__item">
-                            <button
-                                @click="signOut"
-                                @click.native="toggleMobileMenu"
-                                class="header__link header__logout"
-                            >
-                                {{ $t('menu.signout') }}
-                            </button>
-                        </li>
-                    </template>
-                </ul>
-            </nav>
+    <b-navbar>
+        <template #brand>
+            <b-navbar-item tag="router-link" :to="{ name: 'Dashboard' }">
+                <img
+                    src="@/assets/img/logo.svg"
+                    width="100"
+                    height="32"
+                    alt="Eddy Data Analytics logo"
+                />
+            </b-navbar-item>
         </template>
-    </header>
+
+        <template #start>
+            <b-navbar-item tag="router-link" :to="{ name: isLoggedIn ? 'Dashboard' : 'Landing' }">
+                {{ $t('menu.dashboard') }}
+            </b-navbar-item>
+            <b-navbar-item tag="router-link" :to="{ name: 'Integrations' }">
+                {{ $t('menu.integrations') }}
+            </b-navbar-item>
+            <b-navbar-item tag="router-link" :to="{ name: 'Settings' }">
+                {{ $t('menu.settings') }}
+            </b-navbar-item>
+        </template>
+
+        <template #end>
+            <lang-dropdown />
+
+            <b-navbar-item tag="router-link" :to="{ name: 'Profile' }">
+                {{ username }}
+            </b-navbar-item>
+
+            <b-navbar-item tag="div">
+                <div class="buttons">
+                    <a v-if="isLoggedIn" class="button is-light" @click="signOut">
+                        Log out
+                    </a>
+                    <template v-else>
+                        <a class="button is-primary" @click="goToLogin">
+                            <strong>Log in</strong>
+                        </a>
+                        <!-- <a class="button is-light">
+                            Register
+                        </a> -->
+                    </template>
+                </div>
+            </b-navbar-item>
+        </template>
+    </b-navbar>
 </template>
 
 <script>
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import vMediaQuery from 'v-media-query';
 import { AUTH } from '@/store/auth';
 import LangDropdown from '@/components/general/LangDropdown';
-
-Vue.use(vMediaQuery);
 
 @Component({
     components: {
         LangDropdown,
     },
-    watch: {
-        '$mq.resize': 'hideMobileMenu',
-
-        showMobileMenu: function(newVal) {
-            const className = 'nav__mobile_open';
-            if (newVal) {
-                document.body.classList.add(className);
-            } else {
-                document.body.classList.remove(className);
-            }
-        },
-    },
 })
 export default class TheHeader extends Vue {
-    showMobileMenu = false;
-
-    get username() {
-        return this.$store.getters[AUTH.GET_USERNAME];
-    }
-
-    toggleMobileMenu() {
-        if (this.$mq.below(768)) {
-            this.showMobileMenu = !this.showMobileMenu;
-        } else {
-            this.showMobileMenu = false;
-        }
-    }
-
-    hideMobileMenu() {
-        if (this.$mq.above(767)) {
-            this.showMobileMenu = false;
-        }
-    }
-
-    created() {
-        this.showMobileMenu = false;
+    goToLogin() {
+        this.$router.push({
+            name: 'sign-in',
+        });
     }
 
     signOut() {
@@ -144,6 +73,10 @@ export default class TheHeader extends Vue {
                 name: 'sign-in',
             });
         });
+    }
+
+    get username() {
+        return this.$store.getters[AUTH.GET_USERNAME];
     }
 
     get isLoggedIn() {

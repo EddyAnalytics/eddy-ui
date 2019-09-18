@@ -1,12 +1,10 @@
 <template>
-    <div class="wrapper" id="app">
+    <div>
         <the-header></the-header>
-        <main class="main">
-            <div class="container-fluid">
-                <transition>
-                    <router-view></router-view>
-                </transition>
-            </div>
+        <main class="container-fluid">
+            <transition>
+                <router-view></router-view>
+            </transition>
         </main>
         <the-footer></the-footer>
     </div>
@@ -27,8 +25,5 @@ import TheHeader from '@/components/general/TheHeader';
 export default class App extends Vue {}
 </script>
 
-<!-- Import SCSS boilerplate -->
-<style src="./assets/css/styles.scss" lang="scss"></style>
-
 <!-- Import Bulma -->
-<!-- <style src="./assets/css/bulma.scss" lang="scss"></style> -->
+<style src="./assets/scss/bulma.scss" lang="scss"></style>
