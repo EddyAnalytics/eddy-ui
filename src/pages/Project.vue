@@ -1,13 +1,12 @@
 <template>
     <main>
-        <section class="section">
-            <h1 class="title">Project {{ project.name }}</h1>
-            <br />
-            <h2 class="subtitle">Data pipeline</h2>
-        </section>
+        <div class="section">
+            <h1 class="title is-spaced">Project {{ project.name }}</h1>
+            <h2 class="subtitle is-2">Data pipeline</h2>
+        </div>
 
         <section class="section">
-            <h1 class="title">Activity</h1>
+            <h1 class="subtitle">Activity</h1>
 
             <b-field>
                 <b-select placeholder="Select a Kafka Topic" v-model="topic">
@@ -17,9 +16,9 @@
                 </b-select>
             </b-field>
 
-            <h2 class="subtitle">Topic: {{ topic }}</h2>
-
-            <h2 class="subtitle">Last event</h2>
+            <div>Topic: {{ topic }}</div>
+            <br />
+            <div>Last event</div>
             <pre>{{ activity }}</pre>
         </section>
     </main>
@@ -79,8 +78,10 @@ export default class Project extends Vue {
     get options() {
         return [
             'mysql1.inventory.customers',
-            'mysql1.inventory.inventory',
+            'mysql1.inventory.addresses',
+            'mysql1.inventory.orders',
             'mysql1.inventory.products',
+            'mysql1.inventory.products_on_hand',
         ];
     }
 

@@ -76,8 +76,7 @@
             <div class="container">
                 <div class="columns is-vcentered">
                     <div class="column is-5">
-                        <h2 class="title is-size-2">Unified analytics for everyone</h2>
-                        <br />
+                        <h2 class="title is-size-2 is-spaced">Unified analytics for everyone</h2>
                         <p class="is-size-5">
                             The existing unified data analytics platforms consist of either
                             proprietary technologies or managed solutions deployed on cloud

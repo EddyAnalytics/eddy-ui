@@ -1,13 +1,12 @@
 <template>
     <main class="container">
         <section class="section">
-            <h1 class="title">Settings</h1>
-            <br />
-            <h2 class="subtitle">System Status</h2>
-            <h2 class="subtitle">System Settings</h2>
-            <h2 class="subtitle">Kafka</h2>
-            <h2 class="subtitle">Flink</h2>
-            <h2 class="subtitle">Spark</h2>
+            <h1 class="title is-1 is-spaced">Settings</h1>
+            <h2 class="subtitle is-3">System Status</h2>
+            <h2 class="subtitle is-3">System Settings</h2>
+            <h2 class="subtitle is-3">Kafka</h2>
+            <h2 class="subtitle is-3">Flink</h2>
+            <h2 class="subtitle is-3">Spark</h2>
         </section>
     </main>
 </template>
