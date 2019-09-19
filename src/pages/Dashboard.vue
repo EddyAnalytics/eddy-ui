@@ -7,7 +7,7 @@
                     v-for="project in projects"
                     :key="project.id"
                     :project="project"
-                    @click.native="redirectToProject(project)"
+                    @click.native="goToProject(project)"
                 ></project-block>
             </div>
         </section>
@@ -29,7 +29,7 @@ export default class Dashboard extends Vue {
         return this.$store.state.projects.projects;
     }
 
-    redirectToProject(project) {
+    goToProject(project) {
         this.$router.push({ name: 'Project', params: { projectId: project.id } });
     }
 }
