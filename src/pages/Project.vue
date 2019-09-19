@@ -216,7 +216,14 @@ export default class Project extends Vue {
         },
     ];
 
-    goToDashboard() {}
-    addNewDashboard() {}
+    goToDashboard(dashboard) {
+        this.$router.push({
+            name: 'Dashboard',
+            params: { projectId: this.projectId, pipelineId: dashboard.id },
+        });
+    }
+    addNewDashboard() {
+        this.goToDashboard({ id: 'new' });
+    }
 }
 </script>

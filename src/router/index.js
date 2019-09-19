@@ -5,6 +5,7 @@ import Landing from '@/pages/Landing';
 import Projects from '@/pages/Projects';
 import Project from '@/pages/Project';
 import Pipeline from '@/pages/Pipeline';
+import Dashboard from '@/pages/Dashboard';
 import Integrations from '@/pages/Integrations';
 import Settings from '@/pages/Settings';
 
@@ -57,6 +58,14 @@ let router = new Router({
             path: '/project/:projectId/pipeline/:pipelineId',
             name: 'Pipeline',
             component: Pipeline,
+            meta: {
+                auth: true,
+            },
+        },
+        {
+            path: '/project/:projectId/pipeline/:dashboardId',
+            name: 'Dashboard',
+            component: Dashboard,
             meta: {
                 auth: true,
             },
