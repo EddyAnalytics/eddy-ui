@@ -63,7 +63,7 @@ export default class LoginForm extends Vue {
                     this.$router.replace(redirect);
                 } else {
                     this.$router.replace({
-                        name: 'Dashboard',
+                        name: 'Projects',
                     });
                 }
             })

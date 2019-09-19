@@ -1,7 +1,7 @@
 <template>
     <b-navbar fixed-top>
         <template #brand>
-            <b-navbar-item tag="router-link" :to="{ name: isLoggedIn ? 'Dashboard' : 'Landing' }">
+            <b-navbar-item tag="router-link" :to="{ name: isLoggedIn ? 'Projects' : 'Landing' }">
                 <img
                     src="@/assets/img/logo.svg"
                     width="100"
@@ -13,8 +13,8 @@
 
         <template #start>
             <template v-if="isLoggedIn">
-                <b-navbar-item tag="router-link" :to="{ name: 'Dashboard' }">
-                    {{ $t('menu.dashboard') }}
+                <b-navbar-item tag="router-link" :to="{ name: 'Projects' }">
+                    {{ $t('menu.projects') }}
                 </b-navbar-item>
                 <b-navbar-item tag="router-link" :to="{ name: 'Integrations' }">
                     {{ $t('menu.integrations') }}

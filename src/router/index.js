@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Landing from '@/pages/Landing';
-import Dashboard from '@/pages/Dashboard';
+import Projects from '@/pages/Projects';
 import Project from '@/pages/Project';
 import Pipeline from '@/pages/Pipeline';
 import Integrations from '@/pages/Integrations';
@@ -31,16 +31,16 @@ let router = new Router({
             path: '/',
             name: 'Landing',
             component: Landing,
-            // Redirect to the Dashboard if authenticated on landing
-            redirect: store.getters[AUTH.IS_AUTHENTICATED] && '/dashboard',
+            // Redirect to the Projects page if authenticated on landing
+            redirect: store.getters[AUTH.IS_AUTHENTICATED] && '/projects',
             meta: {
                 auth: false,
             },
         },
         {
-            path: '/dashboard',
-            name: 'Dashboard',
-            component: Dashboard,
+            path: '/projects',
+            name: 'Projects',
+            component: Projects,
             meta: {
                 auth: true,
             },

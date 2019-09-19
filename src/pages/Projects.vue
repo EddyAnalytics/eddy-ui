@@ -17,14 +17,14 @@
 <script>
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import ProjectBlock from '@/components/dashboard/ProjectBlock';
+import ProjectBlock from '@/components/projects/ProjectBlock';
 
 @Component({
     components: {
         ProjectBlock,
     },
 })
-export default class Dashboard extends Vue {
+export default class Projects extends Vue {
     get projects() {
         return this.$store.state.projects.projects;
     }

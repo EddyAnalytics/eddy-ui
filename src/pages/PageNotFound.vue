@@ -3,7 +3,7 @@
         <section class="section content">
             <h2>Sorry, this page does not exist</h2>
             <p>
-                <router-link :to="{ name: 'Dashboard' }" class="button--cta">Go back</router-link>
+                <router-link :to="{ name: 'Projects' }" class="button--cta">Go back</router-link>
             </p>
         </section>
     </main>

@@ -21,7 +21,7 @@
         }
     },
     "menu": {
-        "dashboard": "Dashboard",
+        "projects": "Projects",
         "integrations": "Integrations",
         "settings": "Settings",
         "styleguide": "Styleguide",

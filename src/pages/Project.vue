@@ -74,7 +74,7 @@
 <style lang="scss" scoped>
 pre {
     min-height: 10rem;
-    max-height: 30rem;
+    max-height: 20rem;
     overflow: auto;
 }
 </style>
@@ -191,14 +191,15 @@ export default class Project extends Vue {
     ];
 
     goToPipeline(pipeline) {
-        console.log(pipeline);
         this.$router.push({
             name: 'Pipeline',
             params: { projectId: this.projectId, pipelineId: pipeline.id },
         });
     }
 
-    addNewPipeline() {}
+    addNewPipeline() {
+        this.goToPipeline({ id: 'new' });
+    }
 
     dashboards = [
         {
@@ -215,6 +216,7 @@ export default class Project extends Vue {
         },
     ];
 
+    goToDashboard() {}
     addNewDashboard() {}
 }
 </script>
