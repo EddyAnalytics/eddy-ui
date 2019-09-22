@@ -1,12 +1,13 @@
-$primary: #12c2e9;
-$secondary: #c471ed;
-$accent: #f64f59;
+$accent: #12c2e9;
+$primary: #3898f1;
 
 .triple-gradient {
   background: #12c2e9;
-  background: -webkit-linear-gradient(to left, $accent, $secondary, $primary);
-  background: linear-gradient(to left, $accent, $secondary, $primary);
+  background: -webkit-linear-gradient(to left, $accent, $primary);
+  background: linear-gradient(to left, $accent, $primary);
 }
+
+
 
 .subtle-gradient-reverse {
     background: linear-gradient(219deg, #3725d4 0%, #7957d5 71%, #9b67df 100%);

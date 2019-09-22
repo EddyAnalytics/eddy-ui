@@ -12,7 +12,7 @@
                     />
                 </div>
                 <div class="column">
-                    &copy; {{ new Date().getFullYear() }} Eddy Analytics by El Niño
+                    &copy; {{ new Date().getFullYear() }} Eddy Analytics
                     {{ $t('footer.copyrights') }}
                 </div>
             </div>

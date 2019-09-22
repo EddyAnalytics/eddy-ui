@@ -2,12 +2,7 @@
     <b-navbar fixed-top>
         <template #brand>
             <b-navbar-item tag="router-link" :to="{ name: isLoggedIn ? 'Projects' : 'Landing' }">
-                <img
-                    src="@/assets/img/logo.svg"
-                    width="100"
-                    height="32"
-                    alt="Eddy Data Analytics logo"
-                />
+                <img src="@/assets/img/logo-brand.svg" alt="Eddy Data Analytics logo" />
             </b-navbar-item>
         </template>
 

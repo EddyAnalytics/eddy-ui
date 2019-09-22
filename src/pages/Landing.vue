@@ -1,30 +1,34 @@
 <template>
     <main>
-        <section class="hero hero is-medium is-primary is-bold">
+        <section class="hero hero is-medium-with-navbar is-primary is-bold ">
             <div class="hero-body">
                 <div class="container has-text-centered">
                     <h1 class="title">
-                        <img class="hero__logo" src="@/assets/img/logo-white.svg" alt="Eddy Logo" />
+                        <img
+                            class="hero__logo"
+                            src="@/assets/img/logo-brand-white.svg"
+                            alt="Eddy Logo"
+                        />
                     </h1>
-                    <h1 class="title p-t-md p-b-xl">
-                        Open Source Unified Data Analytics Platform
+                    <h1 class="subtitle p-t-md p-b-md">
+                        Open-source unified data analytics platform
                     </h1>
-
+                    <!--
                     <h2 class="subtitle">
                         <b-button class="is-large hero__btn" @click="goToApp">
-                            GO TO THE APP
+                            GO TO THE DEMO APP
                         </b-button>
-                    </h2>
+                    </h2> -->
                 </div>
             </div>
             <div class="hero-footer">
-                <div v-scroll-to="'#instructions'" class="container has-text-centered">
+                <!-- <div v-scroll-to="'#instructions'" class="container has-text-centered">
                     <b-icon icon="chevron-down" size="is-large" class="scroll-down__arrow bounce" />
-                </div>
+                </div> -->
             </div>
         </section>
 
-        <section id="instructions" class="section is-medium is-light">
+        <section id="instructions" class="section is-light">
             <div class="container">
                 <div class="columns is-centered is-vcentered has-text-centered">
                     <div class="column">
@@ -116,12 +120,13 @@
     </main>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '@/assets/scss/gradients.scss';
 .hero {
-    .hero__logo {
-        min-width: 20rem;
-        max-width: 20%;
+    // User cover image instead of gradient
+    &.has-background-image {
+        background-image: url('../assets/img/landing-hero-0.jpg') !important;
+        background-size: cover;
     }
 
     .hero__btn {
