@@ -11,11 +11,14 @@
                         width="120"
                     />
                 </div>
-                <div class="column">
+                <div class="column has-text-right">
                     &copy; {{ new Date().getFullYear() }} Eddy Analytics
                     {{ $t('footer.copyrights') }}
                 </div>
             </div>
+            <p class="has-text-centered">
+                {{ $t('footer.made_with') }} ❤️ {{ $t('footer.made_in') }}
+            </p>
         </div>
     </footer>
 </template>

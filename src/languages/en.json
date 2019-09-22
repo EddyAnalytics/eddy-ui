@@ -59,7 +59,9 @@
         "password": "Password"
     },
     "footer": {
-        "copyrights": "All rights reserved"
+        "copyrights": "All rights reserved",
+        "made_with": "Made with",
+        "made_in": "in Enschede, The Netherlands"
     },
     "profile": {
         "header_info": "Profile information",
