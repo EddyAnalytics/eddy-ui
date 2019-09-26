@@ -12486,10 +12486,10 @@ vue-cli-plugin-apollo@^0.21.0:
     subscriptions-transport-ws "^0.9.16"
     ts-node "^8.3.0"
 
-vue-dag@^0.1.6:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/vue-dag/-/vue-dag-0.1.6.tgz#0dfbd08a10f0d1a2b43d6772253f61dfdd762b9f"
-  integrity sha512-8hIDsJ0PQZjBJ/YIx9te2xszbGtSRoLFNAiNj5ai3kxZTU6rUVZXAhfQ/doBBjw6iI+TR6j9XJKFDt341BMMBQ==
+vue-dag@^0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/vue-dag/-/vue-dag-0.1.8.tgz#5ef8421b68f9089a21f9f81bde1a79f2d6bda462"
+  integrity sha512-itJzep5+hcz+BYDF+uY0pkGcVJyTAP3tbfu6UDbM+QFtSyAhgGFlvkXJ1poNn2D+fKY1HgauEKdFueezBIRHmQ==
 
 vue-eslint-parser@^2.0.3:
   version "2.0.3"
