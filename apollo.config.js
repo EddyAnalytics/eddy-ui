@@ -15,7 +15,7 @@ module.exports = {
     service: {
         name: env.APOLLO_ENGINE_SERVICE,
         endpoint: {
-            url: 'http://localhost:8000',
+            url: env.APOLLO_SCHEMA_DOWNLOAD_URL,
             headers: {
                 authorization: 'Bearer token',
             },

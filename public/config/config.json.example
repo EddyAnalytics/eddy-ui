@@ -12,10 +12,10 @@
     },
     "graphql": {
         "enabled": true,
-        "httpEndpoint": "http://localhost:8000",
-        "wsEndpoint": "ws://localhost:8000/subscriptions"
+        "httpEndpoint": "https://api.k.eddy-analytics.org/graphql",
+        "wsEndpoint": "wss://api.k.eddy-analytics.org/subscriptions"
     },
-    "resourcesRootPath": "http://localhost:8000",
+    "resourcesRootPath": "http://eddy-backend.k.eddy-analytics.org/",
     "errorTracking": {
         "enabled": false,
         "url": "XXX"
