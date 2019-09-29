@@ -51,8 +51,8 @@
 <script>
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import { api } from '@/api';
-import { ERROR_CODE, localizeErrorCode } from '@/api/errors';
+import { api } from '@/services/rest';
+import { ERROR_CODE, localizeErrorCode } from '@/services/rest/errors';
 
 @Component
 export default class PasswordForgottenForm extends Vue {

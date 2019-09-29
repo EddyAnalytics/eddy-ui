@@ -67,7 +67,7 @@
 <script>
 import Vue from 'vue';
 import { Component, Watch } from 'vue-property-decorator';
-import { ERROR_CODE, localizeErrorCode } from '@/api/errors';
+import { ERROR_CODE, localizeErrorCode } from '@/services/rest/errors';
 
 @Component
 export default class PasswordResetForm extends Vue {

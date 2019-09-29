@@ -28,7 +28,6 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { AUTH } from '@/store/auth';
-import { localizeErrorCode } from '@/api/errors';
 
 @Component
 export default class Profile extends Vue {
@@ -37,10 +36,6 @@ export default class Profile extends Vue {
 
     get username() {
         return this.$store.getters[AUTH.GET_USERNAME];
-    }
-
-    get localizedProjectsError() {
-        return localizeErrorCode(this.errorCode);
     }
 }
 </script>

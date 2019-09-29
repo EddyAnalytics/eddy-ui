@@ -32,7 +32,7 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { AUTH } from '@/store/auth';
-import { ERROR_CODE, localizeErrorCode } from '@/api/errors';
+import { ERROR_CODE, localizeErrorCode } from '@/services/rest/errors';
 
 @Component()
 export default class LoginForm extends Vue {

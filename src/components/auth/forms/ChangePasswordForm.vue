@@ -56,8 +56,8 @@
 <script>
 import Vue from 'vue';
 import { Component, Watch } from 'vue-property-decorator';
-import { ERROR_CODE, localizeErrorCode } from '@/api/errors';
-import { api } from '@/api';
+import { ERROR_CODE, localizeErrorCode } from '@/services/rest/errors';
+import { api } from '@/services/rest';
 import { AUTH } from '@/store/auth';
 
 @Component

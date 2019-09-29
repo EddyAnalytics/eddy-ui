@@ -18,6 +18,6 @@ Vue.filter('utc2local', function(date) {
     return moment.utc(date);
 });
 
-import { localizeErrorCode } from '@/api/errors';
+import { localizeErrorCode } from '@/services/rest/errors';
 
 Vue.filter('localizeErrorCode', localizeErrorCode);

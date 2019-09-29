@@ -1,4 +1,4 @@
-import { api } from '@/api';
+import { api } from '@/services/rest';
 
 const namespace = 'auth/';
 
@@ -40,7 +40,6 @@ export default {
                         token: data.token,
                         name: email,
                     });
-                    // TODO: Reset apollo socket and cache
                 },
                 error => {
                     commit(AUTH.SET_USER, null);

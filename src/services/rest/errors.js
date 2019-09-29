@@ -1,4 +1,4 @@
-import i18n from '../languages';
+import i18n from '@/languages';
 
 export const ERROR_CODE = Object.freeze({
     NETWORK: -2,

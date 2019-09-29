@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import '@/router/class-component-hooks';
-import '@/api/interceptors';
+import '@/services/rest/interceptors';
 import Vue from 'vue';
 import App from '@/App';
 import Buefy from 'buefy';
@@ -14,10 +14,10 @@ import '@/filters';
 Vue.use(Buefy);
 
 import VueAxios from 'vue-axios';
-import { api } from '@/api';
+import { api } from '@/services/rest';
 
 import VueApollo from 'vue-apollo';
-import { createProvider } from '@/services/vue-apollo';
+import { createProvider } from '@/services/graphql/client';
 
 Vue.config.productionTip = false;
 
