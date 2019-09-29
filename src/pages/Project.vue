@@ -103,11 +103,21 @@ import gql from 'graphql-tag';
                 `,
                 variables() {
                     return {
-                        topic: this.topic,
+                        topic: this.topic || '',
                     };
                 },
                 result({ data }) {
                     this.activity = data;
+                },
+            },
+            topics: {
+                query: gql`
+                    subscription topics {
+                        topics
+                    }
+                `,
+                result({ data }) {
+                    this.options = data.topics;
                 },
             },
         },
@@ -115,7 +125,8 @@ import gql from 'graphql-tag';
 })
 export default class Project extends Vue {
     activity = {};
-    topic = 'mysql1.inventory.customers';
+    topic = null;
+    options = [];
 
     isConnectorPanelOpen = false;
     dataConnectorDetails = {};
@@ -130,16 +141,6 @@ export default class Project extends Vue {
 
     created() {
         this.projectId = this.$route.params.projectId;
-    }
-
-    get options() {
-        return [
-            'mysql1.inventory.customers',
-            'mysql1.inventory.addresses',
-            'mysql1.inventory.orders',
-            'mysql1.inventory.products',
-            'mysql1.inventory.products_on_hand',
-        ];
     }
 
     dataConnectors = [
