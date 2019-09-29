@@ -97,13 +97,13 @@ import gql from 'graphql-tag';
         $subscribe: {
             kafkaTopic: {
                 query: gql`
-                    subscription kafkaTopic($topic: String!) {
-                        kafka(topic: $topic)
+                    subscription kafkaTopic($topics: [String!]!) {
+                        kafka(topics: $topics)
                     }
                 `,
                 variables() {
                     return {
-                        topic: this.topic || '',
+                        topics: [this.topic || ''],
                     };
                 },
                 result({ data }) {
