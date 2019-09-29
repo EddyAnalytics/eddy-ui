@@ -190,10 +190,6 @@ Vue.use(VueScrollTo);
 export default class Landing extends Vue {
     REPO_URL = 'https://github.com/AlexImb';
 
-    goToApp() {
-        this.$router.push({ name: 'sign-in' });
-    }
-
     goToRepo() {
         window.open(this.REPO_URL, '_blank');
     }
