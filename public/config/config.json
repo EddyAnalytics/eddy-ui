@@ -8,7 +8,7 @@
         "id": "XXX"
     },
     "api": {
-        "url": "https://reqres.in/api/"
+        "url": ""
     },
     "graphql": {
         "enabled": true,

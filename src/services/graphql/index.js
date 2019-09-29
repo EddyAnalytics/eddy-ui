@@ -1,5 +1,6 @@
 import VueApollo from 'vue-apollo';
 import { createApolloClient } from 'vue-cli-plugin-apollo/graphql-client';
+import { onErrorLink } from './links';
 
 // Config
 const defaultOptions = {
@@ -16,7 +17,7 @@ const defaultOptions = {
     // Override default apollo link
     // note: don't override httpLink here, specify httpLink options in the
     // httpLinkOptions property of defaultOptions.
-    // link: myLink
+    link: onErrorLink,
 
     // Override default cache
     // cache: myCache
@@ -31,6 +32,9 @@ const defaultOptions = {
     // clientState: { resolvers: { ... }, defaults: { ... } }
 };
 
+// Export the apollo client for usage outside the Vue instance (.js files)
+export let apollo;
+
 // Call this in the Vue app file
 export function createProvider(options = {}) {
     // Create apollo client
@@ -40,6 +44,7 @@ export function createProvider(options = {}) {
     });
 
     apolloClient.wsClient = wsClient;
+    apollo = apolloClient;
 
     // Create vue apollo provider
     const apolloProvider = new VueApollo({

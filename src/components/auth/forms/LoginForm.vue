@@ -36,8 +36,8 @@ import { ERROR_CODE, localizeErrorCode } from '@/services/rest/errors';
 
 @Component()
 export default class LoginForm extends Vue {
-    email = 'eve.holt@reqres.in';
-    password = 'cityslicka';
+    email = 'alex@elnino.tech';
+    password = 'eddydemo';
     errorCode = ERROR_CODE.NONE;
 
     get passwordType() {

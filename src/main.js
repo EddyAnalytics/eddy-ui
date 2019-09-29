@@ -17,7 +17,7 @@ import VueAxios from 'vue-axios';
 import { api } from '@/services/rest';
 
 import VueApollo from 'vue-apollo';
-import { createProvider } from '@/services/graphql/client';
+import { createProvider } from '@/services/graphql';
 
 Vue.config.productionTip = false;
 

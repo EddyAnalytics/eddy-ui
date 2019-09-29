@@ -1,4 +1,6 @@
 import { api } from '@/services/rest';
+import { apollo } from '@/services/graphql';
+import LOGIN_MUTATION from '@/graphql/mutations/login.gql';
 
 const namespace = 'auth/';
 
@@ -23,7 +25,7 @@ export default {
                 state.token = details.token;
                 state.username = details.name;
                 localStorage.setItem('eddy-ui-token', details.token);
-                localStorage.setItem('username', details.name);
+                localStorage.setItem('username', details.username);
             } else {
                 state.token = false;
                 state.username = null;
@@ -33,19 +35,40 @@ export default {
         },
     },
     actions: {
-        [AUTH.LOGIN]: ({ commit }, { email, password }) => {
-            return api.post('login', { email, password }).then(
-                data => {
-                    commit(AUTH.SET_USER, {
-                        token: data.token,
-                        name: email,
+        [AUTH.LOGIN]: ({ commit }, { email, password, useREST = false }) => {
+            if (useREST) {
+                return api.post('login', { email, password }).then(
+                    data => {
+                        commit(AUTH.SET_USER, {
+                            token: data.token,
+                            username: email,
+                        });
+                    },
+                    error => {
+                        commit(AUTH.SET_USER, null);
+                        throw error;
+                    },
+                );
+            } else {
+                return apollo
+                    .mutate({
+                        mutation: LOGIN_MUTATION,
+                        variables: {
+                            username: email,
+                            password: password,
+                        },
+                    })
+                    .then(res => {
+                        commit(AUTH.SET_USER, {
+                            token: res.data.tokenAuth.token,
+                            username: email,
+                        });
+                    })
+                    .catch(error => {
+                        commit(AUTH.SET_USER, null);
+                        throw error;
                     });
-                },
-                error => {
-                    commit(AUTH.SET_USER, null);
-                    throw error;
-                },
-            );
+            }
         },
         [AUTH.LOGOUT]: ({ commit }) => {
             commit(AUTH.SET_USER, null);
