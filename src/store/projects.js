@@ -1,37 +1,21 @@
-import { api } from '@/services/rest';
+import { apollo } from '@/services/graphql';
+import PROJECTS_QUERY from '@/graphql/queries/projects.gql';
+import CREATE_PROJECT from '@/graphql/mutations/createProject.gql';
+import DELETE_PROJECT from '@/graphql/mutations/deleteProject.gql';
 
 const namespace = 'projects/';
 
 export const PROJECTS = Object.freeze({
     SET: namespace + 'set',
     GET: namespace + 'get',
+    ADD: namespace + 'add',
 });
 
 export default {
     state: () => {
         return {
-            projects: [
-                {
-                    id: 0,
-                    name: 'El Nino - Test Project',
-                    logo: '/img/projects/elnino.svg',
-                },
-                {
-                    id: 1,
-                    name: 'El Nino - Sentiment Analysis',
-                    logo: '/img/projects/elnino.svg',
-                },
-                {
-                    id: 2,
-                    name: 'Takeaway.com',
-                    logo: '/img/projects/thuisbezorgd.svg',
-                },
-                {
-                    id: 3,
-                    name: 'WGV - ePortfolio',
-                    logo: '/img/projects/eportfolio.svg',
-                },
-            ],
+            projects: [],
+            selected: null,
         };
     },
     mutations: {
@@ -40,17 +24,39 @@ export default {
         },
     },
     actions: {
-        [PROJECTS.GET]: ({ commit }, { email, password }) => {
-            return api.projects('login', { email, password }).then(
-                data => {
-                    commit(PROJECTS.SET, {
-                        projects: data,
-                    });
-                },
-                error => {
-                    throw error;
-                },
-            );
+        [PROJECTS.GET]: ({ commit }) => {
+            return apollo
+                .query({
+                    query: PROJECTS_QUERY,
+                    fetchPolicy: 'no-cache',
+                })
+                .then(res => {
+                    commit(PROJECTS.SET, res.data.allProject);
+                });
+        },
+        [PROJECTS.ADD]: (
+            { commit, state, rootState },
+            { workspaceId = rootState.workspaces.selected.id } = {},
+        ) => {
+            return apollo
+                .mutate({
+                    mutation: CREATE_PROJECT,
+                    variables: {
+                        workspaceId: workspaceId,
+                    },
+                })
+                .then(({ data: { createProject: { project } } }) => {
+                    commit(PROJECTS.SET, [...state.projects, project]);
+                });
+        },
+        [PROJECTS.DELETE]: ({ commit, state }) => {
+            return apollo
+                .mutate({
+                    mutation: DELETE_PROJECT,
+                })
+                .then(({ data: { deleteProject: { project } } }) => {
+                    commit(PROJECTS.SET, state.projects.filter(p => p.id === project.id));
+                });
         },
     },
     getters: {},

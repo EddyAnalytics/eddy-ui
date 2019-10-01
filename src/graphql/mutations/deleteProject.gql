@@ -1,0 +1,7 @@
+mutation deleteProject($id: IntID) {
+  deleteProject(id: $projectId) {
+    project {
+        id
+    }
+  }
+}

@@ -8,6 +8,7 @@ import Pipeline from '@/pages/Pipeline';
 import Dashboard from '@/pages/Dashboard';
 import Integrations from '@/pages/Integrations';
 import Settings from '@/pages/Settings';
+import Debug from '@/pages/Debug';
 
 import AuthenticationPage from '@/pages/AuthenticationPage';
 import Profile from '@/pages/Profile';
@@ -84,6 +85,15 @@ let router = new Router({
             component: Settings,
             meta: {
                 auth: true,
+            },
+        },
+        {
+            path: '/debug',
+            name: 'Debug',
+            component: Debug,
+            meta: {
+                auth: false,
+                debug: true,
             },
         },
         {

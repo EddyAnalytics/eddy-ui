@@ -9,6 +9,7 @@
                     :project="project"
                     @click.native="goToProject(project)"
                 ></project-block>
+                <project-block @click.native="addNewProject()" />
             </div>
         </section>
     </main>
@@ -18,6 +19,8 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import ProjectBlock from '@/components/projects/ProjectBlock';
+import { WORKSPACES } from '@/store/workspaces';
+import { PROJECTS } from '@/store/projects';
 
 @Component({
     components: {
@@ -25,8 +28,29 @@ import ProjectBlock from '@/components/projects/ProjectBlock';
     },
 })
 export default class Projects extends Vue {
+    created() {
+        this.getProjects();
+    }
+
+    async getProjects() {
+        await this.$store.dispatch(WORKSPACES.GET);
+        await this.$store.dispatch(PROJECTS.GET);
+    }
+
+    get workspaces() {
+        return this.$store.state.workspaces.workspaces;
+    }
+
+    get workspace() {
+        return this.$store.state.workspaces.workspace;
+    }
+
     get projects() {
         return this.$store.state.projects.projects;
+    }
+
+    addNewProject() {
+        this.$store.dispatch(PROJECTS.ADD);
     }
 
     goToProject(project) {

@@ -1,0 +1,7 @@
+mutation createProject($pipelinesIds: [IntID], $workspaceId: IntID) {
+  createProject(pipelinesIds: $pipelinesIds, workspaceId: $workspaceId) {
+    project {
+        id
+    }
+  }
+}

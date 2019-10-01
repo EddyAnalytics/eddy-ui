@@ -1,0 +1,7 @@
+mutation createWorkspace($integrationsIds: [IntID], $projectsIds: [IntID]) {
+  createWorkspace(integrationsIds: $integrationsIds, projectsIds: $projectsIds) {
+    workspace {
+        id
+    }
+  }
+}
