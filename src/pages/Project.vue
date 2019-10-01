@@ -111,7 +111,7 @@ import PROJECT_DELETE from '@/graphql/mutations/deleteProject.gql';
                 `,
                 variables() {
                     return {
-                        topics: [this.topic || ''],
+                        topics: this.topic ? [this.topic] : [],
                     };
                 },
                 result({ data }) {
