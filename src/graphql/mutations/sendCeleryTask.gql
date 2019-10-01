@@ -1,0 +1,5 @@
+mutation sendCeleryTask($inputTopic: String!, $outputTopic: String!, $sqlQuery: String!) {
+    sendCeleryTask(inputTopic: $inputTopic, outputTopic: $outputTopic, sqlQuery: $sqlQuery) {
+      sendCeleryTask
+    }
+}

@@ -8,7 +8,7 @@
                     <!-- Project ID: {{ projectId }} Pipeline ID: {{ pipelineId }} -->
                 </div>
                 <div class="column has-text-right">
-                    <b-button type="is-primary" icon-left="content-save" @click="goToProject()">
+                    <b-button type="is-primary" icon-left="content-save" @click="savePipeline()">
                         Save
                     </b-button>
                 </div>
@@ -34,6 +34,8 @@ import PipelineBuilderBlock from '@/components/pipeline/PipelineBuilderBlock.vue
 import PipelineBlockForm from '@/components/pipeline/PipelineBlockForm.vue';
 Vue.component('PipelineBuilderBlock', PipelineBuilderBlock);
 
+import SEND_CELERY_TASK from '@/graphql/mutations/sendCeleryTask.gql';
+
 @Component({
     components: {
         VueDag,
@@ -53,7 +55,7 @@ export default class Pipeline extends Vue {
                 y: 300,
                 component: 'PipelineBuilderBlock',
                 props: {
-                    title: 'MySQL Database',
+                    title: 'Kafka Subscriber',
                     iconSrc: 'https://bulma.io/images/placeholders/128x128.png',
                 },
             },
@@ -187,6 +189,21 @@ export default class Pipeline extends Vue {
 
     goToProject() {
         this.$router.push({ name: 'Project', params: { projectId: this.projectId } });
+    }
+
+    savePipeline() {
+        this.$apollo
+            .mutate({
+                mutation: SEND_CELERY_TASK,
+                variables: {
+                    inputTopic: 'mysql1.inventory.orders',
+                    outputTopic: 'sql_results',
+                    sqlQuery: `INSERT INTO sql_results SELECT payload.after.id, payload.before.id FROM orders`,
+                },
+            })
+            .then(res => {
+                console.log('Celery Task Sent. Response: ', res);
+            });
     }
 }
 </script>
