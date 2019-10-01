@@ -1,7 +1,7 @@
 <template>
-    <main>
+    <main v-if="project">
         <div class="section">
-            <h1 class="title is-spaced">Project {{ project.name }}</h1>
+            <h1 class="title is-spaced">Project {{ project.name || `Project ${project.id}` }}</h1>
             <h2 class="subtitle is-3">Data Connectors</h2>
             <div class="columns is-multiline">
                 <data-connector-block
@@ -39,6 +39,19 @@
             </div>
         </div>
 
+        <div class="section">
+            <h2 class="subtitle is-2">Dashboards</h2>
+            <div class="columns is-multiline">
+                <dashboard-block
+                    v-for="dashboard in dashboards"
+                    :key="dashboard.id"
+                    :dashboard="dashboard"
+                    @click.native="goToDashboard(dashboard)"
+                ></dashboard-block>
+                <dashboard-block @click.native="addNewDashboard()" />
+            </div>
+        </div>
+
         <section class="section">
             <h1 class="subtitle">Activity</h1>
 
@@ -56,18 +69,10 @@
             <pre>{{ activity }}</pre>
         </section>
 
-        <div class="section">
-            <h2 class="subtitle is-2">Dashboards</h2>
-            <div class="columns is-multiline">
-                <dashboard-block
-                    v-for="dashboard in dashboards"
-                    :key="dashboard.id"
-                    :dashboard="dashboard"
-                    @click.native="goToDashboard(dashboard)"
-                ></dashboard-block>
-                <dashboard-block @click.native="addNewDashboard()" />
-            </div>
-        </div>
+        <section class="section">
+            <h1 class="subtitle">Project management</h1>
+            <b-button type="is-danger" @click="openDeleteProjectModal()">Delete project</b-button>
+        </section>
     </main>
 </template>
 
@@ -86,6 +91,9 @@ import DataConnectorBlock from '@/components/project/DataConnectorBlock';
 import DashboardBlock from '@/components/project/DashboardBlock';
 import PipelineBlock from '@/components/project/PipelineBlock';
 import gql from 'graphql-tag';
+
+import PROJECT_QUERY from '@/graphql/queries/project.gql';
+import PROJECT_DELETE from '@/graphql/mutations/deleteProject.gql';
 
 @Component({
     components: {
@@ -124,6 +132,8 @@ import gql from 'graphql-tag';
     },
 })
 export default class Project extends Vue {
+    project = null;
+
     activity = {};
     topic = null;
     options = [];
@@ -131,16 +141,16 @@ export default class Project extends Vue {
     isConnectorPanelOpen = false;
     dataConnectorDetails = {};
 
-    get projects() {
-        return this.$store.state.projects.projects;
-    }
-
-    get project() {
-        return this.$store.state.projects.projects[this.projectId];
-    }
-
     created() {
         this.projectId = this.$route.params.projectId;
+        this.$apollo.addSmartQuery('project', {
+            query: PROJECT_QUERY,
+            variables() {
+                return {
+                    id: this.projectId,
+                };
+            },
+        });
     }
 
     dataConnectors = [
@@ -223,8 +233,32 @@ export default class Project extends Vue {
             params: { projectId: this.projectId, pipelineId: dashboard.id },
         });
     }
+
     addNewDashboard() {
         this.goToDashboard({ id: 'new' });
+    }
+
+    openDeleteProjectModal() {
+        this.$buefy.dialog.confirm({
+            title: 'Deleting project',
+            message: 'Are you sure you want to <b>delete</b> this project?',
+            confirmText: 'Delete Project',
+            type: 'is-danger',
+            hasIcon: true,
+            onConfirm: () => this.deleteProject(),
+        });
+    }
+
+    async deleteProject() {
+        await this.$apollo.mutate({
+            mutation: PROJECT_DELETE,
+            variables: {
+                id: this.projectId,
+            },
+        });
+
+        this.$buefy.toast.open('Project deleted');
+        this.$router.replace({ name: 'Projects' });
     }
 }
 </script>

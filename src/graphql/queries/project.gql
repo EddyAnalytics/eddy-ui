@@ -1,0 +1,8 @@
+query project($id: IntID!) {
+    project(id: $id) {
+        id,
+        pipelines {
+            id
+        }
+    }
+}
