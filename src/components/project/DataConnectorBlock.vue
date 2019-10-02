@@ -1,11 +1,15 @@
 <template>
     <article class="column is-narrow">
         <div v-if="dataConnector" class="card dashboard-card">
-            <div class="card-image has-text-centered">
-                <figure class="image is-48x48 is-inline-block">
+            <div v-if="dataConnector.logo" class="card-image">
+                <figure class="image is-128x128 is-inline-block">
                     <img :src="dataConnector.logo" alt="Data connector logo" />
                 </figure>
             </div>
+            <div v-else class="card-image">
+                <b-icon icon="folder-outline" size="is-large" type="is-grey"></b-icon>
+            </div>
+
             <div class="card-content">
                 <div class="content has-text-centered">
                     <div>{{ dataConnector.name }}</div>
@@ -32,6 +36,7 @@
     cursor: pointer;
 
     .card-image {
+        text-align: center;
         height: 4rem;
         overflow: hidden;
         padding-top: 1rem;

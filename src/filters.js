@@ -1,6 +1,12 @@
 import Vue from 'vue';
 import moment from 'moment';
 
+Vue.filter('capitalize', function(value) {
+    if (!value) return '';
+    value = value.toString();
+    return value.charAt(0).toUpperCase() + value.slice(1);
+});
+
 function momentFilter(date, format) {
     if (!date) return undefined;
     date = moment(date);

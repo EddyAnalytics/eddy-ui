@@ -1,0 +1,35 @@
+#import "../fragments/dataConnectorConfigFragment.gql"
+
+mutation createDataConnectorConfig(
+    $connectorClass: String,
+    $connectorId: IntID,
+    $databaseHistoryKafkaBootstrapServers: String,
+    $databaseHistoryKafkaTopic: String,
+    $databaseHostname: String,
+    $databasePassword: String,
+    $databasePort: Int,
+    $databaseServerId: Int,
+    $databaseServerName: String,
+    $databaseUser: String,
+    $databaseWhitelist: String,
+    $tasksMax: Int
+) {
+
+createDebeziumConnectorConfig(
+    connectorClass: $connectorClass,
+    connectorId: $connectorId,
+    databaseHistoryKafkaBootstrapServers: $databaseHistoryKafkaBootstrapServers,
+    databaseHistoryKafkaTopic: $databaseHistoryKafkaTopic,
+    databaseHostname: $databaseHostname,
+    databasePassword: $databasePassword,
+    databasePort: $databasePort,
+    databaseServerId: $databaseServerId,
+    databaseServerName: $databaseServerName,
+    databaseUser: $databaseUser,
+    databaseWhitelist: $databaseWhitelist,
+    tasksMax: $tasksMax) {
+    debeziumConnector {
+        ...dataConnectorConfigFragment
+    }
+  }
+}

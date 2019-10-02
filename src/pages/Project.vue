@@ -3,6 +3,7 @@
         <div class="section">
             <h1 class="title is-spaced">Project {{ project.name || `Project ${project.id}` }}</h1>
             <h2 class="subtitle is-3">Data Connectors</h2>
+
             <div class="columns is-multiline">
                 <data-connector-block
                     v-for="dataConnector in dataConnectors"
@@ -15,13 +16,12 @@
 
             <transition name="fade">
                 <div v-if="isConnectorPanelOpen" class="box">
-                    {{ dataConnectorDetails }}
-                    <div class="buttons">
-                        <b-button type="is-primary" outlined @click="saveConnectorSettings()">
-                            Save
-                        </b-button>
-                        <b-button outlined @click="closeConnectorPanel()">Cancel</b-button>
-                    </div>
+                    <data-connector-form
+                        :dataConnector="selectedDataConnector"
+                        @save="saveConnector"
+                        @cancel="closeConnectorPanel"
+                        @remove="deleteConnector"
+                    ></data-connector-form>
                 </div>
             </transition>
         </div>
@@ -95,17 +95,25 @@ pre {
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import DataConnectorBlock from '@/components/project/DataConnectorBlock';
+import DataConnectorForm from '@/components/project/DataConnectorForm';
 import DashboardBlock from '@/components/project/DashboardBlock';
 import PipelineBlock from '@/components/project/PipelineBlock';
 
 import PROJECT_QUERY from '@/graphql/queries/project.gql';
 import PROJECT_DELETE from '@/graphql/mutations/deleteProject.gql';
+
+import DATA_CONNECTORS_QUERY from '@/graphql/queries/dataConnectors.gql';
+import CREATE_DATA_CONNECTOR from '@/graphql/mutations/createDataConnector.gql';
+import DELETE_DATA_CONNECTOR from '@/graphql/mutations/deleteDataConnector.gql';
+import CREATE_DATA_CONNECTOR_CONFIG from '@/graphql/mutations/createDataConnectorConfig.gql';
+
 import KAFKA_TOPICS from '@/graphql/subscriptions/kafkaTopics.gql';
 import KAFKA_TOPICS_ACTIVITY from '@/graphql/subscriptions/kafkaTopicsActivity.gql';
 
 @Component({
     components: {
         DataConnectorBlock,
+        DataConnectorForm,
         DashboardBlock,
         PipelineBlock,
     },
@@ -113,12 +121,14 @@ import KAFKA_TOPICS_ACTIVITY from '@/graphql/subscriptions/kafkaTopicsActivity.g
 export default class Project extends Vue {
     project = null;
 
+    dataConnectors = [];
+
     topics = [];
     selectedTopics = [];
     topicsActivity = {};
 
     isConnectorPanelOpen = false;
-    dataConnectorDetails = {};
+    selectedDataConnector = {};
 
     created() {
         this.projectId = this.$route.params.projectId;
@@ -130,6 +140,10 @@ export default class Project extends Vue {
                     id: this.projectId,
                 };
             },
+        });
+
+        this.$apollo.addSmartQuery('dataConnectors', {
+            query: DATA_CONNECTORS_QUERY,
         });
 
         this.$apollo.addSmartSubscription('topics', {
@@ -152,41 +166,71 @@ export default class Project extends Vue {
         });
     }
 
-    dataConnectors = [
-        {
-            id: 0,
-            logo: '/img/data-sources/data-source-db.svg',
-            name: 'MySQL Database ',
-        },
-        {
-            id: 1,
-            logo: '/img/data-sources/data-source-db.svg',
-            name: 'MariaDB Database ',
-        },
-    ];
-
     addNewDataConnector() {
         this.isConnectorPanelOpen = true;
-        this.dataConnectorDetails = {};
+        this.selectedDataConnector = {
+            name: 'Unnamed connector',
+            type: 'Debezium',
+            config: {
+                connectorClass: 'io.debezium.connector.mysql.MySqlConnector',
+                tasksMax: '1',
+                databaseHostname: 'mysql',
+                databasePort: '3306',
+                databaseUser: 'root',
+                databasePassword: 'debezium',
+                databaseServerId: '184054',
+                databaseServerName: 'mysql1',
+                databaseWhitelist: 'inventory',
+                databaseHistoryKafkaBootstrapServers: 'kafka:9092',
+                databaseHistoryKafkaTopic: 'schema-changes.inventory',
+            },
+        };
     }
 
-    showConnectorDetails(connector) {
+    showConnectorDetails(dataConnector) {
         this.isConnectorPanelOpen = true;
-        this.dataConnectorDetails = connector;
+        this.selectedDataConnector = dataConnector;
     }
 
-    saveConnectorSettings(connector) {
-        console.log('Save conenctor', connector);
+    async saveConnector(dataConnector) {
+        const configRes = await this.$apollo.mutate({
+            mutation: CREATE_DATA_CONNECTOR_CONFIG,
+            variables: {
+                ...dataConnector.config,
+            },
+        });
+
+        await this.$apollo.mutate({
+            mutation: CREATE_DATA_CONNECTOR,
+            variables: {
+                name: dataConnector.name,
+                configId: configRes.data.createDebeziumConnectorConfig.debeziumConnectorConfig.id,
+            },
+        });
+
+        this.closeConnectorPanel();
+        this.$apollo.queries.dataConnectors.refetch();
         this.$buefy.toast.open({
             message: 'Connector saved',
             type: 'is-success',
         });
-        this.isConnectorPanelOpen = false;
+    }
+
+    async deleteConnector(dataConnector) {
+        await this.$apollo.mutate({
+            mutation: DELETE_DATA_CONNECTOR,
+            variables: {
+                id: dataConnector.id,
+            },
+        });
+        this.closeConnectorPanel();
+        this.$apollo.queries.dataConnectors.refetch();
+        this.$buefy.toast.open('Data connector deleted');
     }
 
     closeConnectorPanel() {
         this.isConnectorPanelOpen = false;
-        this.dataConnectorDetails = {};
+        this.selectedDataConnector = {};
     }
 
     pipelines = [

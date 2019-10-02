@@ -1,0 +1,8 @@
+
+mutation deleteDebeziumConnector($id: IntID) {
+  deleteDebeziumConnector(id: $id) {
+    debeziumConnector {
+        id
+    }
+  }
+}

@@ -1,0 +1,14 @@
+fragment dataConnectorConfigFragment on DebeziumConnectorConfigType {
+    id,
+    connectorClass,
+    tasksMax,
+    databaseHostname,
+    databasePort,
+    databaseUser,
+    databasePassword,
+    databaseServerId,
+    databaseServerName,
+    databaseWhitelist,
+    databaseHistoryKafkaBootstrapServers,
+    databaseHistoryKafkaTopic
+}
