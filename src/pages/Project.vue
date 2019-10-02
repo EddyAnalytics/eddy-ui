@@ -54,19 +54,27 @@
 
         <section class="section">
             <h1 class="subtitle">Activity</h1>
+            <div class="columns">
+                <div class="column is-2">
+                    <b-field label="Topics">
+                        <b-select
+                            multiple
+                            native-size="7"
+                            placeholder="Select a Kafka Topic"
+                            v-model="selectedTopics"
+                        >
+                            <option v-for="option in topics" :value="option" :key="option">
+                                {{ option }}
+                            </option>
+                        </b-select>
+                    </b-field>
+                </div>
 
-            <b-field>
-                <b-select placeholder="Select a Kafka Topic" v-model="topic">
-                    <option v-for="option in options" :value="option" :key="option">
-                        {{ option }}
-                    </option>
-                </b-select>
-            </b-field>
-
-            <div>Topic: {{ topic }}</div>
-            <br />
-            <div>Last event</div>
-            <pre>{{ activity }}</pre>
+                <div class="column">
+                    <div class="m-b-sm"><strong>Selected topics activity</strong></div>
+                    <pre>{{ topicsActivity }}</pre>
+                </div>
+            </div>
         </section>
 
         <section class="section">
@@ -78,8 +86,7 @@
 
 <style lang="scss" scoped>
 pre {
-    min-height: 10rem;
-    max-height: 20rem;
+    height: 20rem;
     overflow: auto;
 }
 </style>
@@ -90,10 +97,11 @@ import { Component } from 'vue-property-decorator';
 import DataConnectorBlock from '@/components/project/DataConnectorBlock';
 import DashboardBlock from '@/components/project/DashboardBlock';
 import PipelineBlock from '@/components/project/PipelineBlock';
-import gql from 'graphql-tag';
 
 import PROJECT_QUERY from '@/graphql/queries/project.gql';
 import PROJECT_DELETE from '@/graphql/mutations/deleteProject.gql';
+import KAFKA_TOPICS from '@/graphql/subscriptions/kafkaTopics.gql';
+import KAFKA_TOPICS_ACTIVITY from '@/graphql/subscriptions/kafkaTopicsActivity.gql';
 
 @Component({
     components: {
@@ -101,54 +109,45 @@ import PROJECT_DELETE from '@/graphql/mutations/deleteProject.gql';
         DashboardBlock,
         PipelineBlock,
     },
-    apollo: {
-        $subscribe: {
-            kafkaTopic: {
-                query: gql`
-                    subscription kafkaTopic($topics: [String!]!) {
-                        kafka(topics: $topics)
-                    }
-                `,
-                variables() {
-                    return {
-                        topics: this.topic ? [this.topic] : [],
-                    };
-                },
-                result({ data }) {
-                    this.activity = data;
-                },
-            },
-            topics: {
-                query: gql`
-                    subscription topics {
-                        topics
-                    }
-                `,
-                result({ data }) {
-                    this.options = data.topics;
-                },
-            },
-        },
-    },
 })
 export default class Project extends Vue {
     project = null;
 
-    activity = {};
-    topic = null;
-    options = [];
+    topics = [];
+    selectedTopics = [];
+    topicsActivity = {};
 
     isConnectorPanelOpen = false;
     dataConnectorDetails = {};
 
     created() {
         this.projectId = this.$route.params.projectId;
+
         this.$apollo.addSmartQuery('project', {
             query: PROJECT_QUERY,
             variables() {
                 return {
                     id: this.projectId,
                 };
+            },
+        });
+
+        this.$apollo.addSmartSubscription('topics', {
+            query: KAFKA_TOPICS,
+            result({ data: { topics } }) {
+                this.topics = topics;
+            },
+        });
+
+        this.$apollo.addSmartSubscription('topicsActivity', {
+            query: KAFKA_TOPICS_ACTIVITY,
+            variables() {
+                return {
+                    topics: this.selectedTopics,
+                };
+            },
+            result({ data: { topicsActivity } }) {
+                this.topicsActivity = topicsActivity;
             },
         });
     }
