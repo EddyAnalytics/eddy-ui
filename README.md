@@ -2,6 +2,8 @@
 
 Frontend client implementation using the [Vue.js](https://vuejs.org/) framework.
 
+Test change
+
 ## Project Development Setup
 
 ```bash
