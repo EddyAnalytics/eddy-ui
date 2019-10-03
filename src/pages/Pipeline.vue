@@ -67,6 +67,8 @@ export default class Pipeline extends Vue {
                 y: 300,
                 type: 'transformation',
                 component: 'PipelineBuilderBlock',
+                sql:
+                    'INSERT INTO sql_results SELECT payload.after.id, payload.before.id FROM orders',
                 props: {
                     title: 'Flink SQL Snippet',
                     type: 'transformation',

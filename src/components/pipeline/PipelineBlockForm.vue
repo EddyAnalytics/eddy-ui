@@ -5,13 +5,15 @@
                 <p class="modal-card-title">Block properties</p>
             </header>
             <section class="modal-card-body">
-                {{ block }}
                 <template v-if="block.type === 'transformation'">
-                    <textarea v-model="block.sql" />
+                    <strong>FinkSQL</strong>
+                    <div class="codemirror-wrapper">
+                        <codemirror v-model="block.sql" :options="codeMirrorOptions" />
+                    </div>
                 </template>
                 <template v-else>
                     <b-field label="Topic">
-                        <b-input v-model="block.topic"></b-input>
+                        <b-input v-model="block.topic" />
                     </b-field>
                 </template>
             </section>
@@ -28,9 +30,24 @@
 <script>
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-@Component
+import { codemirror } from 'vue-codemirror';
+import 'codemirror/mode/sql/sql.js';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/3024-day.css';
+
+@Component({
+    components: {
+        codemirror,
+    },
+})
 export default class PipelineBlockForm extends Vue {
     @Prop() block;
+
+    codeMirrorOptions = {
+        lineNumbers: true,
+        mode: 'text/x-sql',
+        theme: '3024-day',
+    };
 
     save() {
         this.$emit('save', this.block);
