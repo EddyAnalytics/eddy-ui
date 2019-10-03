@@ -29,6 +29,32 @@
                 </div>
             </div>
         </section>
+
+        <div class="grid">
+            <grid-layout
+                class="grid__layout"
+                :layout.sync="layout"
+                :row-height="300"
+                :is-draggable="true"
+                :is-resizable="true"
+                :responsive="true"
+                :margin="[10, 10]"
+                :cols="{ lg: 3, md: 3, sm: 2, xs: 1, xxs: 1 }"
+            >
+                <grid-item
+                    class="grid__layout__item"
+                    v-for="item in layout"
+                    :x="item.x"
+                    :y="item.y"
+                    :w="item.w"
+                    :h="item.h"
+                    :i="item.i"
+                    :key="item.i"
+                >
+                    {{ item.i }}
+                </grid-item>
+            </grid-layout>
+        </div>
     </main>
 </template>
 
@@ -37,22 +63,40 @@ pre {
     height: 20rem;
     overflow: auto;
 }
+
+.grid {
+    width: 100%;
+    .grid__layout {
+        .grid__layout__item {
+            border: 1px solid #ddd;
+        }
+    }
+}
 </style>
 
 <script>
-import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
+import VueGridLayout from 'vue-grid-layout';
 
 import KAFKA_TOPICS from '@/graphql/subscriptions/kafkaTopics.gql';
 import KAFKA_TOPICS_ACTIVITY from '@/graphql/subscriptions/kafkaTopicsActivity.gql';
 
 @Component({
-    components: {},
+    components: {
+        GridLayout: VueGridLayout.GridLayout,
+        GridItem: VueGridLayout.GridItem,
+    },
 })
 export default class Dashboard extends Vue {
     topics = [];
     selectedTopics = [];
     topicsActivity = {};
+
+    layout = [
+        { x: 0, y: 0, w: 1, h: 1, i: '0' },
+        { x: 1, y: 0, w: 1, h: 1, i: '1' },
+        { x: 2, y: 0, w: 1, h: 1, i: '2' },
+    ];
 
     created() {
         this.projectId = this.$route.params.projectId;
