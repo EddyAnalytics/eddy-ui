@@ -6,13 +6,42 @@
         </section>
 
         <section class="section">
+            <div class="columns is-mobile">
+                <div class="column">
+                    <div class="box has-background-primary">
+                        <div class="content">
+                            <h1>2.4k</h1>
+                            <h3>Ingested</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="box has-background-primary">
+                        <div class="content">
+                            <h1>2.1k</h1>
+                            <h3>Transformed</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="box has-background-primary">
+                        <div class="content">
+                            <h1>1.8k</h1>
+                            <h3>Sinked</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
             <h1 class="subtitle">Activity</h1>
             <div class="columns">
                 <div class="column is-2">
                     <b-field label="Topics">
                         <b-select
                             multiple
-                            native-size="7"
+                            native-size="9"
                             placeholder="Select a Kafka Topic"
                             v-model="selectedTopics"
                         >
@@ -50,8 +79,9 @@
                     :h="item.h"
                     :i="item.i"
                     :key="item.i"
+                    :static="item.type === 'AddWidget'"
                 >
-                    {{ item.i }}
+                    <component :is="item.type" />
                 </grid-item>
             </grid-layout>
         </div>
@@ -81,10 +111,15 @@ import VueGridLayout from 'vue-grid-layout';
 import KAFKA_TOPICS from '@/graphql/subscriptions/kafkaTopics.gql';
 import KAFKA_TOPICS_ACTIVITY from '@/graphql/subscriptions/kafkaTopicsActivity.gql';
 
+import AddWidget from '@/components/dashboard/AddWidget';
+import BarChartWidget from '@/components/dashboard/BarChartWidget';
+
 @Component({
     components: {
         GridLayout: VueGridLayout.GridLayout,
         GridItem: VueGridLayout.GridItem,
+        AddWidget,
+        BarChartWidget,
     },
 })
 export default class Dashboard extends Vue {
@@ -93,9 +128,10 @@ export default class Dashboard extends Vue {
     topicsActivity = {};
 
     layout = [
-        { x: 0, y: 0, w: 1, h: 1, i: '0' },
-        { x: 1, y: 0, w: 1, h: 1, i: '1' },
-        { x: 2, y: 0, w: 1, h: 1, i: '2' },
+        { x: 0, y: 0, w: 1, h: 1, i: '1', topic: '', type: 'BarChartWidget' },
+        { x: 1, y: 0, w: 1, h: 1, i: '2', topic: '', type: 'BarChartWidget' },
+        { x: 2, y: 0, w: 1, h: 1, i: '3', topic: '', type: 'BarChartWidget' },
+        { x: 0, y: 0, w: 1, h: 1, i: '0', topic: '', type: 'AddWidget' },
     ];
 
     created() {
