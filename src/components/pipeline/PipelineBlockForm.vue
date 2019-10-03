@@ -1,11 +1,19 @@
 <template>
-    <form @submit.prevent="saveBlockProperties()">
+    <form @submit.prevent="save()">
         <div class="modal-card">
             <header class="modal-card-head">
                 <p class="modal-card-title">Block properties</p>
             </header>
             <section class="modal-card-body">
                 {{ block }}
+                <template v-if="block.type === 'transformation'">
+                    <textarea v-model="block.sql" />
+                </template>
+                <template v-else>
+                    <b-field label="Topic">
+                        <b-input v-model="block.topic"></b-input>
+                    </b-field>
+                </template>
             </section>
             <footer class="modal-card-foot">
                 <button class="button is-primary">
@@ -24,7 +32,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 export default class PipelineBlockForm extends Vue {
     @Prop() block;
 
-    saveBlockProperties() {
+    save() {
+        this.$emit('save', this.block);
         this.$parent.close();
     }
 }

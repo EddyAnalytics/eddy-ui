@@ -53,30 +53,36 @@ export default class Pipeline extends Vue {
                 id: 0,
                 x: 100,
                 y: 300,
+                type: 'source',
                 component: 'PipelineBuilderBlock',
+                topic: 'mysql1.inventory.orders',
                 props: {
                     title: 'Kafka Subscriber',
-                    iconSrc: 'https://bulma.io/images/placeholders/128x128.png',
+                    type: 'source',
                 },
             },
             {
                 id: 1,
                 x: 400,
                 y: 300,
+                type: 'transformation',
                 component: 'PipelineBuilderBlock',
                 props: {
                     title: 'Flink SQL Snippet',
-                    iconSrc: 'https://bulma.io/images/placeholders/128x128.png',
+                    type: 'transformation',
                 },
             },
             {
                 id: 2,
                 x: 700,
                 y: 300,
+                type: 'sink',
                 component: 'PipelineBuilderBlock',
+                topic: 'sql_results',
                 props: {
                     title: 'Kafka Publisher',
-                    iconSrc: 'https://bulma.io/images/placeholders/128x128.png',
+                    type: 'sink',
+                    iconSrc: '/img/pipeline/sink.png',
                 },
             },
         ],
@@ -101,6 +107,7 @@ export default class Pipeline extends Vue {
                 component: PipelineBlockForm,
                 hasModalCard: true,
                 props: { block: node },
+                events: { save: this.saveBlock },
             });
         }
     }
@@ -175,16 +182,20 @@ export default class Pipeline extends Vue {
             id: lastNode ? lastNode.id + 1 : 0,
             x: lastNode ? lastNode.x + 300 : 100,
             y: 300,
+            type: block.type,
             component: 'PipelineBuilderBlock',
             props: {
                 title: block.name,
-                iconSrc: 'https://bulma.io/images/placeholders/128x128.png',
+                type: block.type,
             },
         });
     }
 
     saveBlock(block) {
-        console.log('Save block', block);
+        const nodeIndex = this.graphData.nodes.findIndex(node => node.id === block);
+        if (nodeIndex > -1) {
+            this.graphData.nodes.splice(nodeIndex, 0, block);
+        }
     }
 
     goToProject() {
@@ -192,17 +203,24 @@ export default class Pipeline extends Vue {
     }
 
     savePipeline() {
+        const inputTopic = this.graphData.nodes[0].topic || 'mysql1.inventory.orders';
+        const outputTopic = this.graphData.nodes[2].topic || 'sql_results';
+        const sqlQuery =
+            this.graphData.nodes[1].sql ||
+            `INSERT INTO sql_results SELECT payload.after.id, payload.before.id FROM orders`;
+
         this.$apollo
             .mutate({
                 mutation: SEND_CELERY_TASK,
                 variables: {
-                    inputTopic: 'mysql1.inventory.orders',
-                    outputTopic: 'sql_results',
-                    sqlQuery: `INSERT INTO sql_results SELECT payload.after.id, payload.before.id FROM orders`,
+                    inputTopic: inputTopic,
+                    outputTopic: outputTopic,
+                    sqlQuery: sqlQuery,
                 },
             })
             .then(res => {
                 console.log('Celery Task Sent. Response: ', res);
+                this.$buefy.toast.open('Pipeline saved');
             });
     }
 }
