@@ -64,7 +64,7 @@ let router = new Router({
             },
         },
         {
-            path: '/project/:projectId/pipeline/:dashboardId',
+            path: '/project/:projectId/dashboard/:dashboardId',
             name: 'Dashboard',
             component: Dashboard,
             meta: {

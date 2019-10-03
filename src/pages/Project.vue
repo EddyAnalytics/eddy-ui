@@ -53,43 +53,11 @@
         </div>
 
         <section class="section">
-            <h1 class="subtitle">Activity</h1>
-            <div class="columns">
-                <div class="column is-2">
-                    <b-field label="Topics">
-                        <b-select
-                            multiple
-                            native-size="7"
-                            placeholder="Select a Kafka Topic"
-                            v-model="selectedTopics"
-                        >
-                            <option v-for="option in topics" :value="option" :key="option">
-                                {{ option }}
-                            </option>
-                        </b-select>
-                    </b-field>
-                </div>
-
-                <div class="column">
-                    <div class="m-b-sm"><strong>Selected topics activity</strong></div>
-                    <pre>{{ topicsActivity }}</pre>
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
             <h1 class="subtitle">Project management</h1>
             <b-button type="is-danger" @click="openDeleteProjectModal()">Delete project</b-button>
         </section>
     </main>
 </template>
-
-<style lang="scss" scoped>
-pre {
-    height: 20rem;
-    overflow: auto;
-}
-</style>
 
 <script>
 import Vue from 'vue';
@@ -107,9 +75,6 @@ import CREATE_DATA_CONNECTOR from '@/graphql/mutations/createDataConnector.gql';
 import DELETE_DATA_CONNECTOR from '@/graphql/mutations/deleteDataConnector.gql';
 import CREATE_DATA_CONNECTOR_CONFIG from '@/graphql/mutations/createDataConnectorConfig.gql';
 
-import KAFKA_TOPICS from '@/graphql/subscriptions/kafkaTopics.gql';
-import KAFKA_TOPICS_ACTIVITY from '@/graphql/subscriptions/kafkaTopicsActivity.gql';
-
 @Component({
     components: {
         DataConnectorBlock,
@@ -122,10 +87,6 @@ export default class Project extends Vue {
     project = null;
 
     dataConnectors = [];
-
-    topics = [];
-    selectedTopics = [];
-    topicsActivity = {};
 
     isConnectorPanelOpen = false;
     selectedDataConnector = {};
@@ -144,25 +105,6 @@ export default class Project extends Vue {
 
         this.$apollo.addSmartQuery('dataConnectors', {
             query: DATA_CONNECTORS_QUERY,
-        });
-
-        this.$apollo.addSmartSubscription('topics', {
-            query: KAFKA_TOPICS,
-            result({ data: { topics } }) {
-                this.topics = topics;
-            },
-        });
-
-        this.$apollo.addSmartSubscription('topicsActivity', {
-            query: KAFKA_TOPICS_ACTIVITY,
-            variables() {
-                return {
-                    topics: this.selectedTopics,
-                };
-            },
-            result({ data: { topicsActivity } }) {
-                this.topicsActivity = topicsActivity;
-            },
         });
     }
 
@@ -273,7 +215,7 @@ export default class Project extends Vue {
     goToDashboard(dashboard) {
         this.$router.push({
             name: 'Dashboard',
-            params: { projectId: this.projectId, pipelineId: dashboard.id },
+            params: { projectId: this.projectId, dashboardId: dashboard.id },
         });
     }
 
