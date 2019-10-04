@@ -5,17 +5,12 @@
                 <p class="modal-card-title">Block properties</p>
             </header>
             <section class="modal-card-body">
-                <template v-if="block.type === 'transformation'">
-                    <strong>FinkSQL</strong>
-                    <div class="codemirror-wrapper">
-                        <codemirror v-model="block.sql" :options="codeMirrorOptions" />
-                    </div>
-                </template>
-                <template v-else>
-                    <b-field label="Topic">
-                        <b-input v-model="block.topic" />
-                    </b-field>
-                </template>
+                <component
+                    v-if="properties.component"
+                    :is="properties.component"
+                    :properties="properties"
+                />
+                <div v-else>No configurable properties</div>
             </section>
             <footer class="modal-card-foot">
                 <button class="button is-primary">
@@ -29,28 +24,26 @@
 
 <script>
 import { Component, Prop, Vue } from 'vue-property-decorator';
-
-import { codemirror } from 'vue-codemirror';
-import 'codemirror/mode/sql/sql.js';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/3024-day.css';
+import FlinkSQLProperties from './block-properties/FlinkSQLProperties';
+import KafkaPublisherProperties from './block-properties/KafkaPublisherProperties';
 
 @Component({
     components: {
-        codemirror,
+        FlinkSQLProperties,
+        KafkaPublisherProperties,
     },
 })
 export default class PipelineBlockForm extends Vue {
     @Prop() block;
 
-    codeMirrorOptions = {
-        lineNumbers: true,
-        mode: 'text/x-sql',
-        theme: '3024-day',
-    };
+    properties = {};
+
+    created() {
+        this.properties = JSON.parse(JSON.stringify(this.block.properties));
+    }
 
     save() {
-        this.$emit('save', this.block);
+        this.$emit('save', { ...this.block, properties: this.properties });
         this.$parent.close();
     }
 }

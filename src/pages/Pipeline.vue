@@ -55,7 +55,10 @@ export default class Pipeline extends Vue {
                 y: 300,
                 type: 'source',
                 component: 'PipelineBuilderBlock',
-                topic: 'mysql1.inventory.orders',
+                properties: {
+                    component: 'KafkaPublisherProperties',
+                    topic: 'mysql1.inventory.customers',
+                },
                 props: {
                     title: 'Kafka Subscriber',
                     type: 'source',
@@ -67,8 +70,13 @@ export default class Pipeline extends Vue {
                 y: 300,
                 type: 'transformation',
                 component: 'PipelineBuilderBlock',
-                sql:
-                    'INSERT INTO sql_results SELECT payload.after.id, payload.before.id FROM orders',
+                properties: {
+                    component: 'FlinkSQLProperties',
+                    inSchema:
+                        '{\n"payload": "ROW<`ts_ms` LONG, after ROW<`id` LONG, first_name VARCHAR, last_name VARCHAR, email VARCHAR>, before ROW<`id` LONG, first_name VARCHAR, last_name VARCHAR, email VARCHAR>>"\n}',
+                    outSchema: '{\n"id": "LONG",\n"value": "LONG"\n}',
+                    sqlQuery: `INSERT INTO sql_results \nSELECT payload.after.id, payload.before.id \nFROM customers`,
+                },
                 props: {
                     title: 'Flink SQL Snippet',
                     type: 'transformation',
@@ -80,7 +88,10 @@ export default class Pipeline extends Vue {
                 y: 300,
                 type: 'sink',
                 component: 'PipelineBuilderBlock',
-                topic: 'sql_results',
+                properties: {
+                    component: 'KafkaPublisherProperties',
+                    topic: 'sql_results',
+                },
                 props: {
                     title: 'Kafka Publisher',
                     type: 'sink',
@@ -175,7 +186,11 @@ export default class Pipeline extends Vue {
             type: 'transformation',
             name: 'Filter',
         },
-        { disabled: true, type: 'transformation', name: 'Map', component: 'PipelineBuilderBlock' },
+        {
+            disabled: true,
+            type: 'transformation',
+            name: 'Map',
+        },
     ];
 
     addBlock(block) {
@@ -194,9 +209,10 @@ export default class Pipeline extends Vue {
     }
 
     saveBlock(block) {
-        const nodeIndex = this.graphData.nodes.findIndex(node => node.id === block);
+        const nodeIndex = this.graphData.nodes.findIndex(node => node.id === block.id);
+        console.log(block, nodeIndex);
         if (nodeIndex > -1) {
-            this.graphData.nodes.splice(nodeIndex, 0, block);
+            this.graphData.nodes.splice(nodeIndex, 1, block);
         }
     }
 
@@ -205,23 +221,30 @@ export default class Pipeline extends Vue {
     }
 
     savePipeline() {
-        const inputTopic = this.graphData.nodes[0].topic || 'mysql1.inventory.orders';
-        const outputTopic = this.graphData.nodes[2].topic || 'sql_results';
-        const sqlQuery =
-            this.graphData.nodes[1].sql ||
-            `INSERT INTO sql_results SELECT payload.after.id, payload.before.id FROM orders`;
+        const inputTopic = this.graphData.nodes[0].properties.topic;
+        const outputTopic = this.graphData.nodes[2].properties.topic;
+        const inSchema = this.graphData.nodes[1].properties.inSchema;
+        const outSchema = this.graphData.nodes[1].properties.outSchema;
+        const sqlQuery = this.graphData.nodes[1].properties.sqlQuery;
 
         this.$apollo
             .mutate({
                 mutation: SEND_CELERY_TASK,
                 variables: {
-                    inputTopic: inputTopic,
-                    outputTopic: outputTopic,
-                    sqlQuery: sqlQuery,
+                    inSchema,
+                    inputTopic,
+                    outSchema,
+                    outputTopic,
+                    sqlQuery,
                 },
             })
             .then(res => {
-                console.log('Celery Task Sent. Response: ', res);
+                console.log(
+                    'Celery Task Sent',
+                    { inSchema, inputTopic, outSchema, outputTopic, sqlQuery },
+                    'Response: ',
+                    res,
+                );
                 this.$buefy.toast.open('Pipeline saved');
             });
     }
