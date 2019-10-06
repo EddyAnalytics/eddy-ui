@@ -1,33 +1,55 @@
 <template>
     <main>
         <section class="section">
-            <h1 class="title">Dashboard</h1>
-            Project ID: {{ projectId }} Dashboard ID: {{ dashboardId }}
+            <div class="columns">
+                <div class="column">
+                    <h1 v-if="dashboardId === 'new'" class="title">New Dashboard</h1>
+                    <h1 v-else class="title">Dashboard</h1>
+                </div>
+                <div class="column has-text-right">
+                    <b-button class="m-r-sm" icon-left="share-variant">
+                        Share
+                    </b-button>
+                    <b-button type="is-primary" icon-left="content-save" @click="saveDashboard()">
+                        Save
+                    </b-button>
+                </div>
+            </div>
         </section>
 
-        <section class="section">
-            <div class="columns is-mobile">
-                <div class="column">
+        <section class="p-md">
+            <div class="columns">
+                <div class="column is-3">
                     <div class="box has-background-primary">
                         <div class="content">
-                            <h1>2.4k</h1>
-                            <h3>Ingested</h3>
+                            <h1 class="has-text-white">{{ topics.length }}</h1>
+                            <h4 class="has-text-white">Topics available</h4>
                         </div>
                     </div>
                 </div>
-                <div class="column">
+                <div class="column is-3">
                     <div class="box has-background-primary">
                         <div class="content">
-                            <h1>2.1k</h1>
-                            <h3>Transformed</h3>
+                            <h1 class="has-text-white">{{ selectedTopics.length }}</h1>
+                            <h4 class="has-text-white">Subscriptions</h4>
                         </div>
                     </div>
                 </div>
-                <div class="column">
+                <div class="column is-3">
                     <div class="box has-background-primary">
                         <div class="content">
-                            <h1>1.8k</h1>
-                            <h3>Sinked</h3>
+                            <h1 class="has-text-white">{{ topicsActivityCount }}</h1>
+                            <h4 class="has-text-white">Received events</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-3">
+                    <div class="box has-background-primary">
+                        <div class="content">
+                            <h1 class="has-text-white">
+                                {{ Math.floor(topicsActivityCount / minutes) }}
+                            </h1>
+                            <h4 class="has-text-white">Events per minute</h4>
                         </div>
                     </div>
                 </div>
@@ -35,7 +57,7 @@
         </section>
 
         <section class="section">
-            <h1 class="subtitle">Activity</h1>
+            <h1 class="subtitle">Live topics activity</h1>
             <div class="columns">
                 <div class="column is-2">
                     <b-field label="Topics">
@@ -59,7 +81,7 @@
             </div>
         </section>
 
-        <div class="grid">
+        <div class="grid p-sm">
             <grid-layout
                 class="grid__layout"
                 :layout.sync="layout"
@@ -71,7 +93,7 @@
                 :cols="{ lg: 3, md: 3, sm: 2, xs: 1, xxs: 1 }"
             >
                 <grid-item
-                    class="grid__layout__item"
+                    class="grid__layout__item box"
                     v-for="item in layout"
                     :x="item.x"
                     :y="item.y"
@@ -88,17 +110,16 @@
     </main>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 pre {
     height: 20rem;
     overflow: auto;
 }
 
 .grid {
-    width: 100%;
     .grid__layout {
-        .grid__layout__item {
-            border: 1px solid #ddd;
+        .vue-grid-placeholder {
+            background: $primary;
         }
     }
 }
@@ -124,19 +145,27 @@ import BarChartWidget from '@/components/dashboard/BarChartWidget';
 })
 export default class Dashboard extends Vue {
     topics = [];
-    selectedTopics = [];
+    selectedTopics = ['sql_results'];
     topicsActivity = {};
 
+    topicsActivityCount = 1;
+    minutes = 1;
+
     layout = [
-        { x: 0, y: 0, w: 1, h: 1, i: '1', topic: '', type: 'BarChartWidget' },
-        { x: 1, y: 0, w: 1, h: 1, i: '2', topic: '', type: 'BarChartWidget' },
-        { x: 2, y: 0, w: 1, h: 1, i: '3', topic: '', type: 'BarChartWidget' },
+        { x: 1, y: 0, w: 1, h: 1, i: '1', topic: '', type: 'BarChartWidget' },
+        { x: 2, y: 0, w: 1, h: 1, i: '2', topic: '', type: 'BarChartWidget' },
+        { x: 0, y: 1, w: 1, h: 1, i: '3', topic: '', type: 'BarChartWidget' },
+        { x: 1, y: 1, w: 1, h: 1, i: '4', topic: '', type: 'BarChartWidget' },
         { x: 0, y: 0, w: 1, h: 1, i: '0', topic: '', type: 'AddWidget' },
     ];
 
     created() {
         this.projectId = this.$route.params.projectId;
         this.dashboardId = this.$route.params.dashboardId;
+
+        setInterval(() => {
+            this.minutes++;
+        }, 1000);
 
         this.$apollo.addSmartSubscription('topics', {
             query: KAFKA_TOPICS,
@@ -154,8 +183,13 @@ export default class Dashboard extends Vue {
             },
             result({ data: { topicsActivity } }) {
                 this.topicsActivity = topicsActivity;
+                this.topicsActivityCount++;
             },
         });
+    }
+
+    saveDashboard() {
+        this.$buefy.toast.open('Dashoard saved');
     }
 }
 </script>
