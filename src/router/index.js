@@ -33,8 +33,6 @@ let router = new Router({
             path: '/',
             name: 'Landing',
             component: Landing,
-            // Redirect to the Projects page if authenticated on landing
-            redirect: store.getters[AUTH.IS_AUTHENTICATED] && '/projects',
             meta: {
                 auth: false,
             },
