@@ -1,9 +1,9 @@
 <template>
-    <section v-if="dataConnector">
+    <section v-if="dataConnectorModel">
         <div class="columns">
             <div class="column">
                 <b-field label="Type">
-                    <b-select v-model="dataConnector.type">
+                    <b-select v-model="dataConnectorModel.type">
                         <option
                             v-for="option in connectorTypes"
                             :value="option"
@@ -16,16 +16,16 @@
                 </b-field>
 
                 <b-field label="Name">
-                    <b-input v-model="dataConnector.name"></b-input>
+                    <b-input v-model="dataConnectorModel.name"></b-input>
                 </b-field>
 
-                <template v-if="dataConnector.config">
+                <template v-if="dataConnectorModel.config">
                     <b-field
                         v-for="key in halfFields"
                         :key="key"
                         :label="$options.filters.capitalize(key)"
                     >
-                        <b-input v-model="dataConnector.config[key]"></b-input>
+                        <b-input v-model="dataConnectorModel.config[key]"></b-input>
                     </b-field>
                     <b-button type="is-primary" class="m-r-sm" outlined @click="save()">
                         Save
@@ -33,7 +33,7 @@
                 </template>
                 <b-button outlined @click="cancel()">Cancel</b-button>
                 <b-button
-                    v-if="dataConnector.id"
+                    v-if="dataConnectorModel.id"
                     type="is-danger"
                     class="is-pulled-right"
                     outlined
@@ -44,13 +44,13 @@
             </div>
 
             <div class="column">
-                <template v-if="dataConnector.config">
+                <template v-if="dataConnectorModel.config">
                     <b-field
                         v-for="key in otherHalfFields"
                         :key="key"
                         :label="$options.filters.capitalize(key)"
                     >
-                        <b-input v-model="dataConnector.config[key]"></b-input>
+                        <b-input v-model="dataConnectorModel.config[key]"></b-input>
                     </b-field>
                 </template>
             </div>
@@ -78,6 +78,7 @@ import { Component, Prop } from 'vue-property-decorator';
 @Component
 export default class DataConnectorForm extends Vue {
     @Prop() dataConnector;
+    dataConnectorModel = {};
 
     connectorTypes = [
         'Debezium',
@@ -86,18 +87,22 @@ export default class DataConnectorForm extends Vue {
         'MQTT (Comming soon)',
     ];
 
+    mounted() {
+        this.dataConnectorModel = JSON.parse(JSON.stringify(this.dataConnector));
+    }
+
     get halfFields() {
-        const keysLength = Object.keys(this.dataConnector.config).length;
-        return Object.keys(this.dataConnector.config).slice(0, keysLength / 2);
+        const keysLength = Object.keys(this.dataConnectorModel.config).length;
+        return Object.keys(this.dataConnectorModel.config).slice(0, keysLength / 2);
     }
 
     get otherHalfFields() {
-        const keysLength = Object.keys(this.dataConnector.config).length;
-        return Object.keys(this.dataConnector.config).slice(keysLength / 2);
+        const keysLength = Object.keys(this.dataConnectorModel.config).length;
+        return Object.keys(this.dataConnectorModel.config).slice(keysLength / 2);
     }
 
     save() {
-        this.$emit('save', this.dataConnector);
+        this.$emit('save', this.dataConnectorModel);
     }
 
     cancel() {
@@ -105,7 +110,7 @@ export default class DataConnectorForm extends Vue {
     }
 
     remove() {
-        this.$emit('remove', this.dataConnector);
+        this.$emit('remove', this.dataConnectorModel);
     }
 }
 </script>

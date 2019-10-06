@@ -7,7 +7,7 @@
                 </figure>
             </div>
             <div v-else class="card-image">
-                <b-icon icon="folder-outline" size="is-large" type="is-grey"></b-icon>
+                <b-icon icon="database" size="is-large" type="is-grey"></b-icon>
             </div>
 
             <div class="card-content">

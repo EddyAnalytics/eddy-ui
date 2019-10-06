@@ -9,7 +9,7 @@
                     v-for="dataConnector in dataConnectors"
                     :key="dataConnector.id"
                     :dataConnector="dataConnector"
-                    @click.native="showConnectorDetails(dataConnector)"
+                    @click.native="toggleConnectorDetails(dataConnector)"
                 ></data-connector-block>
                 <data-connector-block @click.native="addNewDataConnector()" />
             </div>
@@ -72,8 +72,10 @@ import PROJECT_DELETE from '@/graphql/mutations/deleteProject.gql';
 
 import DATA_CONNECTORS_QUERY from '@/graphql/queries/dataConnectors.gql';
 import CREATE_DATA_CONNECTOR from '@/graphql/mutations/createDataConnector.gql';
-import DELETE_DATA_CONNECTOR from '@/graphql/mutations/deleteDataConnector.gql';
 import CREATE_DATA_CONNECTOR_CONFIG from '@/graphql/mutations/createDataConnectorConfig.gql';
+import UPDATE_DATA_CONNECTOR from '@/graphql/mutations/updateDataConnector.gql';
+import UPDATE_DATA_CONNECTOR_CONFIG from '@/graphql/mutations/updateDataConnectorConfig.gql';
+import DELETE_DATA_CONNECTOR from '@/graphql/mutations/deleteDataConnector.gql';
 
 @Component({
     components: {
@@ -129,24 +131,34 @@ export default class Project extends Vue {
         };
     }
 
-    showConnectorDetails(dataConnector) {
-        this.isConnectorPanelOpen = true;
-        this.selectedDataConnector = dataConnector;
+    toggleConnectorDetails(dataConnector) {
+        if (this.isConnectorPanelOpen && dataConnector === this.selectedDataConnector) {
+            this.closeConnectorPanel();
+        } else {
+            this.isConnectorPanelOpen = true;
+            this.selectedDataConnector = dataConnector;
+        }
     }
 
     async saveConnector(dataConnector) {
         const configRes = await this.$apollo.mutate({
-            mutation: CREATE_DATA_CONNECTOR_CONFIG,
+            mutation: dataConnector.id
+                ? UPDATE_DATA_CONNECTOR_CONFIG
+                : CREATE_DATA_CONNECTOR_CONFIG,
             variables: {
                 ...dataConnector.config,
             },
         });
 
+        const configId =
+            configRes.data[`${dataConnector.id ? 'update' : 'create'}DebeziumConnectorConfig`]
+                .debeziumConnectorConfig.id;
+
         await this.$apollo.mutate({
-            mutation: CREATE_DATA_CONNECTOR,
+            mutation: dataConnector.id ? UPDATE_DATA_CONNECTOR : CREATE_DATA_CONNECTOR,
             variables: {
                 name: dataConnector.name,
-                configId: configRes.data.createDebeziumConnectorConfig.debeziumConnectorConfig.id,
+                configId,
             },
         });
 
