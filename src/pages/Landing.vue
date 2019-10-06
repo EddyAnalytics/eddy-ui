@@ -98,7 +98,7 @@
                             <b-button
                                 size="is-large"
                                 icon-right="github-circle"
-                                @click="goToRepo()"
+                                @click="goToOrganization()"
                             >
                                 View on GitHub
                             </b-button>
@@ -188,10 +188,10 @@ Vue.use(VueScrollTo);
 
 @Component
 export default class Landing extends Vue {
-    REPO_URL = 'https://github.com/AlexImb';
+    ORGANIZATION_URL = 'https://github.com/EddyAnalytics';
 
-    goToRepo() {
-        window.open(this.REPO_URL, '_blank');
+    goToOrganization() {
+        window.open(this.ORGANIZATION_URL, '_blank');
     }
 }
 </script>
