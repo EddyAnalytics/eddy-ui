@@ -76,7 +76,7 @@
 
                 <div class="column">
                     <div class="m-b-sm"><strong>Selected topics activity</strong></div>
-                    <pre>{{ topicsActivity }}</pre>
+                    <pre class="last-event-pre">{{ topicsActivity }}</pre>
                 </div>
             </div>
         </section>
@@ -111,7 +111,7 @@
 </template>
 
 <style lang="scss">
-pre {
+.last-event-pre {
     height: 20rem;
     overflow: auto;
 }
