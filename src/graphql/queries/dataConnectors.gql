@@ -1,7 +1,7 @@
 #import "../fragments/dataConnectorConfigFragment.gql"
 
 query dataConnectors {
-    dataConnectors: allDebeziumConnector {
+    dataConnectors: allDebeziumConnectors {
         id,
         name,
         config {

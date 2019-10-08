@@ -32,7 +32,7 @@ export default {
                     fetchPolicy: 'no-cache',
                 })
                 .then(res => {
-                    commit(WORKSPACES.SET, res.data.allWorkspace);
+                    commit(WORKSPACES.SET, res.data.allWorkspaces);
                 });
         },
         [WORKSPACES.ADD]: ({ commit, state }) => {

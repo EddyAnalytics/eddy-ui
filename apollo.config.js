@@ -17,9 +17,8 @@ module.exports = {
         endpoint: {
             url: env.APOLLO_SCHEMA_DOWNLOAD_URL,
             headers: {
-                authorization: 'Bearer token',
+                authorization: `Bearer ${env.APOLLO_SCHEMA_DOWNLOAD_TOKEN}`,
             },
-            skipSSLValidation: true,
         },
     },
     engine: {
