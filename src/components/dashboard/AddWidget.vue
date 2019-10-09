@@ -3,7 +3,7 @@
         <b-steps type="is-small" :animated="false" v-model="step">
             <b-step-item label="Type" :clickable="true">
                 <br />
-                <b-tabs type="is-toggle" v-model="chartType" expanded>
+                <b-tabs type="is-toggle" v-model="chartTypeIndex" expanded>
                     <b-tab-item
                         v-for="chartType in chartTypes"
                         :key="chartType.id"
@@ -13,9 +13,17 @@
                 </b-tabs>
             </b-step-item>
             <b-step-item label="Data" :clickable="true">
-                <strong>X-axis</strong>
-                <br />
-                <strong>Y-axis</strong>
+                <b-field label="Topic">
+                    <b-select v-model="topic" :expanded="true">
+                        <option v-for="topic in topics" :value="topic" :key="topic">
+                            {{ topic }}
+                        </option>
+                    </b-select>
+                </b-field>
+
+                <b-field label="Y-Axis Key">
+                    <b-input v-model="topicKey" />
+                </b-field>
             </b-step-item>
             <b-step-item label="Options" :clickable="true">
                 <b-checkbox>Title</b-checkbox>
@@ -23,16 +31,34 @@
                 <b-checkbox>Legend</b-checkbox>
                 <br />
                 <b-checkbox>Use logaritmic scale</b-checkbox>
+
+                <b-button
+                    type="is-primary"
+                    class="step__save-btn"
+                    @click="addWidget"
+                    :disabled="!topic || !this.topicKey"
+                >
+                    Add
+                </b-button>
             </b-step-item>
         </b-steps>
     </article>
 </template>
 
+<style lang="scss" scoped>
+.step__save-btn {
+    float: right;
+    top: 3.33rem;
+}
+</style>
+
 <script>
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class AddWidget extends Vue {
+    @Prop() topics;
+
     step = 0;
     chartTypes = [
         { id: 0, type: 'BarChartWidget', label: 'Bar', icon: 'chart-bar' },
@@ -40,6 +66,17 @@ export default class AddWidget extends Vue {
         { id: 2, type: 'LineChartWidget', label: 'Line', icon: 'chart-line' },
         { id: 3, type: 'AreaChartWidget', label: 'Area', icon: 'chart-areaspline' },
     ];
-    chartType = 0;
+    chartTypeIndex = 0;
+
+    topic = null;
+    topicKey = null;
+
+    addWidget() {
+        this.$emit('addWidget', {
+            type: this.chartTypes[this.chartTypeIndex].type,
+            topic: this.topic,
+            topicKey: this.topicKey,
+        });
+    }
 }
 </script>

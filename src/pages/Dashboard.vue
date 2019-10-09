@@ -84,8 +84,8 @@
         <div class="grid p-sm">
             <grid-layout
                 class="grid__layout"
-                :layout.sync="layout"
-                :row-height="300"
+                :layout.sync="widgets"
+                :row-height="350"
                 :is-draggable="true"
                 :is-resizable="true"
                 :responsive="true"
@@ -94,7 +94,7 @@
             >
                 <grid-item
                     class="grid__layout__item box"
-                    v-for="item in layout"
+                    v-for="item in widgets"
                     :x="item.x"
                     :y="item.y"
                     :w="item.w"
@@ -103,7 +103,7 @@
                     :key="item.i"
                     :static="item.type === 'AddWidget'"
                 >
-                    <component :is="item.type" />
+                    <component :is="item.type" @addWidget="addWidget" :topics="topics" />
                 </grid-item>
             </grid-layout>
         </div>
@@ -147,17 +147,10 @@ export default class Dashboard extends Vue {
     topics = [];
     selectedTopics = ['sql_results'];
     topicsActivity = {};
-
     topicsActivityCount = 1;
     minutes = 1;
 
-    layout = [
-        { x: 1, y: 0, w: 1, h: 1, i: '1', topic: '', type: 'BarChartWidget' },
-        { x: 2, y: 0, w: 1, h: 1, i: '2', topic: '', type: 'BarChartWidget' },
-        { x: 0, y: 1, w: 1, h: 1, i: '3', topic: '', type: 'BarChartWidget' },
-        { x: 1, y: 1, w: 1, h: 1, i: '4', topic: '', type: 'BarChartWidget' },
-        { x: 0, y: 0, w: 1, h: 1, i: '0', topic: '', type: 'AddWidget' },
-    ];
+    widgets = [{ x: 0, y: 0, w: 1, h: 1, i: '0', topic: '', type: 'AddWidget' }];
 
     created() {
         this.projectId = this.$route.params.projectId;
@@ -185,6 +178,20 @@ export default class Dashboard extends Vue {
                 this.topicsActivity = topicsActivity;
                 this.topicsActivityCount++;
             },
+        });
+    }
+
+    addWidget(widget) {
+        const lastWidget = this.widgets[this.widgets.length - 1];
+        this.widgets.push({
+            x: (lastWidget.x + 1) % 3,
+            y: 0,
+            w: 1,
+            h: 1,
+            i: +lastWidget.i + 1 + '',
+            topic: widget.topic,
+            topicKey: widget.topicKey,
+            type: widget.type,
         });
     }
 
