@@ -21,8 +21,14 @@
                     </b-select>
                 </b-field>
 
+                <b-checkbox v-model="useReceiveTimeScale">Use receive time scale</b-checkbox>
+
+                <b-field v-if="!useReceiveTimeScale" label="X-Axis Key">
+                    <b-input v-model="xAxisKey" />
+                </b-field>
+
                 <b-field label="Y-Axis Key">
-                    <b-input v-model="topicKey" />
+                    <b-input v-model="yAxisKey" />
                 </b-field>
             </b-step-item>
             <b-step-item label="Options" :clickable="true">
@@ -36,7 +42,7 @@
                     type="is-primary"
                     class="step__save-btn"
                     @click="addWidget"
-                    :disabled="!topic || !this.topicKey"
+                    :disabled="!topic || !this.yAxisKey"
                 >
                     Add
                 </b-button>
@@ -69,13 +75,22 @@ export default class AddWidget extends Vue {
     chartTypeIndex = 0;
 
     topic = null;
-    topicKey = null;
+    useReceiveTimeScale = true;
+    xAxisKey = null;
+    yAxisKey = null;
+
+    showLegend = false;
 
     addWidget() {
         this.$emit('addWidget', {
             type: this.chartTypes[this.chartTypeIndex].type,
-            topic: this.topic,
-            topicKey: this.topicKey,
+            config: {
+                topics: [this.topic],
+                useReceiveTimeScale: this.useReceiveTimeScale,
+                xAxisKey: this.xAxisKey,
+                yAxisKey: this.yAxisKey,
+                showLegend: this.showLegend,
+            },
         });
     }
 }

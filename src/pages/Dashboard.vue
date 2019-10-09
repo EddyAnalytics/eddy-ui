@@ -94,16 +94,21 @@
             >
                 <grid-item
                     class="grid__layout__item box"
-                    v-for="item in widgets"
-                    :x="item.x"
-                    :y="item.y"
-                    :w="item.w"
-                    :h="item.h"
-                    :i="item.i"
-                    :key="item.i"
-                    :static="item.type === 'AddWidget'"
+                    v-for="widget in widgets"
+                    :x="widget.x"
+                    :y="widget.y"
+                    :w="widget.w"
+                    :h="widget.h"
+                    :i="widget.i"
+                    :key="widget.i"
+                    :static="widget.type === 'AddWidget'"
                 >
-                    <component :is="item.type" @addWidget="addWidget" :topics="topics" />
+                    <component
+                        :is="widget.type"
+                        @addWidget="addWidget"
+                        :topics="topics"
+                        :widget="widget"
+                    />
                 </grid-item>
             </grid-layout>
         </div>
@@ -118,6 +123,9 @@
 
 .grid {
     .grid__layout {
+        .grid__layout__item {
+            overflow: auto;
+        }
         .vue-grid-placeholder {
             background: $primary;
         }
@@ -150,7 +158,31 @@ export default class Dashboard extends Vue {
     topicsActivityCount = 1;
     minutes = 1;
 
-    widgets = [{ x: 0, y: 0, w: 1, h: 1, i: '0', topic: '', type: 'AddWidget' }];
+    widgets = [
+        {
+            x: 0,
+            y: 0,
+            w: 1,
+            h: 1,
+            i: '0',
+            type: 'AddWidget',
+        },
+        {
+            type: 'BarChartWidget',
+            x: 1,
+            y: 0,
+            w: 1,
+            h: 1,
+            i: '1',
+            config: {
+                topics: ['mysql1.inventory.customers'],
+                useReceiveTimeScale: true,
+                xAxisKey: null,
+                yAxisKey: 'payload.after.id',
+                showLegend: false,
+            },
+        },
+    ];
 
     created() {
         this.projectId = this.$route.params.projectId;
@@ -189,9 +221,7 @@ export default class Dashboard extends Vue {
             w: 1,
             h: 1,
             i: +lastWidget.i + 1 + '',
-            topic: widget.topic,
-            topicKey: widget.topicKey,
-            type: widget.type,
+            ...widget,
         });
     }
 
