@@ -2,17 +2,17 @@
 
 
 mutation createDataConnectorConfig(
-    $connectorClass: String,
-    $databaseHistoryKafkaBootstrapServers: String,
-    $databaseHistoryKafkaTopic: String,
-    $databaseHostname: String,
-    $databasePassword: String,
-    $databasePort: Int,
-    $databaseServerId: Int,
-    $databaseServerName: String,
-    $databaseUser: String,
-    $databaseWhitelist: String,
-    $tasksMax: Int
+    $connectorClass: String!,
+    $databaseHistoryKafkaBootstrapServers: String!,
+    $databaseHistoryKafkaTopic: String!,
+    $databaseHostname: String!,
+    $databasePassword: String!,
+    $databasePort: Int!,
+    $databaseServerId: Int!,
+    $databaseServerName: String!,
+    $databaseUser: String!,
+    $databaseWhitelist: String!,
+    $tasksMax: Int!
 ) {
 
 createDebeziumConnectorConfig(

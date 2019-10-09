@@ -1,6 +1,6 @@
 #import "../fragments/dataConnectorConfigFragment.gql"
 
-mutation createDataConnector($configId: IntID, $name: String) {
+mutation createDataConnector($configId: IntID!, $name: String!) {
   createDebeziumConnector(configId: $configId, name: $name) {
     debeziumConnector {
         id,

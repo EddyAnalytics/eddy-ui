@@ -31,7 +31,7 @@ export default {
                     fetchPolicy: 'no-cache',
                 })
                 .then(res => {
-                    commit(PROJECTS.SET, res.data.allProject);
+                    commit(PROJECTS.SET, res.data.allProjects);
                 });
         },
         [PROJECTS.ADD]: (

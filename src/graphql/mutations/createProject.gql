@@ -1,5 +1,5 @@
-mutation createProject($pipelinesIds: [IntID], $workspaceId: IntID) {
-  createProject(pipelinesIds: $pipelinesIds, workspaceId: $workspaceId) {
+mutation createProject($workspaceId: IntID!) {
+  createProject(workspaceId: $workspaceId) {
     project {
         id
     }
