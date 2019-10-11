@@ -170,7 +170,7 @@ export default class Dashboard extends Vue {
             y: 0,
             w: 1,
             h: 1,
-            i: '0',
+            i: 0,
             type: 'AddWidget',
         },
         {
@@ -179,7 +179,7 @@ export default class Dashboard extends Vue {
             y: 0,
             w: 1,
             h: 1,
-            i: '1',
+            i: 1,
             config: {
                 topics: ['mysql1.inventory.customers'],
                 useReceiveTimeScale: true,
@@ -220,15 +220,20 @@ export default class Dashboard extends Vue {
     }
 
     addWidget(widget) {
-        const lastWidget = this.widgets[this.widgets.length - 1];
-        this.widgets.push({
-            x: (lastWidget.x + 1) % 3,
+        const lastWidgetIndex = this.widgets.reduce((maxIndex, widget) => {
+            return Math.max(maxIndex, widget.x);
+        }, 0);
+
+        const newWidget = {
+            x: 1,
             y: 0,
             w: 1,
             h: 1,
-            i: +lastWidget.i + 1 + '',
+            i: lastWidgetIndex + 1,
             ...widget,
-        });
+        };
+
+        this.widgets.push(newWidget);
     }
 
     saveDashboard() {
