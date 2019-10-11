@@ -9,6 +9,7 @@
                         :key="chartType.id"
                         :label="chartType.label"
                         :icon="chartType.icon"
+                        :disabled="chartType.disabled"
                     ></b-tab-item>
                 </b-tabs>
             </b-step-item>
@@ -68,9 +69,9 @@ export default class AddWidget extends Vue {
     step = 0;
     chartTypes = [
         { id: 0, type: 'BarChartWidget', label: 'Bar', icon: 'chart-bar' },
-        { id: 1, type: 'PieChartWidget', label: 'Pie', icon: 'chart-donut' },
-        { id: 2, type: 'LineChartWidget', label: 'Line', icon: 'chart-line' },
-        { id: 3, type: 'AreaChartWidget', label: 'Area', icon: 'chart-areaspline' },
+        { id: 1, type: 'LineChartWidget', label: 'Line', icon: 'chart-line' },
+        { id: 2, type: 'PieChartWidget', label: 'Pie', icon: 'chart-donut', disabled: true },
+        { id: 3, type: 'AreaChartWidget', label: 'Area', icon: 'chart-areaspline', disabled: true },
     ];
     chartTypeIndex = 0;
 

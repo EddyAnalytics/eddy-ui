@@ -1,12 +1,18 @@
 <template>
     <article>
-        <h1>LineChartWidget</h1>
+        <line-chart class="widget__chart" :chart-data="chartData" :options="options" />
     </article>
 </template>
 
 <script>
-import { Component, Vue } from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
+import BaseWidget from '@/components/dashboard/BaseWidget';
+import LineChart from '@/components/charts/LineChart.js';
 
-@Component
-export default class LineChartWidget extends Vue {}
+@Component({
+    components: {
+        LineChart,
+    },
+})
+export default class LineChartWidget extends BaseWidget {}
 </script>

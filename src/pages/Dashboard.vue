@@ -142,6 +142,9 @@ import KAFKA_TOPICS_ACTIVITY from '@/graphql/subscriptions/kafkaTopicsActivity.g
 
 import AddWidget from '@/components/dashboard/AddWidget';
 import BarChartWidget from '@/components/dashboard/BarChartWidget';
+import LineChartWidget from '@/components/dashboard/LineChartWidget';
+import PieChartWidget from '@/components/dashboard/PieChartWidget';
+import AreaChartWidget from '@/components/dashboard/AreaChartWidget';
 
 @Component({
     components: {
@@ -149,6 +152,9 @@ import BarChartWidget from '@/components/dashboard/BarChartWidget';
         GridItem: VueGridLayout.GridItem,
         AddWidget,
         BarChartWidget,
+        LineChartWidget,
+        PieChartWidget,
+        AreaChartWidget,
     },
 })
 export default class Dashboard extends Vue {
@@ -168,7 +174,7 @@ export default class Dashboard extends Vue {
             type: 'AddWidget',
         },
         {
-            type: 'BarChartWidget',
+            type: 'LineChartWidget',
             x: 1,
             y: 0,
             w: 1,
