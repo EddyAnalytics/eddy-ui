@@ -1,11 +1,12 @@
-#import "../fragments/dataConnectorConfigFragment.gql"
-
 query dataConnectors {
-    dataConnectors: allDebeziumConnectors {
+    dataConnectors: allDataConnectors {
         id,
-        name,
-        config {
-            ...dataConnectorConfigFragment
+        label,
+        config,
+        dataConnectorType {
+            id,
+            label,
+            config
         }
     }
 }

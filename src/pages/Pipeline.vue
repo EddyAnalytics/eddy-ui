@@ -134,62 +134,62 @@ export default class Pipeline extends Vue {
         {
             disabled: false,
             type: 'source',
-            name: 'MySQL Database',
+            label: 'MySQL Database',
         },
         {
             disabled: true,
             type: 'source',
-            name: 'PostgreSQL Database',
+            label: 'PostgreSQL Database',
         },
         {
             disabled: true,
             type: 'source',
-            name: 'MQTT Subscriber',
+            label: 'MQTT Subscriber',
         },
         {
             disabled: false,
             type: 'source',
-            name: 'Kafka Subscriber',
+            label: 'Kafka Subscriber',
         },
         {
             disabled: false,
             type: 'sink',
-            name: 'Kafka Publisher',
+            label: 'Kafka Publisher',
         },
         {
             disabled: true,
             type: 'sink',
-            name: 'Amazon Redshift',
+            label: 'Amazon Redshift',
         },
         {
             disabled: true,
             type: 'sink',
-            name: 'MQTT Publisher',
+            label: 'MQTT Publisher',
         },
         {
             disabled: false,
             type: 'transformation',
-            name: 'Flink SQL Snippet',
+            label: 'Flink SQL Snippet',
         },
         {
             disabled: true,
             type: 'transformation',
-            name: 'Join Data Sources',
+            label: 'Join Data Sources',
         },
         {
             disabled: true,
             type: 'transformation',
-            name: 'Agregate',
+            label: 'Agregate',
         },
         {
             disabled: true,
             type: 'transformation',
-            name: 'Filter',
+            label: 'Filter',
         },
         {
             disabled: true,
             type: 'transformation',
-            name: 'Map',
+            label: 'Map',
         },
     ];
 
@@ -202,7 +202,7 @@ export default class Pipeline extends Vue {
             type: block.type,
             component: 'PipelineBuilderBlock',
             props: {
-                title: block.name,
+                title: block.label,
                 type: block.type,
             },
         });

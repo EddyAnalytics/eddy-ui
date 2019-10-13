@@ -1,7 +1,7 @@
 <template>
     <main v-if="project">
         <div class="section">
-            <h1 class="title is-spaced">Project {{ project.name || `Project ${project.id}` }}</h1>
+            <h1 class="title is-spaced">Project {{ project.label || `Project ${project.id}` }}</h1>
             <h2 class="subtitle is-3">Data Connectors</h2>
 
             <div class="columns is-multiline">
@@ -72,9 +72,7 @@ import PROJECT_DELETE from '@/graphql/mutations/deleteProject.gql';
 
 import DATA_CONNECTORS_QUERY from '@/graphql/queries/dataConnectors.gql';
 import CREATE_DATA_CONNECTOR from '@/graphql/mutations/createDataConnector.gql';
-import CREATE_DATA_CONNECTOR_CONFIG from '@/graphql/mutations/createDataConnectorConfig.gql';
 import UPDATE_DATA_CONNECTOR from '@/graphql/mutations/updateDataConnector.gql';
-import UPDATE_DATA_CONNECTOR_CONFIG from '@/graphql/mutations/updateDataConnectorConfig.gql';
 import DELETE_DATA_CONNECTOR from '@/graphql/mutations/deleteDataConnector.gql';
 
 @Component({
@@ -113,21 +111,7 @@ export default class Project extends Vue {
     addNewDataConnector() {
         this.isConnectorPanelOpen = true;
         this.selectedDataConnector = {
-            name: 'Unnamed connector',
-            type: 'Debezium',
-            config: {
-                connectorClass: 'io.debezium.connector.mysql.MySqlConnector',
-                tasksMax: '1',
-                databaseHostname: 'mysql',
-                databasePort: '3306',
-                databaseUser: 'root',
-                databasePassword: 'debezium',
-                databaseServerId: '184054',
-                databaseServerName: 'mysql1',
-                databaseWhitelist: 'inventory',
-                databaseHistoryKafkaBootstrapServers: 'kafka:9092',
-                databaseHistoryKafkaTopic: 'schema-changes.inventory',
-            },
+            label: 'Unnamed connector',
         };
     }
 
@@ -141,24 +125,13 @@ export default class Project extends Vue {
     }
 
     async saveConnector(dataConnector) {
-        const configRes = await this.$apollo.mutate({
-            mutation: dataConnector.id
-                ? UPDATE_DATA_CONNECTOR_CONFIG
-                : CREATE_DATA_CONNECTOR_CONFIG,
-            variables: {
-                ...dataConnector.config,
-            },
-        });
-
-        const configId =
-            configRes.data[`${dataConnector.id ? 'update' : 'create'}DebeziumConnectorConfig`]
-                .debeziumConnectorConfig.id;
-
         await this.$apollo.mutate({
             mutation: dataConnector.id ? UPDATE_DATA_CONNECTOR : CREATE_DATA_CONNECTOR,
             variables: {
-                name: dataConnector.name,
-                configId,
+                dataConnectorTypeId: dataConnector.dataConnectorType.id,
+                label: dataConnector.label,
+                projectId: this.projectId,
+                config: JSON.stringify(dataConnector.config),
             },
         });
 
@@ -190,11 +163,11 @@ export default class Project extends Vue {
     pipelines = [
         {
             id: 0,
-            name: 'Simple Pipeline',
+            label: 'Simple Pipeline',
         },
         {
             id: 1,
-            name: 'Advanced Pipeline',
+            label: 'Advanced Pipeline',
         },
     ];
 
@@ -212,15 +185,15 @@ export default class Project extends Vue {
     dashboards = [
         {
             id: 0,
-            name: 'KPI Dashboard',
+            label: 'KPI Dashboard',
         },
         {
             id: 1,
-            name: 'Customer Profiles',
+            label: 'Customer Profiles',
         },
         {
             id: 2,
-            name: 'Test Dashboard',
+            label: 'Test Dashboard',
         },
     ];
 

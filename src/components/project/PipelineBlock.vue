@@ -6,7 +6,7 @@
             </div>
             <div class="card-content">
                 <div class="content has-text-centered">
-                    <div>{{ pipeline.name }}</div>
+                    <div>{{ pipeline.label }}</div>
                 </div>
             </div>
         </div>

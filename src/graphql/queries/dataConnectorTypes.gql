@@ -1,0 +1,7 @@
+query dataConnectorTypes {
+    dataConnectorTypes: allDataConnectorTypes {
+        id,
+        label,
+        config
+    }
+}

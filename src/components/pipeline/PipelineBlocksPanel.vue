@@ -20,7 +20,7 @@
         <div class="panel-blocks">
             <a
                 v-for="block in blocks"
-                :key="block.name"
+                :key="block.label"
                 class="panel-block"
                 :disabled="block.disabled"
                 @click="$emit('addBlock', block)"
@@ -28,7 +28,7 @@
                 <span class="panel-icon">
                     <i class="mdi" :class="`mdi-${iconClass(block.type)}`" aria-hidden="true"></i>
                 </span>
-                {{ block.name }}
+                {{ block.label }}
             </a>
         </div>
     </nav>

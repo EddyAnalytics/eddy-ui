@@ -12,7 +12,7 @@
 
             <div class="card-content">
                 <div class="content has-text-centered">
-                    <div>{{ dataConnector.name }}</div>
+                    <div>{{ dataConnector.label }}</div>
                 </div>
             </div>
         </div>

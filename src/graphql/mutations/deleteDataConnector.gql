@@ -1,7 +1,7 @@
 
-mutation deleteDebeziumConnector($id: IntID) {
-  deleteDebeziumConnector(id: $id) {
-    debeziumConnector {
+mutation deleteDataConnector($id: IntID!) {
+  deleteDataConnector(id: $id) {
+    dataConnector {
         id
     }
   }

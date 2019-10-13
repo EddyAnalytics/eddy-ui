@@ -11,7 +11,7 @@
             </div>
             <div class="card-content">
                 <div class="content">
-                    <div>{{ project.name || `Project ${project.id}` }}</div>
+                    <div>{{ project.label || `Project ${project.id}` }}</div>
                 </div>
             </div>
         </div>
