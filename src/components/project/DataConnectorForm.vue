@@ -29,7 +29,11 @@
                         :key="key"
                         :label="$options.filters.capitalize(key)"
                     >
-                        <b-input v-model="dataConnectorModel.config[key]"></b-input>
+                        <b-input
+                            :type="isHiddenField(key) ? 'password' : 'input'"
+                            v-model="dataConnectorModel.config[key]"
+                            :password-reveal="isHiddenField(key)"
+                        ></b-input>
                     </b-field>
                     <b-button type="is-primary" class="m-r-sm" outlined @click="save()">
                         Save
@@ -54,7 +58,11 @@
                         :key="key"
                         :label="$options.filters.capitalize(key)"
                     >
-                        <b-input v-model="dataConnectorModel.config[key]"></b-input>
+                        <b-input
+                            :type="isHiddenField(key) ? 'password' : 'input'"
+                            v-model="dataConnectorModel.config[key]"
+                            :password-reveal="isHiddenField(key)"
+                        ></b-input>
                     </b-field>
                 </template>
             </div>
@@ -113,6 +121,10 @@ export default class DataConnectorForm extends Vue {
     get otherHalfFields() {
         const keysLength = Object.keys(this.dataConnectorModel.config).length;
         return Object.keys(this.dataConnectorModel.config).slice(keysLength / 2);
+    }
+
+    isHiddenField(key) {
+        return ['password'].includes(key);
     }
 
     save() {
