@@ -1,8 +1,14 @@
 query project($id: IntID!) {
     project(id: $id) {
         id,
+        label,
         pipelines {
-            id
+            id,
+            label
+        },
+        dashboards {
+            id,
+            label
         }
     }
 }

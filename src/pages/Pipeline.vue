@@ -3,9 +3,10 @@
         <section class="section">
             <div class="columns">
                 <div class="column">
-                    <h1 v-if="pipelineId === 'new'" class="title">New pipeline</h1>
-                    <h1 v-else class="title">Edit pipeline</h1>
-                    <!-- Project ID: {{ projectId }} Pipeline ID: {{ pipelineId }} -->
+                    <h1 class="title">
+                        <go-back-button :projectId="projectId" />
+                        Pipeline Builder
+                    </h1>
                 </div>
                 <div class="column has-text-right">
                     <b-button type="is-primary" icon-left="content-save" @click="savePipeline()">
@@ -27,6 +28,8 @@
 
 <script>
 import { Component, Vue } from 'vue-property-decorator';
+import GoBackButton from '@/components/general/GoBackButton.vue';
+
 import PipelineBlocksPanel from '@/components/pipeline/PipelineBlocksPanel.vue';
 
 import VueDag from 'vue-dag';
@@ -38,6 +41,7 @@ import SEND_CELERY_TASK from '@/graphql/mutations/sendCeleryTask.gql';
 
 @Component({
     components: {
+        GoBackButton,
         VueDag,
         PipelineBlocksPanel,
     },

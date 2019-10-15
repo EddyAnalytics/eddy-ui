@@ -3,8 +3,10 @@
         <section class="section">
             <div class="columns">
                 <div class="column">
-                    <h1 v-if="dashboardId === 'new'" class="title">New Dashboard</h1>
-                    <h1 v-else class="title">Dashboard</h1>
+                    <h1 class="title">
+                        <go-back-button :projectId="projectId" />
+                        Dashboard Builder
+                    </h1>
                 </div>
                 <div class="column has-text-right">
                     <b-button class="m-r-sm" icon-left="share-variant">
@@ -135,6 +137,8 @@
 
 <script>
 import { Component, Vue } from 'vue-property-decorator';
+import GoBackButton from '@/components/general/GoBackButton.vue';
+
 import VueGridLayout from 'vue-grid-layout';
 
 import KAFKA_TOPICS from '@/graphql/subscriptions/kafkaTopics.gql';
@@ -148,6 +152,7 @@ import AreaChartWidget from '@/components/dashboard/AreaChartWidget';
 
 @Component({
     components: {
+        GoBackButton,
         GridLayout: VueGridLayout.GridLayout,
         GridItem: VueGridLayout.GridItem,
         AddWidget,

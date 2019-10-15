@@ -30,7 +30,7 @@
             <h2 class="subtitle is-2">Data Pipelines</h2>
             <div class="columns is-multiline">
                 <pipeline-block
-                    v-for="pipeline in pipelines"
+                    v-for="pipeline in project.pipelines"
                     :key="pipeline.id"
                     :pipeline="pipeline"
                     @click.native="goToPipeline(pipeline)"
@@ -43,7 +43,7 @@
             <h2 class="subtitle is-2">Dashboards</h2>
             <div class="columns is-multiline">
                 <dashboard-block
-                    v-for="dashboard in dashboards"
+                    v-for="dashboard in project.dashboards"
                     :key="dashboard.id"
                     :dashboard="dashboard"
                     @click.native="goToDashboard(dashboard)"
@@ -160,17 +160,6 @@ export default class Project extends Vue {
         this.selectedDataConnector = {};
     }
 
-    pipelines = [
-        {
-            id: 0,
-            label: 'Simple Pipeline',
-        },
-        {
-            id: 1,
-            label: 'Advanced Pipeline',
-        },
-    ];
-
     goToPipeline(pipeline) {
         this.$router.push({
             name: 'Pipeline',
@@ -181,21 +170,6 @@ export default class Project extends Vue {
     addNewPipeline() {
         this.goToPipeline({ id: 'new' });
     }
-
-    dashboards = [
-        {
-            id: 0,
-            label: 'KPI Dashboard',
-        },
-        {
-            id: 1,
-            label: 'Customer Profiles',
-        },
-        {
-            id: 2,
-            label: 'Test Dashboard',
-        },
-    ];
 
     goToDashboard(dashboard) {
         this.$router.push({
