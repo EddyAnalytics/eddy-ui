@@ -36,13 +36,14 @@ export default {
         },
         [PROJECTS.ADD]: (
             { commit, state, rootState },
-            { workspaceId = rootState.workspaces.selected.id } = {},
+            { workspaceId = rootState.workspaces.selected.id, label } = {},
         ) => {
             return apollo
                 .mutate({
                     mutation: CREATE_PROJECT,
                     variables: {
-                        workspaceId: workspaceId,
+                        workspaceId,
+                        label,
                     },
                 })
                 .then(({ data: { createProject: { project } } }) => {

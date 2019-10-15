@@ -1,5 +1,6 @@
 query projects {
     allProjects {
         id
+        label
     }
 }

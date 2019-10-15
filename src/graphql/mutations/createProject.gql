@@ -1,7 +1,8 @@
-mutation createProject($workspaceId: IntID!) {
-  createProject(workspaceId: $workspaceId) {
+mutation createProject($workspaceId: IntID!, $label: String) {
+  createProject(workspaceId: $workspaceId, label: $label) {
     project {
-        id
+        id,
+        label
     }
   }
 }

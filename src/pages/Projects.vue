@@ -9,7 +9,7 @@
                     :project="project"
                     @click.native="goToProject(project)"
                 ></project-block>
-                <project-block @click.native="addNewProject()" />
+                <project-block @click.native="openProjectModal()" />
             </div>
         </section>
     </main>
@@ -21,10 +21,12 @@ import { Component } from 'vue-property-decorator';
 import ProjectBlock from '@/components/projects/ProjectBlock';
 import { WORKSPACES } from '@/store/workspaces';
 import { PROJECTS } from '@/store/projects';
+import ProjectForm from '@/components/projects/ProjectForm.vue';
 
 @Component({
     components: {
         ProjectBlock,
+        ProjectForm,
     },
 })
 export default class Projects extends Vue {
@@ -49,8 +51,18 @@ export default class Projects extends Vue {
         return this.$store.state.projects.projects;
     }
 
-    addNewProject() {
-        this.$store.dispatch(PROJECTS.ADD);
+    openProjectModal(project) {
+        this.$buefy.modal.open({
+            parent: this,
+            component: ProjectForm,
+            hasModalCard: true,
+            props: project,
+            events: { save: this.saveProject },
+        });
+    }
+
+    saveProject(project) {
+        this.$store.dispatch(PROJECTS.ADD, project);
     }
 
     goToProject(project) {

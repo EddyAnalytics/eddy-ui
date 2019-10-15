@@ -1,4 +1,4 @@
-mutation deleteProject($id: IntID) {
+mutation deleteProject($id: IntID!) {
   deleteProject(id: $id) {
     project {
         id
