@@ -17,6 +17,9 @@
             <div class="columns">
                 <div class="column is-3">
                     <pipeline-blocks-panel :blocks="pipelineBlockTemplates" @addBlock="addBlock" />
+                    <b-button type="is-danger" @click="openDeletePipelineModal()">
+                        Delete pipeline
+                    </b-button>
                 </div>
                 <div class="column">
                     <vue-dag v-model="graphData" @edit="editNode" @delete="deleteNode" />
@@ -38,6 +41,8 @@ import PipelineBlockForm from '@/components/pipeline/PipelineBlockForm.vue';
 Vue.component('PipelineBuilderBlock', PipelineBuilderBlock);
 
 import SEND_CELERY_TASK from '@/graphql/mutations/sendCeleryTask.gql';
+
+import DELETE_PIPELINE from '@/graphql/mutations/deletePipeline.gql';
 
 @Component({
     components: {
@@ -220,10 +225,6 @@ export default class Pipeline extends Vue {
         }
     }
 
-    goToProject() {
-        this.$router.push({ name: 'Project', params: { projectId: this.projectId } });
-    }
-
     savePipeline() {
         const inputTopic = this.graphData.nodes[0].properties.topic;
         const outputTopic = this.graphData.nodes[2].properties.topic;
@@ -263,6 +264,29 @@ export default class Pipeline extends Vue {
                 );
                 this.$buefy.toast.open('Pipeline saved');
             });
+    }
+
+    openDeletePipelineModal() {
+        this.$buefy.dialog.confirm({
+            title: 'Deleting pipeline',
+            message: 'Are you sure you want to <b>delete</b> this pipeline?',
+            confirmText: 'Delete pipeline',
+            type: 'is-danger',
+            hasIcon: true,
+            onConfirm: () => this.deletePipeline(),
+        });
+    }
+
+    async deletePipeline() {
+        await this.$apollo.mutate({
+            mutation: DELETE_PIPELINE,
+            variables: {
+                id: this.pipelineId,
+            },
+        });
+
+        this.$buefy.toast.open('Pipeline deleted');
+        this.$router.replace({ name: 'Project', params: { projectId: this.projectId } });
     }
 }
 </script>

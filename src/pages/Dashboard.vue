@@ -9,8 +9,17 @@
                     </h1>
                 </div>
                 <div class="column has-text-right">
-                    <b-button class="m-r-sm" icon-left="share-variant">
+                    <b-button outlined class="m-r-sm" icon-left="share-variant">
                         Share
+                    </b-button>
+                    <b-button
+                        outlined
+                        type="is-danger"
+                        class="m-r-sm"
+                        icon-left="delete"
+                        @click="openDeleteDashboardModal()"
+                    >
+                        Delete
                     </b-button>
                     <b-button type="is-primary" icon-left="content-save" @click="saveDashboard()">
                         Save
@@ -22,7 +31,11 @@
         <section class="p-md">
             <div class="columns">
                 <div class="column is-3">
-                    <div class="box has-background-primary">
+                    <div
+                        class="box has-background-primary"
+                        style="cursor: pointer;"
+                        @click="showTopicsActivity = !showTopicsActivity"
+                    >
                         <div class="content">
                             <h1 class="has-text-white">{{ topics.length }}</h1>
                             <h4 class="has-text-white">Topics available</h4>
@@ -58,7 +71,7 @@
             </div>
         </section>
 
-        <section class="section">
+        <section class="section" v-show="showTopicsActivity">
             <h1 class="subtitle">Live topics activity</h1>
             <div class="columns">
                 <div class="column is-2">
@@ -144,6 +157,8 @@ import VueGridLayout from 'vue-grid-layout';
 import KAFKA_TOPICS from '@/graphql/subscriptions/kafkaTopics.gql';
 import KAFKA_TOPICS_ACTIVITY from '@/graphql/subscriptions/kafkaTopicsActivity.gql';
 
+import DELETE_DASHBOARD from '@/graphql/mutations/deleteDashboard.gql';
+
 import AddWidget from '@/components/dashboard/AddWidget';
 import BarChartWidget from '@/components/dashboard/BarChartWidget';
 import LineChartWidget from '@/components/dashboard/LineChartWidget';
@@ -165,6 +180,7 @@ import AreaChartWidget from '@/components/dashboard/AreaChartWidget';
 export default class Dashboard extends Vue {
     topics = [];
     selectedTopics = ['sql_results'];
+    showTopicsActivity = false;
     topicsActivity = {};
     topicsActivityCount = 1;
     minutes = 1;
@@ -243,6 +259,29 @@ export default class Dashboard extends Vue {
 
     saveDashboard() {
         this.$buefy.toast.open('Dashoard saved');
+    }
+
+    openDeleteDashboardModal() {
+        this.$buefy.dialog.confirm({
+            title: 'Deleting dashboard',
+            message: 'Are you sure you want to <b>delete</b> this dashboard?',
+            confirmText: 'Delete dashboard',
+            type: 'is-danger',
+            hasIcon: true,
+            onConfirm: () => this.deleteDashboard(),
+        });
+    }
+
+    async deleteDashboard() {
+        await this.$apollo.mutate({
+            mutation: DELETE_DASHBOARD,
+            variables: {
+                id: this.dashboardId,
+            },
+        });
+
+        this.$buefy.toast.open('Dashboard deleted');
+        this.$router.replace({ name: 'Project', params: { projectId: this.projectId } });
     }
 }
 </script>

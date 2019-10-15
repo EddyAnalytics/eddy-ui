@@ -1,0 +1,7 @@
+mutation deletePipeline($id: IntID!) {
+  deletePipeline(id: $id) {
+    pipeline {
+        id
+    }
+  }
+}

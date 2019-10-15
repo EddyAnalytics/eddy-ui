@@ -62,18 +62,26 @@
 <script>
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
+
 import DataConnectorBlock from '@/components/project/DataConnectorBlock';
 import DataConnectorForm from '@/components/project/DataConnectorForm';
-import DashboardBlock from '@/components/project/DashboardBlock';
+
 import PipelineBlock from '@/components/project/PipelineBlock';
+import PipelineForm from '@/components/projects/PipelineForm.vue';
+
+import DashboardBlock from '@/components/project/DashboardBlock';
+import DashboardForm from '@/components/projects/DashboardForm.vue';
 
 import PROJECT_QUERY from '@/graphql/queries/project.gql';
-import PROJECT_DELETE from '@/graphql/mutations/deleteProject.gql';
+import DELETE_PROJECT from '@/graphql/mutations/deleteProject.gql';
 
 import DATA_CONNECTORS_QUERY from '@/graphql/queries/dataConnectors.gql';
 import CREATE_DATA_CONNECTOR from '@/graphql/mutations/createDataConnector.gql';
 import UPDATE_DATA_CONNECTOR from '@/graphql/mutations/updateDataConnector.gql';
 import DELETE_DATA_CONNECTOR from '@/graphql/mutations/deleteDataConnector.gql';
+
+import CREATE_PIPELINE from '@/graphql/mutations/createPipeline.gql';
+import CREATE_DASHBOARD from '@/graphql/mutations/createDashboard.gql';
 
 @Component({
     components: {
@@ -81,6 +89,7 @@ import DELETE_DATA_CONNECTOR from '@/graphql/mutations/deleteDataConnector.gql';
         DataConnectorForm,
         DashboardBlock,
         PipelineBlock,
+        PipelineForm,
     },
 })
 export default class Project extends Vue {
@@ -101,6 +110,7 @@ export default class Project extends Vue {
                     id: this.projectId,
                 };
             },
+            fetchPolicy: 'cache-and-network',
         });
 
         this.$apollo.addSmartQuery('dataConnectors', {
@@ -167,8 +177,30 @@ export default class Project extends Vue {
         });
     }
 
+    async savePipeline(pipeline) {
+        await this.$apollo.mutate({
+            mutation: CREATE_PIPELINE,
+            variables: {
+                ...pipeline,
+                projectId: this.projectId,
+            },
+        });
+
+        this.$apollo.queries.project.refetch();
+    }
+
+    openPipelineModal(pipeline) {
+        this.$buefy.modal.open({
+            parent: this,
+            component: PipelineForm,
+            hasModalCard: true,
+            props: pipeline,
+            events: { save: this.savePipeline },
+        });
+    }
+
     addNewPipeline() {
-        this.goToPipeline({ id: 'new' });
+        this.openPipelineModal();
     }
 
     goToDashboard(dashboard) {
@@ -178,8 +210,30 @@ export default class Project extends Vue {
         });
     }
 
+    async saveDashboard(dashboard) {
+        await this.$apollo.mutate({
+            mutation: CREATE_DASHBOARD,
+            variables: {
+                ...dashboard,
+                projectId: this.projectId,
+            },
+        });
+
+        this.$apollo.queries.project.refetch();
+    }
+
+    openDashboardModal(dashboard) {
+        this.$buefy.modal.open({
+            parent: this,
+            component: DashboardForm,
+            hasModalCard: true,
+            props: dashboard,
+            events: { save: this.saveDashboard },
+        });
+    }
+
     addNewDashboard() {
-        this.goToDashboard({ id: 'new' });
+        this.openDashboardModal();
     }
 
     openDeleteProjectModal() {
@@ -195,7 +249,7 @@ export default class Project extends Vue {
 
     async deleteProject() {
         await this.$apollo.mutate({
-            mutation: PROJECT_DELETE,
+            mutation: DELETE_PROJECT,
             variables: {
                 id: this.projectId,
             },

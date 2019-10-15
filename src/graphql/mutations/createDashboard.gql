@@ -1,0 +1,8 @@
+mutation createDashboard($label: String!, $projectId: IntID!) {
+  createDashboard(label: $label, projectId: $projectId) {
+    dashboard {
+        id,
+        label
+    }
+  }
+}

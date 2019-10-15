@@ -1,0 +1,8 @@
+mutation createPipeline($label: String!, $projectId: IntID!) {
+  createPipeline(label: $label, projectId: $projectId) {
+    pipeline {
+        id,
+        label,
+    }
+  }
+}
