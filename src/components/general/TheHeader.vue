@@ -49,6 +49,10 @@
 <style lang="scss" scoped>
 .navbar {
     box-shadow: 0 2px 0 0 whitesmoke;
+
+    .navbar-item.is-active {
+        font-weight: 500;
+    }
 }
 </style>
 
