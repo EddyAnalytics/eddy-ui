@@ -227,21 +227,33 @@ export default class Pipeline extends Vue {
         const outSchema = this.graphData.nodes[1].properties.outSchema;
         const sqlQuery = this.graphData.nodes[1].properties.sqlQuery;
 
+        const celeryTaskConfig = {
+            parallelism: 1,
+            queries: [sqlQuery],
+            schemas: {
+                [inputTopic]: {
+                    type: 'source',
+                    schema: inSchema,
+                },
+                [outputTopic]: {
+                    type: 'sink',
+                    schema: outSchema,
+                },
+            },
+        };
+
         this.$apollo
             .mutate({
                 mutation: SEND_CELERY_TASK,
                 variables: {
-                    inSchema,
-                    inputTopic,
-                    outSchema,
-                    outputTopic,
-                    sqlQuery,
+                    type: 'flink',
+                    config: JSON.stringify(celeryTaskConfig),
                 },
             })
             .then(res => {
                 console.log(
                     'Celery Task Sent',
-                    { inSchema, inputTopic, outSchema, outputTopic, sqlQuery },
+                    { type: 'flink', config: celeryTaskConfig },
                     'Response: ',
                     res,
                 );

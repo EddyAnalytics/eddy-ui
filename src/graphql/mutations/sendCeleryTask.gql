@@ -1,5 +1,8 @@
-mutation sendCeleryTask($inSchema: String!, $inputTopic: String!, $outputTopic: String!, $outSchema: String!, $sqlQuery: String!) {
-    sendCeleryTask(inSchema: $inSchema, inputTopic: $inputTopic, outputTopic: $outputTopic, outSchema: $outSchema, sqlQuery: $sqlQuery) {
-      ok
+mutation sendCeleryTask($type: String!, $config: JSONString! ) {
+    sendCeleryTask(type: $type, config: $config) {
+        celeryTask {
+            type,
+            config
+        }
     }
 }
