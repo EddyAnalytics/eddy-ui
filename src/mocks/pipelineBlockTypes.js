@@ -40,6 +40,7 @@ export const blockTypesMocks = [
         disabled: false,
         type: 'beam-transform',
         label: 'Beam SQL Snippet',
+        propertiesComponent: 'BeamSQLProperties',
     },
     {
         disabled: true,

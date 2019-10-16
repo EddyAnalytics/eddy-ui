@@ -1,9 +1,8 @@
+import { TaskGenerationException } from '@/helpers/exceptions';
+
 export const generateBeamTask = (sourceNodes, sinkNodes, node) => {
     const sqlQuery = node.properties.sqlQuery;
-    if (!sqlQuery || !sqlQuery.length) {
-        this.showErrorSnackbar('Missing query for node', node.props.title);
-        return;
-    }
+    if (!sqlQuery || !sqlQuery.length) throw new TaskGenerationException('Missing query for node');
 
     let beamTask = {
         taskType: 'beam',

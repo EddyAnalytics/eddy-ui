@@ -67,6 +67,7 @@
 <script>
 import { Component, Vue } from 'vue-property-decorator';
 import GoBackButton from '@/components/general/GoBackButton.vue';
+import { TaskGenerationException } from '@/helpers/exceptions';
 
 import { blockTypesMocks } from '@/mocks/pipelineBlockTypes';
 import PipelineBlocksPanel from '@/components/pipeline/PipelineBlocksPanel.vue';
@@ -231,52 +232,44 @@ export default class Pipeline extends Vue {
         let tasks = [];
         for (let node of nodes) {
             if (node.type === 'flink-transform' || node.type === 'beam-transform') {
-                const inEdges = edges.filter(edge => edge.to === node.id);
-                const outEdges = edges.filter(edge => edge.from === node.id);
+                try {
+                    const inEdges = edges.filter(edge => edge.to === node.id);
+                    if (!inEdges.length)
+                        throw new TaskGenerationException('Missing incoming edge for node');
 
-                if (!inEdges.length) {
-                    this.showErrorSnackbar('Missing incoming edge for node', node.props.title);
-                }
+                    const outEdges = edges.filter(edge => edge.from === node.id);
+                    if (!outEdges.length)
+                        throw new TaskGenerationException('Missing outgoing edge for node');
 
-                if (!outEdges.length) {
-                    this.showErrorSnackbar('Missing outgoing edge for node', node.props.title);
-                }
+                    const inNodeIds = inEdges.map(edge => edge.from);
+                    const inNodes = inNodeIds.map(id => nodes.find(node => node.id === id));
 
-                const inNodeIds = inEdges.map(edge => edge.from);
-                const outNodeIds = outEdges.map(edge => edge.to);
+                    const outNodeIds = outEdges.map(edge => edge.to);
+                    const outNodes = outNodeIds.map(id => nodes.find(node => node.id === id));
 
-                const inNodes = inNodeIds.map(id => nodes.find(node => node.id === id));
-                const outNodes = outNodeIds.map(id => nodes.find(node => node.id === id));
+                    const sourceNodes = inNodes.filter(node => node.type === 'source');
+                    if (!sourceNodes.length)
+                        throw new TaskGenerationException('Missing source node(s) for');
 
-                const sourceNodes = inNodes.filter(node => node.type === 'source');
-                const sinkNodes = outNodes.filter(node => node.type === 'sink');
+                    const sinkNodes = outNodes.filter(node => node.type === 'sink');
+                    if (!sinkNodes.length)
+                        throw new TaskGenerationException('Missing sink node(s) for');
 
-                if (!sourceNodes.length) {
-                    this.showErrorSnackbar('Missing source node(s) for', node.props.title);
-                    return;
-                }
-
-                if (!sinkNodes.length) {
-                    this.showErrorSnackbar('Missing sink node(s) for', node.props.title);
-                    return;
-                }
-
-                if (node.type === 'flink-transform') {
-                    const flinkTask = generateFlinkTask(sourceNodes, sinkNodes, node);
-                    if (flinkTask) {
-                        tasks.push(flinkTask);
+                    let task;
+                    if (node.type === 'beam-transform') {
+                        task = generateBeamTask(sourceNodes, sinkNodes, node);
                     }
-                }
-
-                if (node.type === 'beam-transform') {
-                    const beamTask = generateBeamTask(sourceNodes, sinkNodes, node);
-                    if (beamTask) {
-                        tasks.push(beamTask);
+                    if (node.type === 'flink-transform') {
+                        task = generateFlinkTask(sourceNodes, sinkNodes, node);
                     }
+                    if (task) tasks.push(task);
+                } catch (e) {
+                    if (!(e instanceof TaskGenerationException)) throw e;
+                    this.showErrorSnackbar(e.message, node.props.title);
+                    return;
                 }
             }
         }
-
         return tasks;
     }
 

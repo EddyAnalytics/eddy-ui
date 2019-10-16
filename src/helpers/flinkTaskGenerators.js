@@ -1,33 +1,18 @@
 export const generateFlinkTask = (sourceNodes, sinkNodes, node) => {
     const sqlQuery = node.properties.sqlQuery;
-    if (!sqlQuery || !sqlQuery.length) {
-        this.showErrorSnackbar('Missing query for node', node.props.title);
-        return;
-    }
+    if (!sqlQuery || !sqlQuery.length) throw 'Missing query for node';
 
     const inSchema = node.properties.inSchema;
-    if (!inSchema || !inSchema.length) {
-        this.showErrorSnackbar('Missing input schema for node', node.props.title);
-        return;
-    }
+    if (!inSchema || !inSchema.length) throw 'Missing input schema for node';
 
     const outSchema = node.properties.outSchema;
-    if (!outSchema || !outSchema.length) {
-        this.showErrorSnackbar('Missing output schema for node', node.props.title);
-        return;
-    }
+    if (!outSchema || !outSchema.length) throw 'Missing output schema for node';
 
     const inputTopics = sourceNodes.map(node => node.properties.topic);
-    if (!inputTopics || !inputTopics.length) {
-        this.showErrorSnackbar('Missing input topics for node', node.props.title);
-        return;
-    }
+    if (!inputTopics || !inputTopics.length) throw 'Missing input topics for node';
 
     const outputTopics = sinkNodes.map(node => node.properties.topic);
-    if (!outputTopics || !outputTopics.length) {
-        this.showErrorSnackbar('Missing output topics for node', node.props.title);
-        return;
-    }
+    if (!outputTopics || !outputTopics.length) throw 'Missing output topics for node';
 
     const aggInTopic = 'sql_results';
     const aggInTable = 'sql_results_agg_source';
