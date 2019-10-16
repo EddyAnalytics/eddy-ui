@@ -191,43 +191,130 @@ export default class Pipeline extends Vue {
         }
     }
 
+    showErrorSnackbar(...messages) {
+        this.$buefy.snackbar.open({
+            message: messages.join(' '),
+            type: 'is-danger',
+            queue: false,
+        });
+    }
+
     async executePipeline() {
-        const inputTopic = this.graphData.nodes[0].properties.topic;
-        const outputTopic = this.graphData.nodes[2].properties.topic;
-        const inSchema = this.graphData.nodes[1].properties.inSchema;
-        const outSchema = this.graphData.nodes[1].properties.outSchema;
-        const sqlQuery = this.graphData.nodes[1].properties.sqlQuery;
+        const celeryTasks = this.getCeleryTasks(this.graphData.nodes, this.graphData.edges);
 
-        const celeryTaskConfig = {
-            parallelism: 1,
-            queries: [sqlQuery],
-            schemas: {
-                [inputTopic]: {
-                    type: 'source',
-                    schema: inSchema,
-                },
-                [outputTopic]: {
-                    type: 'sink',
-                    schema: outSchema,
-                },
-            },
-        };
+        if (!celeryTasks) return;
+        if (!celeryTasks.length) {
+            this.showErrorSnackbar('Nothing to run. Define nodes and link them toghether.');
+            return;
+        }
 
-        const res = await this.$apollo.mutate({
-            mutation: SEND_CELERY_TASK,
-            variables: {
-                type: 'flink',
-                config: JSON.stringify(celeryTaskConfig),
-            },
+        console.log('Tasks to submit', celeryTasks);
+
+        celeryTasks.forEach(async task => {
+            const res = await this.$apollo.mutate({
+                mutation: SEND_CELERY_TASK,
+                variables: {
+                    taskType: task.taskType,
+                    config: JSON.stringify(task.config),
+                },
+            });
+
+            console.log('Celery Task Sent', task, 'Response: ', res);
         });
 
-        console.log(
-            'Celery Task Sent',
-            { type: 'flink', config: celeryTaskConfig },
-            'Response: ',
-            res,
-        );
         this.$buefy.toast.open('Pipeline executed');
+    }
+
+    getCeleryTasks(nodes, edges) {
+        let tasks = [];
+        for (let node of nodes) {
+            if (node.type === 'flink-transform' || node.type === 'beam-transform') {
+                const inEdges = edges.filter(edge => edge.to === node.id);
+                const outEdges = edges.filter(edge => edge.from === node.id);
+
+                if (!inEdges.length) {
+                    this.showErrorSnackbar('Missing incoming edge for node', node.props.title);
+                }
+
+                if (!outEdges.length) {
+                    this.showErrorSnackbar('Missing outgoing edge for node', node.props.title);
+                }
+
+                const inNodeIds = inEdges.map(edge => edge.from);
+                const outNodeIds = outEdges.map(edge => edge.to);
+
+                const inNodes = inNodeIds.map(id => nodes.find(node => node.id === id));
+                const outNodes = outNodeIds.map(id => nodes.find(node => node.id === id));
+
+                const sourceNodes = inNodes.filter(node => node.type === 'source');
+                const sinkNodes = outNodes.filter(node => node.type === 'sink');
+
+                if (!sourceNodes.length) {
+                    this.showErrorSnackbar('Missing source node(s) for', node.props.title);
+                    return;
+                }
+
+                if (!sinkNodes.length) {
+                    this.showErrorSnackbar('Missing sink node(s) for', node.props.title);
+                    return;
+                }
+
+                if (node.type === 'flink-transform') {
+                    const sqlQuery = node.properties.sqlQuery;
+                    if (!sqlQuery || !sqlQuery.length) {
+                        this.showErrorSnackbar('Missing query for node', node.props.title);
+                        return;
+                    }
+
+                    const inSchema = node.properties.inSchema;
+                    if (!inSchema || !inSchema.length) {
+                        this.showErrorSnackbar('Missing input schema for node', node.props.title);
+                        return;
+                    }
+
+                    const outSchema = node.properties.outSchema;
+                    if (!outSchema || !outSchema.length) {
+                        this.showErrorSnackbar('Missing output schema for node', node.props.title);
+                        return;
+                    }
+
+                    const inputTopics = sourceNodes.map(node => node.properties.topic);
+                    if (!inputTopics || !inputTopics.length) {
+                        this.showErrorSnackbar('Missing input topics for node', node.props.title);
+                        return;
+                    }
+
+                    const outputTopics = sinkNodes.map(node => node.properties.topic);
+                    if (!outputTopics || !outputTopics.length) {
+                        this.showErrorSnackbar('Missing output topics for node', node.props.title);
+                        return;
+                    }
+
+                    // TODO: Add support for multiple input topics with one schema each
+                    const flinkTask = {
+                        taskType: 'flink',
+                        config: {
+                            parallelism: 1,
+                            queries: [sqlQuery],
+                            schemas: {
+                                [inputTopics[0]]: {
+                                    type: 'source',
+                                    schema: inSchema,
+                                },
+                                [outputTopics[0]]: {
+                                    type: 'sink',
+                                    schema: outSchema,
+                                },
+                            },
+                        },
+                    };
+
+                    tasks.push(flinkTask);
+                }
+            }
+        }
+
+        return tasks;
     }
 
     async savePipeline() {

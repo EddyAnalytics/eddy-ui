@@ -1,5 +1,5 @@
-mutation sendCeleryTask($type: String!, $config: JSONString!) {
-    sendCeleryTask(type: $type, config: $config) {
+mutation sendCeleryTask($taskType: String!, $config: JSONString!) {
+    sendCeleryTask(taskType: $taskType, config: $config) {
         ok
     }
 }
