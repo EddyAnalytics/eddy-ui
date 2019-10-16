@@ -34,7 +34,7 @@ import 'codemirror/theme/neo.css';
         codemirror,
     },
 })
-export default class PipelineBlockForm extends Vue {
+export default class FlinkSQLProperties extends Vue {
     @Prop() properties;
 
     options = {

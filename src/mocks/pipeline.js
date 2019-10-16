@@ -89,10 +89,7 @@ export const pipelineBeamMock = {
             component: 'PipelineBuilderBlock',
             properties: {
                 component: 'BeamSQLProperties',
-                inSchema:
-                    '{\n"payload": "ROW<`ts_ms` LONG, after ROW<`id` LONG, first_name VARCHAR, last_name VARCHAR, email VARCHAR>, before ROW<`id` LONG, first_name VARCHAR, last_name VARCHAR, email VARCHAR>>"\n}',
-                outSchema: '{\n"id": "LONG",\n"value": "LONG"\n}',
-                sqlQuery: `INSERT INTO sql_results \nSELECT payload.after.id, payload.before.id \nFROM customers`,
+                sqlQuery: `SELECT merk, count(kenteken) AS aantal, min(datum_afgifte) AS eerste_datum\nFROM PCOLLECTION\nWHERE YEAR(datum_afgifte) = 2017\nGROUP BY merk`,
             },
             props: {
                 title: 'Beam SQL Snippet',

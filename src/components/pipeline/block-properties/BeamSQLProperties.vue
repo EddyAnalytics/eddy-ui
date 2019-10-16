@@ -2,14 +2,7 @@
     <div>
         <b-tabs position="is-centered is-boxed" :animated="false" :destroy-on-hide="true">
             <b-tab-item label="Input Schema">
-                <div class="codemirror-wrapper">
-                    <codemirror v-model="properties.inSchema" :options="inSchemaOptions" />
-                </div>
-            </b-tab-item>
-            <b-tab-item label="Output schema">
-                <div class="codemirror-wrapper">
-                    <codemirror v-model="properties.outSchema" :options="outSchemaOptions" />
-                </div>
+                WIP
             </b-tab-item>
             <b-tab-item label="BeamSQL Query">
                 <div class="codemirror-wrapper">
@@ -34,7 +27,7 @@ import 'codemirror/theme/neo.css';
         codemirror,
     },
 })
-export default class PipelineBlockForm extends Vue {
+export default class BeamSQLProperties extends Vue {
     @Prop() properties;
 
     options = {

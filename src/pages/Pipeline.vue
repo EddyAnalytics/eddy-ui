@@ -84,6 +84,8 @@ import PIPELINE_QUERY from '@/graphql/queries/pipeline.gql';
 import UPDATE_PIPELINE from '@/graphql/mutations/updatePipeline.gql';
 import DELETE_PIPELINE from '@/graphql/mutations/deletePipeline.gql';
 
+import { generateFlinkTask } from '@/helpers/flinkTaskGenerators';
+import { generateBeamTask } from '@/helpers/beamTaskGenerators';
 import SEND_CELERY_TASK from '@/graphql/mutations/sendCeleryTask.gql';
 
 @Component({
@@ -260,89 +262,22 @@ export default class Pipeline extends Vue {
                 }
 
                 if (node.type === 'flink-transform') {
-                    const flinkTask = this.getFlinkTask(sinkNodes, sourceNodes, node);
+                    const flinkTask = generateFlinkTask(sourceNodes, sinkNodes, node);
                     if (flinkTask) {
                         tasks.push(flinkTask);
                     }
                 }
 
                 if (node.type === 'beam-transform') {
-                    // TODO: Add Beam tasks generation
+                    const beamTask = generateBeamTask(sourceNodes, sinkNodes, node);
+                    if (beamTask) {
+                        tasks.push(beamTask);
+                    }
                 }
             }
         }
 
         return tasks;
-    }
-
-    getAgregateCountQuery(topic) {
-        return `
-        INSERT INTO ${topic}_count_10 SELECT COUNT(*) FROM ${topic} " GROUP BY TUMBLE(ts, INTERVAL '10' SECOND)")
-        `;
-    }
-
-    getFlinkTask(sourceNodes, sinkNodes, node) {
-        const sqlQuery = node.properties.sqlQuery;
-        if (!sqlQuery || !sqlQuery.length) {
-            this.showErrorSnackbar('Missing query for node', node.props.title);
-            return;
-        }
-
-        const inSchema = node.properties.inSchema;
-        if (!inSchema || !inSchema.length) {
-            this.showErrorSnackbar('Missing input schema for node', node.props.title);
-            return;
-        }
-
-        const outSchema = node.properties.outSchema;
-        if (!outSchema || !outSchema.length) {
-            this.showErrorSnackbar('Missing output schema for node', node.props.title);
-            return;
-        }
-
-        const inputTopics = sourceNodes.map(node => node.properties.topic);
-        if (!inputTopics || !inputTopics.length) {
-            this.showErrorSnackbar('Missing input topics for node', node.props.title);
-            return;
-        }
-
-        const outputTopics = sinkNodes.map(node => node.properties.topic);
-        if (!outputTopics || !outputTopics.length) {
-            this.showErrorSnackbar('Missing output topics for node', node.props.title);
-            return;
-        }
-
-        const aggregateInputTopic = 'agg_' + outputTopics[0];
-        const agregateCountQuery = this.getAgregateCountQuery(aggregateInputTopic);
-
-        // TODO: Add support for multiple input topics with one schema each
-        const flinkTask = {
-            taskType: 'flink',
-            config: {
-                parallelism: 1,
-                queries: [sqlQuery, agregateCountQuery],
-                schemas: {
-                    [inputTopics[0]]: {
-                        type: 'source',
-                        schema: JSON.parse(inSchema),
-                    },
-                    [outputTopics[0]]: {
-                        type: 'sink',
-                        schema: JSON.parse(outSchema),
-                    },
-                    [aggregateInputTopic]: {
-                        type: 'source',
-                        schema: JSON.parse(outSchema),
-                    },
-                    [aggregateInputTopic + '_count_10']: {
-                        type: 'sink',
-                        schema: { count: 'LONG' },
-                    },
-                },
-            },
-        };
-
-        return flinkTask;
     }
 
     async savePipeline() {
