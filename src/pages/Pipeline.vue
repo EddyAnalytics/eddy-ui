@@ -260,61 +260,89 @@ export default class Pipeline extends Vue {
                 }
 
                 if (node.type === 'flink-transform') {
-                    const sqlQuery = node.properties.sqlQuery;
-                    if (!sqlQuery || !sqlQuery.length) {
-                        this.showErrorSnackbar('Missing query for node', node.props.title);
-                        return;
+                    const flinkTask = this.getFlinkTask(sinkNodes, sourceNodes, node);
+                    if (flinkTask) {
+                        tasks.push(flinkTask);
                     }
+                }
 
-                    const inSchema = node.properties.inSchema;
-                    if (!inSchema || !inSchema.length) {
-                        this.showErrorSnackbar('Missing input schema for node', node.props.title);
-                        return;
-                    }
-
-                    const outSchema = node.properties.outSchema;
-                    if (!outSchema || !outSchema.length) {
-                        this.showErrorSnackbar('Missing output schema for node', node.props.title);
-                        return;
-                    }
-
-                    const inputTopics = sourceNodes.map(node => node.properties.topic);
-                    if (!inputTopics || !inputTopics.length) {
-                        this.showErrorSnackbar('Missing input topics for node', node.props.title);
-                        return;
-                    }
-
-                    const outputTopics = sinkNodes.map(node => node.properties.topic);
-                    if (!outputTopics || !outputTopics.length) {
-                        this.showErrorSnackbar('Missing output topics for node', node.props.title);
-                        return;
-                    }
-
-                    // TODO: Add support for multiple input topics with one schema each
-                    const flinkTask = {
-                        taskType: 'flink',
-                        config: {
-                            parallelism: 1,
-                            queries: [sqlQuery],
-                            schemas: {
-                                [inputTopics[0]]: {
-                                    type: 'source',
-                                    schema: inSchema,
-                                },
-                                [outputTopics[0]]: {
-                                    type: 'sink',
-                                    schema: outSchema,
-                                },
-                            },
-                        },
-                    };
-
-                    tasks.push(flinkTask);
+                if (node.type === 'beam-transform') {
+                    // TODO: Add Beam tasks generation
                 }
             }
         }
 
         return tasks;
+    }
+
+    getAgregateCountQuery(topic) {
+        return `
+        INSERT INTO ${topic}_count_10 SELECT COUNT(*) FROM ${topic} " GROUP BY TUMBLE(ts, INTERVAL '10' SECOND)")
+        `;
+    }
+
+    getFlinkTask(sourceNodes, sinkNodes, node) {
+        const sqlQuery = node.properties.sqlQuery;
+        if (!sqlQuery || !sqlQuery.length) {
+            this.showErrorSnackbar('Missing query for node', node.props.title);
+            return;
+        }
+
+        const inSchema = node.properties.inSchema;
+        if (!inSchema || !inSchema.length) {
+            this.showErrorSnackbar('Missing input schema for node', node.props.title);
+            return;
+        }
+
+        const outSchema = node.properties.outSchema;
+        if (!outSchema || !outSchema.length) {
+            this.showErrorSnackbar('Missing output schema for node', node.props.title);
+            return;
+        }
+
+        const inputTopics = sourceNodes.map(node => node.properties.topic);
+        if (!inputTopics || !inputTopics.length) {
+            this.showErrorSnackbar('Missing input topics for node', node.props.title);
+            return;
+        }
+
+        const outputTopics = sinkNodes.map(node => node.properties.topic);
+        if (!outputTopics || !outputTopics.length) {
+            this.showErrorSnackbar('Missing output topics for node', node.props.title);
+            return;
+        }
+
+        const aggregateInputTopic = 'agg_' + outputTopics[0];
+        const agregateCountQuery = this.getAgregateCountQuery(aggregateInputTopic);
+
+        // TODO: Add support for multiple input topics with one schema each
+        const flinkTask = {
+            taskType: 'flink',
+            config: {
+                parallelism: 1,
+                queries: [sqlQuery, agregateCountQuery],
+                schemas: {
+                    [inputTopics[0]]: {
+                        type: 'source',
+                        schema: inSchema,
+                    },
+                    [outputTopics[0]]: {
+                        type: 'sink',
+                        schema: outSchema,
+                    },
+                    [aggregateInputTopic]: {
+                        type: 'source',
+                        schema: inSchema,
+                    },
+                    [aggregateInputTopic + '_count_10']: {
+                        type: 'sink',
+                        schema: JSON.stringify({ count: 'LONG' }),
+                    },
+                },
+            },
+        };
+
+        return flinkTask;
     }
 
     async savePipeline() {
