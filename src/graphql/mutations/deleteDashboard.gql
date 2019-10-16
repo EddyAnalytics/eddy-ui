@@ -1,7 +1,5 @@
 mutation deleteDashboard($id: IntID!) {
   deleteDashboard(id: $id) {
-    dashboard {
-        id
-    }
+    id
   }
 }

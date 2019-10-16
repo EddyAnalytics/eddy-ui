@@ -1,8 +1,6 @@
 
 mutation deleteDataConnector($id: IntID!) {
   deleteDataConnector(id: $id) {
-    dataConnector {
-        id
-    }
+    id
   }
 }

@@ -1,7 +1,5 @@
 mutation deleteProject($id: IntID!) {
   deleteProject(id: $id) {
-    project {
-        id
-    }
+    id
   }
 }
