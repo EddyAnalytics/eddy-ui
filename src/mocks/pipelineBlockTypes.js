@@ -3,6 +3,7 @@ export const blockTypesMocks = [
         disabled: false,
         type: 'source',
         label: 'DB Connector Stream',
+        propertiesComponent: 'DBConnectorProperties',
     },
     {
         disabled: true,
@@ -31,27 +32,33 @@ export const blockTypesMocks = [
     },
     {
         disabled: false,
-        type: 'transformation',
+        type: 'flink-transform',
         label: 'Flink SQL Snippet',
+        propertiesComponent: 'FlinkSQLProperties',
+    },
+    {
+        disabled: false,
+        type: 'beam-transform',
+        label: 'Beam SQL Snippet',
     },
     {
         disabled: true,
-        type: 'transformation',
+        type: 'transform',
         label: 'Join Data Sources',
     },
     {
         disabled: true,
-        type: 'transformation',
+        type: 'transform',
         label: 'Agregate',
     },
     {
         disabled: true,
-        type: 'transformation',
+        type: 'transform',
         label: 'Filter',
     },
     {
         disabled: true,
-        type: 'transformation',
+        type: 'transform',
         label: 'Map',
     },
 ];

@@ -14,7 +14,7 @@
         <p class="panel-tabs">
             <a class="is-active">all</a>
             <a>sources</a>
-            <a>transformations</a>
+            <a>transforms</a>
             <a>sinks</a>
         </p>
         <div class="panel-blocks">
@@ -60,12 +60,12 @@ export default class PipelineBlocksPanel extends Vue {
         switch (type) {
             case 'source':
                 return 'database';
-            case 'transformation':
+            case 'transform':
                 return 'shuffle';
             case 'sink':
                 return 'transfer';
             default:
-                return 'tab';
+                return 'shuffle';
         }
     }
 }

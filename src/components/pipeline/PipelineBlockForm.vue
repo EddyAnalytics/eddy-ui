@@ -24,13 +24,19 @@
 
 <script>
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import BeamSQLProperties from './block-properties/BeamSQLProperties';
+import DBConnectorProperties from './block-properties/DBConnectorProperties';
 import FlinkSQLProperties from './block-properties/FlinkSQLProperties';
 import KafkaPublisherProperties from './block-properties/KafkaPublisherProperties';
+import KafkaSubscriberProperties from './block-properties/KafkaSubscriberProperties';
 
 @Component({
     components: {
+        BeamSQLProperties,
+        DBConnectorProperties,
         FlinkSQLProperties,
         KafkaPublisherProperties,
+        KafkaSubscriberProperties,
     },
 })
 export default class PipelineBlockForm extends Vue {

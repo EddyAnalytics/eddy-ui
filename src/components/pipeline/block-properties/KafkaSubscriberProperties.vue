@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>Kafka Publisher</h2>
+        <h2>Kafka Subscriber</h2>
         <b-field label="Topic">
             <b-input v-model="properties.topic" />
         </b-field>
@@ -11,7 +11,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
-export default class KafkaPublisherProperties extends Vue {
+export default class KafkaSubscriberProperties extends Vue {
     @Prop() properties;
 }
 </script>

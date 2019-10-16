@@ -37,8 +37,11 @@
                         <b-button outlined type="is-danger" @click="openDeletePipelineModal()">
                             Delete pipeline
                         </b-button>
-                        <b-button outlined type="is-info" @click="loadMockPipeline()">
-                            Load demo pipeline
+                        <b-button outlined type="is-info" @click="loadMockPipeline('flink')">
+                            Load Flink demo
+                        </b-button>
+                        <b-button outlined type="is-info" @click="loadMockPipeline('beam')">
+                            Load Beam demo
                         </b-button>
                     </div>
                 </div>
@@ -75,7 +78,7 @@ Vue.component('PipelineBuilderBlock', PipelineBuilderBlock);
 
 import BLOCK_TYPES_QUERY from '@/graphql/queries/blockTypes.gql';
 
-import { pipelineMock } from '@/mocks/pipeline';
+import { pipelineFlinkMock, pipelineBeamMock } from '@/mocks/pipeline';
 
 import PIPELINE_QUERY from '@/graphql/queries/pipeline.gql';
 import UPDATE_PIPELINE from '@/graphql/mutations/updatePipeline.gql';
@@ -141,8 +144,8 @@ export default class Pipeline extends Vue {
         });
     }
 
-    loadMockPipeline() {
-        this.graphData = pipelineMock;
+    loadMockPipeline(type) {
+        this.graphData = type === 'beam' ? pipelineBeamMock : pipelineFlinkMock;
     }
 
     editNode(nodeId) {
@@ -171,6 +174,9 @@ export default class Pipeline extends Vue {
             y: 300,
             type: block.type,
             component: 'PipelineBuilderBlock',
+            properties: {
+                component: block.propertiesComponent,
+            },
             props: {
                 title: block.label,
                 type: block.type,
@@ -180,7 +186,6 @@ export default class Pipeline extends Vue {
 
     saveBlock(block) {
         const nodeIndex = this.graphData.nodes.findIndex(node => node.id === block.id);
-        console.log(block, nodeIndex);
         if (nodeIndex > -1) {
             this.graphData.nodes.splice(nodeIndex, 1, block);
         }
