@@ -324,19 +324,19 @@ export default class Pipeline extends Vue {
                 schemas: {
                     [inputTopics[0]]: {
                         type: 'source',
-                        schema: inSchema,
+                        schema: JSON.parse(inSchema),
                     },
                     [outputTopics[0]]: {
                         type: 'sink',
-                        schema: outSchema,
+                        schema: JSON.parse(outSchema),
                     },
                     [aggregateInputTopic]: {
                         type: 'source',
-                        schema: inSchema,
+                        schema: JSON.parse(outSchema),
                     },
                     [aggregateInputTopic + '_count_10']: {
                         type: 'sink',
-                        schema: JSON.stringify({ count: 'LONG' }),
+                        schema: { count: 'LONG' },
                     },
                 },
             },
