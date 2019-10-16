@@ -1,0 +1,10 @@
+fragment pipelineFragment on PipelineType {
+    id,
+    label,
+    blocks {
+        id,
+        label,
+        config
+    },
+    config
+}

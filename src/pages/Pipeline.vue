@@ -6,9 +6,25 @@
                     <h1 class="title">
                         <go-back-button :projectId="projectId" />
                         Pipeline Builder
+                        <span v-if="pipeline && pipeline.label">- {{ pipeline.label }}</span>
                     </h1>
                 </div>
+
                 <div class="column has-text-right">
+                    <div class="pipeline-active-switch m-r-md">
+                        <b-switch :value="true" type="is-success" v-model="isActive">
+                            {{ isActive ? 'Activated' : 'Inactive' }}
+                        </b-switch>
+                    </div>
+                    <b-button
+                        outlined
+                        type="is-info"
+                        icon-left="play"
+                        class="m-r-sm"
+                        @click="executePipeline()"
+                    >
+                        Execute
+                    </b-button>
                     <b-button type="is-primary" icon-left="content-save" @click="savePipeline()">
                         Save
                     </b-button>
@@ -16,10 +32,15 @@
             </div>
             <div class="columns">
                 <div class="column is-3">
-                    <pipeline-blocks-panel :blocks="pipelineBlockTemplates" @addBlock="addBlock" />
-                    <b-button type="is-danger" @click="openDeletePipelineModal()">
-                        Delete pipeline
-                    </b-button>
+                    <pipeline-blocks-panel :blocks="blockTypes" @addBlock="addBlock" />
+                    <div class="buttons">
+                        <b-button outlined type="is-danger" @click="openDeletePipelineModal()">
+                            Delete pipeline
+                        </b-button>
+                        <b-button outlined type="is-info" @click="loadMockPipeline()">
+                            Load demo pipeline
+                        </b-button>
+                    </div>
                 </div>
                 <div class="column">
                     <vue-dag v-model="graphData" @edit="editNode" @delete="deleteNode" />
@@ -29,10 +50,22 @@
     </main>
 </template>
 
+<style lang="scss">
+@import 'vue-dag/src/scss/vue-dag.scss';
+</style>
+
+<style lang="scss" scoped>
+.pipeline-active-switch {
+    display: inline-block;
+    line-height: 2.2rem;
+}
+</style>
+
 <script>
 import { Component, Vue } from 'vue-property-decorator';
 import GoBackButton from '@/components/general/GoBackButton.vue';
 
+import { blockTypesMocks } from '@/mocks/pipelineBlockTypes';
 import PipelineBlocksPanel from '@/components/pipeline/PipelineBlocksPanel.vue';
 
 import VueDag from 'vue-dag';
@@ -40,9 +73,15 @@ import PipelineBuilderBlock from '@/components/pipeline/PipelineBuilderBlock.vue
 import PipelineBlockForm from '@/components/pipeline/PipelineBlockForm.vue';
 Vue.component('PipelineBuilderBlock', PipelineBuilderBlock);
 
-import SEND_CELERY_TASK from '@/graphql/mutations/sendCeleryTask.gql';
+import BLOCK_TYPES_QUERY from '@/graphql/queries/blockTypes.gql';
 
+import { pipelineMock } from '@/mocks/pipeline';
+
+import PIPELINE_QUERY from '@/graphql/queries/pipeline.gql';
+import UPDATE_PIPELINE from '@/graphql/mutations/updatePipeline.gql';
 import DELETE_PIPELINE from '@/graphql/mutations/deletePipeline.gql';
+
+import SEND_CELERY_TASK from '@/graphql/mutations/sendCeleryTask.gql';
 
 @Component({
     components: {
@@ -52,73 +91,58 @@ import DELETE_PIPELINE from '@/graphql/mutations/deletePipeline.gql';
     },
 })
 export default class Pipeline extends Vue {
+    blockTypes = [];
+    pipeline = {};
+    isActive = false;
+
     graphData = {
         config: {
             scale: 1,
             height: '80vh',
         },
-        nodes: [
-            {
-                id: 0,
-                x: 100,
-                y: 300,
-                type: 'source',
-                component: 'PipelineBuilderBlock',
-                properties: {
-                    component: 'KafkaPublisherProperties',
-                    topic: 'mysql1.inventory.customers',
-                },
-                props: {
-                    title: 'Kafka Subscriber',
-                    type: 'source',
-                },
-            },
-            {
-                id: 1,
-                x: 400,
-                y: 300,
-                type: 'transformation',
-                component: 'PipelineBuilderBlock',
-                properties: {
-                    component: 'FlinkSQLProperties',
-                    inSchema:
-                        '{\n"payload": "ROW<`ts_ms` LONG, after ROW<`id` LONG, first_name VARCHAR, last_name VARCHAR, email VARCHAR>, before ROW<`id` LONG, first_name VARCHAR, last_name VARCHAR, email VARCHAR>>"\n}',
-                    outSchema: '{\n"id": "LONG",\n"value": "LONG"\n}',
-                    sqlQuery: `INSERT INTO sql_results \nSELECT payload.after.id, payload.before.id \nFROM customers`,
-                },
-                props: {
-                    title: 'Flink SQL Snippet',
-                    type: 'transformation',
-                },
-            },
-            {
-                id: 2,
-                x: 700,
-                y: 300,
-                type: 'sink',
-                component: 'PipelineBuilderBlock',
-                properties: {
-                    component: 'KafkaPublisherProperties',
-                    topic: 'sql_results',
-                },
-                props: {
-                    title: 'Kafka Publisher',
-                    type: 'sink',
-                    iconSrc: '/img/pipeline/sink.png',
-                },
-            },
-        ],
-        edges: [{ id: 0, from: 0, to: 1 }, { id: 1, from: 1, to: 2 }],
+        nodes: [],
+        edges: [],
     };
 
     created() {
         this.projectId = this.$route.params.projectId;
         this.pipelineId = this.$route.params.pipelineId;
 
-        if (this.pipelineId === 'new') {
-            this.graphData.nodes = [];
-            this.graphData.edges = [];
-        }
+        this.$apollo.addSmartQuery('blockTypes', {
+            query: BLOCK_TYPES_QUERY,
+            result(res) {
+                console.log('Block types', res);
+                // TODO: Replace with DB data after finishing the endopoint
+                this.blockTypes = blockTypesMocks;
+            },
+        });
+
+        this.$apollo.addSmartQuery('pipeline', {
+            query: PIPELINE_QUERY,
+            variables: {
+                id: this.pipelineId,
+            },
+            result(res) {
+                const pipelineConfigJSON = res.data.pipeline.config;
+                const pipelineConfig = JSON.parse(pipelineConfigJSON);
+                console.log('Deserialized pipeline config', pipelineConfig);
+                if (pipelineConfig.config) {
+                    this.graphData.config = pipelineConfig.config;
+                }
+
+                if (pipelineConfig.nodes) {
+                    this.graphData.nodes = pipelineConfig.nodes;
+                }
+
+                if (pipelineConfig.edges) {
+                    this.graphData.edges = pipelineConfig.edges;
+                }
+            },
+        });
+    }
+
+    loadMockPipeline() {
+        this.graphData = pipelineMock;
     }
 
     editNode(nodeId) {
@@ -138,69 +162,6 @@ export default class Pipeline extends Vue {
         const index = this.graphData.nodes.findIndex(node => node.id === nodeId);
         if (index > -1) this.graphData.nodes.splice(index, 1);
     }
-
-    pipelineBlockTemplates = [
-        {
-            disabled: false,
-            type: 'source',
-            label: 'MySQL Database',
-        },
-        {
-            disabled: true,
-            type: 'source',
-            label: 'PostgreSQL Database',
-        },
-        {
-            disabled: true,
-            type: 'source',
-            label: 'MQTT Subscriber',
-        },
-        {
-            disabled: false,
-            type: 'source',
-            label: 'Kafka Subscriber',
-        },
-        {
-            disabled: false,
-            type: 'sink',
-            label: 'Kafka Publisher',
-        },
-        {
-            disabled: true,
-            type: 'sink',
-            label: 'Amazon Redshift',
-        },
-        {
-            disabled: true,
-            type: 'sink',
-            label: 'MQTT Publisher',
-        },
-        {
-            disabled: false,
-            type: 'transformation',
-            label: 'Flink SQL Snippet',
-        },
-        {
-            disabled: true,
-            type: 'transformation',
-            label: 'Join Data Sources',
-        },
-        {
-            disabled: true,
-            type: 'transformation',
-            label: 'Agregate',
-        },
-        {
-            disabled: true,
-            type: 'transformation',
-            label: 'Filter',
-        },
-        {
-            disabled: true,
-            type: 'transformation',
-            label: 'Map',
-        },
-    ];
 
     addBlock(block) {
         const lastNode = this.graphData.nodes[this.graphData.nodes.length - 1];
@@ -225,7 +186,7 @@ export default class Pipeline extends Vue {
         }
     }
 
-    savePipeline() {
+    async executePipeline() {
         const inputTopic = this.graphData.nodes[0].properties.topic;
         const outputTopic = this.graphData.nodes[2].properties.topic;
         const inSchema = this.graphData.nodes[1].properties.inSchema;
@@ -247,23 +208,34 @@ export default class Pipeline extends Vue {
             },
         };
 
-        this.$apollo
-            .mutate({
-                mutation: SEND_CELERY_TASK,
-                variables: {
-                    type: 'flink',
-                    config: JSON.stringify(celeryTaskConfig),
-                },
-            })
-            .then(res => {
-                console.log(
-                    'Celery Task Sent',
-                    { type: 'flink', config: celeryTaskConfig },
-                    'Response: ',
-                    res,
-                );
-                this.$buefy.toast.open('Pipeline saved');
-            });
+        const res = await this.$apollo.mutate({
+            mutation: SEND_CELERY_TASK,
+            variables: {
+                type: 'flink',
+                config: JSON.stringify(celeryTaskConfig),
+            },
+        });
+
+        console.log(
+            'Celery Task Sent',
+            { type: 'flink', config: celeryTaskConfig },
+            'Response: ',
+            res,
+        );
+        this.$buefy.toast.open('Pipeline executed');
+    }
+
+    async savePipeline() {
+        await this.$apollo.mutate({
+            mutation: UPDATE_PIPELINE,
+            variables: {
+                id: this.pipelineId,
+                label: this.pipeline.label,
+                config: JSON.stringify(this.graphData),
+            },
+        });
+
+        this.$buefy.toast.open('Pipeline saved');
     }
 
     openDeletePipelineModal() {
@@ -290,7 +262,3 @@ export default class Pipeline extends Vue {
     }
 }
 </script>
-
-<style lang="scss">
-@import 'vue-dag/src/scss/vue-dag.scss';
-</style>

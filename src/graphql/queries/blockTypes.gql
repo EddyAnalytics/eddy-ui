@@ -1,0 +1,7 @@
+query blockTypes {
+    blockTypes: allBlockTypes {
+        id,
+        label,
+        config
+    }
+}

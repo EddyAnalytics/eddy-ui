@@ -1,0 +1,9 @@
+#import "../fragments/pipelineFragment.gql"
+
+mutation updatePipeline($id: IntID!, $label: String!, $config: JSONString) {
+  updatePipeline(id: $id, label: $label, config: $config) {
+    pipeline {
+        ...pipelineFragment
+    }
+  }
+}
