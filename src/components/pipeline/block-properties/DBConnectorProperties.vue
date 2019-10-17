@@ -1,23 +1,29 @@
 <template>
     <div>
         <template v-if="dbDataConnectors.length">
-            <h2>Database Connector Stream</h2>
-            <b-select
-                v-model="selectedDataConnector"
-                @input="onDataConnectorSelected"
-                :expanded="true"
-            >
-                <option
-                    v-for="connector in dbDataConnectors"
-                    :value="connector"
-                    :key="connector.id"
+            <h2 class="subtitle">Database Connector Stream</h2>
+            <b-field label="Data connector">
+                <b-select
+                    v-model="selectedDataConnector"
+                    @input="onDataConnectorSelected"
+                    :expanded="true"
                 >
-                    {{ connector.label }}
-                </option>
-            </b-select>
+                    <option
+                        v-for="connector in dbDataConnectors"
+                        :value="connector"
+                        :key="connector.id"
+                    >
+                        {{ connector.label }}
+                    </option>
+                </b-select>
+            </b-field>
 
             <b-field label="Topic">
                 <b-input v-model="properties.topic" />
+            </b-field>
+
+            <b-field label="Schema">
+                <schema-tree :schema="properties.schema" />
             </b-field>
         </template>
 
@@ -29,9 +35,15 @@
 
 <script>
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import DATA_CONNECTORS_QUERY from '@/graphql/queries/dataConnectors.gql';
+import SchemaTree from '@/components/pipeline/block-properties/schema-tree/SchemaTree';
 
-@Component
+import PROJECT_QUERY from '@/graphql/queries/project.gql';
+
+@Component({
+    components: {
+        SchemaTree,
+    },
+})
 export default class DBConnectorProperties extends Vue {
     @Prop() properties;
 
@@ -40,25 +52,26 @@ export default class DBConnectorProperties extends Vue {
     selectedDataConnector = null;
 
     onDataConnectorSelected(connector) {
-        this.properties.topic = connector.config.host;
+        this.properties.connector = connector;
     }
 
     created() {
-        this.$apollo.addSmartQuery('dataConnectors', {
-            query: DATA_CONNECTORS_QUERY,
+        if (this.properties.connector) {
+            this.selectedDataConnector = this.properties.connector;
+        }
+
+        if (!this.properties.schema) {
+            this.$set(this.properties, 'schema', {});
+        }
+
+        this.projectId = +this.$route.params.projectId;
+        this.$apollo.addSmartQuery('project', {
+            query: PROJECT_QUERY,
+            variables: {
+                id: this.projectId,
+            },
             result({ data }) {
-                let dbDataConnectors = data.dataConnectors.filter(
-                    dc => dc.dataConnectorType.label === 'Debezium',
-                );
-
-                dbDataConnectors = dbDataConnectors.map(dc => {
-                    return {
-                        ...dc,
-                        config: JSON.parse(dc.config),
-                    };
-                });
-
-                this.dbDataConnectors = dbDataConnectors;
+                this.dbDataConnectors = data.project.dataConnectors;
             },
         });
     }

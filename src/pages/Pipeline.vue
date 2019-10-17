@@ -132,14 +132,13 @@ export default class Pipeline extends Vue {
                 const pipelineConfigJSON = res.data.pipeline.config;
                 const pipelineConfig = JSON.parse(pipelineConfigJSON);
                 console.log('Deserialized pipeline config', pipelineConfig);
+
                 if (pipelineConfig.config) {
                     this.graphData.config = pipelineConfig.config;
                 }
-
                 if (pipelineConfig.nodes) {
                     this.graphData.nodes = pipelineConfig.nodes;
                 }
-
                 if (pipelineConfig.edges) {
                     this.graphData.edges = pipelineConfig.edges;
                 }

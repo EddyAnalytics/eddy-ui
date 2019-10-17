@@ -11,8 +11,59 @@ export const pipelineFlinkMock = {
             type: 'source',
             component: 'PipelineBuilderBlock',
             properties: {
-                component: 'KafkaPublisherProperties',
+                component: 'DBConnectorProperties',
                 topic: 'mysql1.inventory.customers',
+                schema: {
+                    name: 'payload',
+                    value: 'ROW',
+                    children: [
+                        { name: 'ts_ms', value: 'LONG' },
+                        {
+                            name: 'before',
+                            value: 'ROW',
+                            children: [
+                                {
+                                    name: 'id',
+                                    value: 'LONG',
+                                },
+                                {
+                                    name: 'first_name',
+                                    value: 'VARCHAR',
+                                },
+                                {
+                                    name: 'last_name',
+                                    value: 'VARCHAR',
+                                },
+                                {
+                                    name: 'email',
+                                    value: 'VARCHAR',
+                                },
+                            ],
+                        },
+                        {
+                            name: 'after',
+                            value: 'ROW',
+                            children: [
+                                {
+                                    name: 'id',
+                                    value: 'LONG',
+                                },
+                                {
+                                    name: 'first_name',
+                                    value: 'VARCHAR',
+                                },
+                                {
+                                    name: 'last_name',
+                                    value: 'VARCHAR',
+                                },
+                                {
+                                    name: 'email',
+                                    value: 'VARCHAR',
+                                },
+                            ],
+                        },
+                    ],
+                },
             },
             props: {
                 title: 'DB Connector Stream',
