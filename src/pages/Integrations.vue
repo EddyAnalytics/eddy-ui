@@ -28,22 +28,28 @@ export default class Integrations extends Vue {
         this.$apollo.addSmartQuery('allIntegrations', {
             query: INTEGRATIONS_QUERY,
             result({ data }) {
-                if (data.allIntegrations.length) {
-                    console.log(data.allIntegrations[0]);
-                    this.integrations[0] = {
-                        id: 0,
-                        logo: '/img/integrations/debezium.svg',
-                        name: 'Debezium ',
-                        description: `Database Connector for Kafka allowing streaming and observing a SQL/NoSQL database`,
-                        label: data.allIntegrations[0].label,
-                        config: JSON.parse(data.allIntegrations[0].config),
-                    };
+                let debeziumIntegration = data.allIntegrations.find(
+                    integration => integration.integrationType === 'debezium',
+                );
+
+                if (debeziumIntegration) {
+                    this.$set(this.integrations, 0, {
+                        ...this.integrations[0],
+                        label: debeziumIntegration.label,
+                        config: JSON.parse(debeziumIntegration.config),
+                    });
                 }
             },
         });
     }
 
     integrations = [
+        {
+            id: 0,
+            logo: '/img/integrations/debezium.svg',
+            name: 'Debezium ',
+            description: `Database Connector for Kafka allowing streaming and observing a SQL/NoSQL database`,
+        },
         {
             id: 1,
             logo: '/img/integrations/spark.svg',

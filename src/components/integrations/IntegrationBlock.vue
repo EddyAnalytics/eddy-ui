@@ -11,7 +11,7 @@
                 <div class="media-content">
                     <div class="content p-md">
                         <p>
-                            <strong>{{ integration.label }}</strong>
+                            <strong>{{ integration.name }}</strong>
                             <br />
                             {{ integration.description }}
                         </p>
