@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div>
+        <div v-if="!isRoot">
             <b-field grouped>
                 <b-field>
                     <b-input v-model="item.name" />
@@ -20,7 +20,20 @@
                 />
             </b-field>
         </div>
-        <div v-show="isOpen" v-if="isFolder">
+        <div v-if="isRoot">
+            <schema-tree-item
+                v-for="(child, index) in item.children"
+                :key="index"
+                :item="child"
+                @addItem="$emit('addItem', $event)"
+                @changeValue="$emit('changeValue', $event)"
+            />
+            <b-button outlined type="is-info" icon-left="plus" @click="$emit('addItem', item)">
+                Add field
+            </b-button>
+        </div>
+
+        <div v-show="isOpen" v-if="isFolder && !isRoot">
             <div class="child-tree p-l-lg p-b-lg">
                 <schema-tree-item
                     v-for="(child, index) in item.children"
@@ -57,6 +70,10 @@ export default class SchemaTreeItem extends Vue {
 
     isOpen = false;
     values = ['ROW', 'LONG', 'VARCHAR'];
+
+    get isRoot() {
+        return this.item && this.item.value === 'ROOT';
+    }
 
     get isFolder() {
         return this.item.children && this.item.children.length;

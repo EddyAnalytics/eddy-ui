@@ -14,51 +14,56 @@ export const pipelineFlinkMock = {
                 component: 'DBConnectorProperties',
                 topic: 'mysql1.inventory.customers',
                 schema: {
-                    name: 'payload',
-                    value: 'ROW',
+                    value: 'ROOT',
                     children: [
-                        { name: 'ts_ms', value: 'LONG' },
                         {
-                            name: 'before',
+                            name: 'payload',
                             value: 'ROW',
                             children: [
+                                { name: 'ts_ms', value: 'LONG' },
                                 {
-                                    name: 'id',
-                                    value: 'LONG',
+                                    name: 'before',
+                                    value: 'ROW',
+                                    children: [
+                                        {
+                                            name: 'id',
+                                            value: 'LONG',
+                                        },
+                                        {
+                                            name: 'first_name',
+                                            value: 'VARCHAR',
+                                        },
+                                        {
+                                            name: 'last_name',
+                                            value: 'VARCHAR',
+                                        },
+                                        {
+                                            name: 'email',
+                                            value: 'VARCHAR',
+                                        },
+                                    ],
                                 },
                                 {
-                                    name: 'first_name',
-                                    value: 'VARCHAR',
-                                },
-                                {
-                                    name: 'last_name',
-                                    value: 'VARCHAR',
-                                },
-                                {
-                                    name: 'email',
-                                    value: 'VARCHAR',
-                                },
-                            ],
-                        },
-                        {
-                            name: 'after',
-                            value: 'ROW',
-                            children: [
-                                {
-                                    name: 'id',
-                                    value: 'LONG',
-                                },
-                                {
-                                    name: 'first_name',
-                                    value: 'VARCHAR',
-                                },
-                                {
-                                    name: 'last_name',
-                                    value: 'VARCHAR',
-                                },
-                                {
-                                    name: 'email',
-                                    value: 'VARCHAR',
+                                    name: 'after',
+                                    value: 'ROW',
+                                    children: [
+                                        {
+                                            name: 'id',
+                                            value: 'LONG',
+                                        },
+                                        {
+                                            name: 'first_name',
+                                            value: 'VARCHAR',
+                                        },
+                                        {
+                                            name: 'last_name',
+                                            value: 'VARCHAR',
+                                        },
+                                        {
+                                            name: 'email',
+                                            value: 'VARCHAR',
+                                        },
+                                    ],
                                 },
                             ],
                         },
