@@ -61,7 +61,28 @@ export default class DBConnectorProperties extends Vue {
         }
 
         if (!this.properties.schema) {
-            this.$set(this.properties, 'schema', {});
+            this.$set(this.properties, 'schema', {
+                value: 'ROOT',
+                children: [
+                    {
+                        name: 'payload',
+                        value: 'ROW',
+                        children: [
+                            { name: 'ts_ms', value: 'LONG' },
+                            {
+                                name: 'before',
+                                value: 'ROW',
+                                children: [{}],
+                            },
+                            {
+                                name: 'after',
+                                value: 'ROW',
+                                children: [{}],
+                            },
+                        ],
+                    },
+                ],
+            });
         }
 
         this.projectId = +this.$route.params.projectId;

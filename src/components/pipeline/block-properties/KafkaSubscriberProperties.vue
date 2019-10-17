@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>Kafka Subscriber</h2>
+        <h2 class="subtitle">Kafka Subscriber</h2>
         <b-field label="Topic">
             <b-input v-model="properties.topic" />
         </b-field>

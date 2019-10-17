@@ -68,8 +68,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 export default class SchemaTreeItem extends Vue {
     @Prop() item;
 
-    isOpen = false;
-    values = ['ROW', 'LONG', 'VARCHAR'];
+    isOpen = true;
+    values = ['ROW', 'LONG', 'VARCHAR', 'TIMESTAMP'];
 
     get isRoot() {
         return this.item && this.item.value === 'ROOT';

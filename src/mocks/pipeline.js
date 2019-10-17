@@ -86,7 +86,20 @@ export const pipelineFlinkMock = {
                 inSchema:
                     '{\n"payload": "ROW<`ts_ms` LONG, after ROW<`id` LONG, first_name VARCHAR, last_name VARCHAR, email VARCHAR>, before ROW<`id` LONG, first_name VARCHAR, last_name VARCHAR, email VARCHAR>>"\n}',
                 outSchema: '{\n"id": "LONG",\n"value": "LONG"\n}',
-                sqlQuery: `INSERT INTO sql_results \nSELECT payload.after.id, payload.before.id \nFROM customers`,
+                schema: {
+                    value: 'ROOT',
+                    children: [
+                        {
+                            name: 'id',
+                            value: 'LONG',
+                        },
+                        {
+                            name: 'value',
+                            value: 'LONG',
+                        },
+                    ],
+                },
+                sqlQuery: `SELECT payload.after.id, payload.before.id`,
             },
             props: {
                 title: 'Flink SQL Snippet',
