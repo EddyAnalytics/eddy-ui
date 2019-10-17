@@ -1,0 +1,6 @@
+fragment integrationFragment on IntegrationType {
+    id,
+    integrationType,
+    label,
+    config
+}

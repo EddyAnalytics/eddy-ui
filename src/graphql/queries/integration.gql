@@ -1,0 +1,6 @@
+#import "../fragments/pipelineFragment.gql"
+query integration($id: IntID!) {
+    integration(id: $id) {
+        ...integrationFragment
+    }
+}

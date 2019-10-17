@@ -16,22 +16,34 @@ import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import IntegrationBlock from '@/components/integrations/IntegrationBlock';
 
+import INTEGRATIONS_QUERY from '@/graphql/queries/integrations.gql';
+
 @Component({
     components: {
         IntegrationBlock,
     },
 })
 export default class Integrations extends Vue {
+    created() {
+        this.$apollo.addSmartQuery('allIntegrations', {
+            query: INTEGRATIONS_QUERY,
+            result({ data }) {
+                if (data.allIntegrations.length) {
+                    console.log(data.allIntegrations[0]);
+                    this.integrations[0] = {
+                        id: 0,
+                        logo: '/img/integrations/debezium.svg',
+                        name: 'Debezium ',
+                        description: `Database Connector for Kafka allowing streaming and observing a SQL/NoSQL database`,
+                        label: data.allIntegrations[0].label,
+                        config: JSON.parse(data.allIntegrations[0].config),
+                    };
+                }
+            },
+        });
+    }
+
     integrations = [
-        {
-            id: 0,
-            logo: '/img/integrations/debezium.svg',
-            name: 'Debezium ',
-            description: `
-                        SQL DB Connector for Kafka allowing streaming a SQL
-                        database from the begining or observing it in real time
-            `,
-        },
         {
             id: 1,
             logo: '/img/integrations/spark.svg',

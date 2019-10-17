@@ -70,19 +70,6 @@
     </section>
 </template>
 
-<style lang="scss" scoped>
-.dashboard-card {
-    min-width: 10rem;
-    cursor: pointer;
-
-    .card-image {
-        height: 4rem;
-        overflow: hidden;
-        padding-top: 1rem;
-    }
-}
-</style>
-
 <script>
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';

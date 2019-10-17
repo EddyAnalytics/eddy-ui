@@ -1,0 +1,6 @@
+#import "../fragments/integrationFragment.gql"
+query integrations {
+    allIntegrations{
+        ...integrationFragment
+    }
+}
