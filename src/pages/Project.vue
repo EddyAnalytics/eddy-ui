@@ -6,7 +6,7 @@
 
             <div class="columns is-multiline">
                 <data-connector-block
-                    v-for="dataConnector in dataConnectors"
+                    v-for="dataConnector in project.dataConnectors"
                     :key="dataConnector.id"
                     :dataConnector="dataConnector"
                     @click.native="toggleConnectorDetails(dataConnector)"
@@ -75,7 +75,6 @@ import DashboardForm from '@/components/projects/DashboardForm.vue';
 import PROJECT_QUERY from '@/graphql/queries/project.gql';
 import DELETE_PROJECT from '@/graphql/mutations/deleteProject.gql';
 
-import DATA_CONNECTORS_QUERY from '@/graphql/queries/dataConnectors.gql';
 import CREATE_DATA_CONNECTOR from '@/graphql/mutations/createDataConnector.gql';
 import UPDATE_DATA_CONNECTOR from '@/graphql/mutations/updateDataConnector.gql';
 import DELETE_DATA_CONNECTOR from '@/graphql/mutations/deleteDataConnector.gql';
@@ -94,9 +93,6 @@ import CREATE_DASHBOARD from '@/graphql/mutations/createDashboard.gql';
 })
 export default class Project extends Vue {
     project = null;
-
-    dataConnectors = [];
-
     isConnectorPanelOpen = false;
     selectedDataConnector = {};
 
@@ -111,10 +107,6 @@ export default class Project extends Vue {
                 };
             },
             fetchPolicy: 'cache-and-network',
-        });
-
-        this.$apollo.addSmartQuery('dataConnectors', {
-            query: DATA_CONNECTORS_QUERY,
         });
     }
 
@@ -146,7 +138,7 @@ export default class Project extends Vue {
         });
 
         this.closeConnectorPanel();
-        this.$apollo.queries.dataConnectors.refetch();
+        this.$apollo.queries.project.refetch();
         this.$buefy.toast.open({
             message: 'Connector saved',
             type: 'is-success',
@@ -161,7 +153,7 @@ export default class Project extends Vue {
             },
         });
         this.closeConnectorPanel();
-        this.$apollo.queries.dataConnectors.refetch();
+        this.$apollo.queries.project.refetch();
         this.$buefy.toast.open('Data connector deleted');
     }
 

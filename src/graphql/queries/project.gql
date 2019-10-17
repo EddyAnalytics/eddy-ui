@@ -2,6 +2,16 @@ query project($id: IntID!) {
     project(id: $id) {
         id,
         label,
+        dataConnectors {
+            id,
+            label,
+            config,
+            dataConnectorType {
+                id,
+                label,
+                config
+            }
+        }
         pipelines {
             id,
             label
