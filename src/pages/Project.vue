@@ -130,6 +130,7 @@ export default class Project extends Vue {
         await this.$apollo.mutate({
             mutation: dataConnector.id ? UPDATE_DATA_CONNECTOR : CREATE_DATA_CONNECTOR,
             variables: {
+                id: dataConnector.id,
                 dataConnectorTypeId: dataConnector.dataConnectorType.id,
                 label: dataConnector.label,
                 projectId: this.projectId,

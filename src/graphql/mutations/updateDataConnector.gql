@@ -1,5 +1,5 @@
-mutation createDataConnector($id: IntID!, $label: String!, $config: JSONString!) {
-  createDataConnector(id: $id, label: $label, config: $config) {
+mutation updateDataConnector($id: IntID!, $label: String!, $config: JSONString!) {
+  updateDataConnector(id: $id, label: $label, config: $config) {
     dataConnector {
         id,
         label,

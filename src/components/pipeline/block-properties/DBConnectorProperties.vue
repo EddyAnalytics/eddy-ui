@@ -1,26 +1,47 @@
 <template>
     <div>
-        <template v-if="dbDataConnectors.length">
+        <template v-if="connectors.length">
             <h2 class="subtitle">Database Connector Stream</h2>
-            <b-field label="Data connector">
-                <b-select
-                    v-model="selectedDataConnector"
-                    @input="onDataConnectorSelected"
-                    :expanded="true"
-                >
-                    <option
-                        v-for="connector in dbDataConnectors"
-                        :value="connector"
-                        :key="connector.id"
-                    >
-                        {{ connector.label }}
-                    </option>
-                </b-select>
+            <b-field grouped>
+                <b-field label="Topic" expanded>
+                    <b-field>
+                        <b-input :value="properties.topic" expanded disabled />
+                        <p class="control">
+                            <button class="button is-info" outlined @click.prevent="changeTopic()">
+                                Change
+                            </button>
+                        </p>
+                    </b-field>
+                </b-field>
             </b-field>
 
-            <b-field label="Topic">
-                <b-input v-model="properties.topic" />
-            </b-field>
+            <template v-if="editMode">
+                <b-field label="Data connector">
+                    <b-select v-model="connector" @input="onDataConnectorSelected" :expanded="true">
+                        <option
+                            v-for="connector in connectors"
+                            :value="connector"
+                            :key="connector.id"
+                        >
+                            {{ connector.label }}
+                        </option>
+                    </b-select>
+                </b-field>
+                <b-field label="Database">
+                    <b-select v-model="database" @input="onDatabaseSelected" :expanded="true">
+                        <option v-for="database in databases" :value="database" :key="database">
+                            {{ database }}
+                        </option>
+                    </b-select>
+                </b-field>
+                <b-field label="Table">
+                    <b-select v-model="table" @input="onTableSelected" :expanded="true">
+                        <option v-for="table in tables" :value="table" :key="table">
+                            {{ table }}
+                        </option>
+                    </b-select>
+                </b-field>
+            </template>
 
             <b-field label="Schema">
                 <schema-tree :schema="properties.schema" />
@@ -37,6 +58,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import SchemaTree from '@/components/pipeline/block-properties/schema-tree/SchemaTree';
 
+import KAFKA_TOPICS from '@/graphql/subscriptions/kafkaTopics.gql';
 import PROJECT_QUERY from '@/graphql/queries/project.gql';
 
 @Component({
@@ -47,53 +69,120 @@ import PROJECT_QUERY from '@/graphql/queries/project.gql';
 export default class DBConnectorProperties extends Vue {
     @Prop() properties;
 
-    dataConnectors = [];
-    dbDataConnectors = [];
-    selectedDataConnector = null;
+    editMode = true;
+
+    connector = null;
+    database = null;
+    table = null;
+
+    topics = [];
+    connectors = [];
+
+    databases = [];
+    filterDatabases(connectorId) {
+        const databases = this.topics
+            .filter(topic => {
+                const parts = topic.split('.');
+                return parts[0] == this.projectId && parts[1] == connectorId && parts[2];
+            })
+            .map(topic => topic.split('.')[2]);
+        this.databases = [...new Set(databases)];
+    }
+
+    tables = [];
+    filterTables(connectorId, database) {
+        this.tables = this.topics
+            .filter(topic => {
+                const parts = topic.split('.');
+                return (
+                    parts[0] == this.projectId &&
+                    parts[1] == connectorId &&
+                    parts[2] === database &&
+                    parts[3]
+                );
+            })
+            .map(topic => topic.split('.')[3]);
+    }
 
     onDataConnectorSelected(connector) {
-        this.properties.connector = connector;
+        this.filterDatabases(connector.id);
+    }
+
+    onDatabaseSelected(database) {
+        this.filterTables(this.connector.id, database);
+    }
+
+    onTableSelected(table) {
+        this.properties.table = table;
+        this.properties.topic =
+            this.projectId +
+            '.' +
+            this.connector.id +
+            '.' +
+            this.database +
+            '.' +
+            this.properties.table;
+
+        this.editMode = false;
+    }
+
+    changeTopic() {
+        this.editMode = true;
+        this.properties.topic = '';
     }
 
     created() {
-        if (this.properties.connector) {
-            this.selectedDataConnector = this.properties.connector;
-        }
+        this.projectId = +this.$route.params.projectId;
+        this.pipelineId = +this.$route.params.pipelineId;
 
         if (!this.properties.schema) {
-            this.$set(this.properties, 'schema', {
-                value: 'ROOT',
-                children: [
-                    {
-                        name: 'payload',
-                        value: 'ROW',
-                        children: [
-                            { name: 'ts_ms', value: 'LONG' },
-                            {
-                                name: 'before',
-                                value: 'ROW',
-                                children: [{}],
-                            },
-                            {
-                                name: 'after',
-                                value: 'ROW',
-                                children: [{}],
-                            },
-                        ],
-                    },
-                ],
-            });
+            this.prefillSchema();
         }
 
-        this.projectId = +this.$route.params.projectId;
+        if (this.properties.topic) {
+            this.editMode = false;
+        }
+
         this.$apollo.addSmartQuery('project', {
             query: PROJECT_QUERY,
             variables: {
                 id: this.projectId,
             },
             result({ data }) {
-                this.dbDataConnectors = data.project.dataConnectors;
+                this.connectors = data.project.dataConnectors;
             },
+        });
+
+        this.$apollo.addSmartSubscription('topics', {
+            query: KAFKA_TOPICS,
+            result({ data: { topics } }) {
+                this.topics = topics;
+            },
+        });
+    }
+
+    prefillSchema() {
+        this.$set(this.properties, 'schema', {
+            value: 'ROOT',
+            children: [
+                {
+                    name: 'payload',
+                    value: 'ROW',
+                    children: [
+                        { name: 'ts_ms', value: 'LONG' },
+                        {
+                            name: 'before',
+                            value: 'ROW',
+                            children: [{}],
+                        },
+                        {
+                            name: 'after',
+                            value: 'ROW',
+                            children: [{}],
+                        },
+                    ],
+                },
+            ],
         });
     }
 }

@@ -13,7 +13,7 @@ export const pipelineFlinkMock = {
             component: 'PipelineBuilderBlock',
             properties: {
                 component: 'DBConnectorProperties',
-                topic: 'mysql1.inventory.customers',
+                topic: '33.56.inventory.orders',
                 schema: {
                     value: 'ROOT',
                     children: [
