@@ -11,12 +11,18 @@
                 </div>
 
                 <div class="column has-text-right">
-                    <div class="pipeline-active-switch m-r-md">
-                        <b-switch :value="true" type="is-success" v-model="isActive">
-                            {{ isActive ? 'Activated' : 'Inactive' }}
-                        </b-switch>
-                    </div>
                     <b-button
+                        outlined
+                        v-if="model.active"
+                        type="is-danger"
+                        icon-left="stop"
+                        class="m-r-sm"
+                        @click="stopPipeline()"
+                    >
+                        Stop
+                    </b-button>
+                    <b-button
+                        v-else
                         outlined
                         type="is-info"
                         icon-left="play"
@@ -46,7 +52,7 @@
                     </div>
                 </div>
                 <div class="column">
-                    <vue-dag v-model="graphData" @edit="editNode" @delete="deleteNode" />
+                    <vue-dag v-model="model" @edit="editNode" @delete="deleteNode" />
                 </div>
             </div>
         </section>
@@ -67,8 +73,6 @@
 <script>
 import { Component, Vue } from 'vue-property-decorator';
 import GoBackButton from '@/components/general/GoBackButton.vue';
-import { TaskGenerationException } from '@/helpers/exceptions';
-
 import { blockTypesMocks } from '@/mocks/pipelineBlockTypes';
 import PipelineBlocksPanel from '@/components/pipeline/PipelineBlocksPanel.vue';
 
@@ -85,8 +89,7 @@ import PIPELINE_QUERY from '@/graphql/queries/pipeline.gql';
 import UPDATE_PIPELINE from '@/graphql/mutations/updatePipeline.gql';
 import DELETE_PIPELINE from '@/graphql/mutations/deletePipeline.gql';
 
-import { generateFlinkTask } from '@/helpers/flinkTaskGenerators';
-import { generateBeamTask } from '@/helpers/beamTaskGenerators';
+import { generateCeleryTasks } from '@/services/task/tasksService';
 import SEND_CELERY_TASK from '@/graphql/mutations/sendCeleryTask.gql';
 
 @Component({
@@ -99,9 +102,9 @@ import SEND_CELERY_TASK from '@/graphql/mutations/sendCeleryTask.gql';
 export default class Pipeline extends Vue {
     blockTypes = [];
     pipeline = {};
-    isActive = false;
 
-    graphData = {
+    model = {
+        active: false,
         config: {
             scale: 1,
             height: '80vh',
@@ -133,25 +136,26 @@ export default class Pipeline extends Vue {
                 const pipelineConfig = JSON.parse(pipelineConfigJSON);
                 console.log('Deserialized pipeline config', pipelineConfig);
 
+                this.model.active = pipelineConfig.active;
                 if (pipelineConfig.config) {
-                    this.graphData.config = pipelineConfig.config;
+                    this.model.config = pipelineConfig.config;
                 }
                 if (pipelineConfig.nodes) {
-                    this.graphData.nodes = pipelineConfig.nodes;
+                    this.model.nodes = pipelineConfig.nodes;
                 }
                 if (pipelineConfig.edges) {
-                    this.graphData.edges = pipelineConfig.edges;
+                    this.model.edges = pipelineConfig.edges;
                 }
             },
         });
     }
 
     loadMockPipeline(type) {
-        this.graphData = type === 'beam' ? pipelineBeamMock : pipelineFlinkMock;
+        this.model = type === 'beam' ? pipelineBeamMock : pipelineFlinkMock;
     }
 
     editNode(nodeId) {
-        const node = this.graphData.nodes.find(node => node.id === nodeId);
+        const node = this.model.nodes.find(node => node.id === nodeId);
         if (node) {
             this.$buefy.modal.open({
                 parent: this,
@@ -164,13 +168,13 @@ export default class Pipeline extends Vue {
     }
 
     deleteNode(nodeId) {
-        const index = this.graphData.nodes.findIndex(node => node.id === nodeId);
-        if (index > -1) this.graphData.nodes.splice(index, 1);
+        const index = this.model.nodes.findIndex(node => node.id === nodeId);
+        if (index > -1) this.model.nodes.splice(index, 1);
     }
 
     addBlock(block) {
-        const lastNode = this.graphData.nodes[this.graphData.nodes.length - 1];
-        this.graphData.nodes.push({
+        const lastNode = this.model.nodes[this.model.nodes.length - 1];
+        this.model.nodes.push({
             id: lastNode ? lastNode.id + 1 : 0,
             x: lastNode ? lastNode.x + 300 : 100,
             y: 300,
@@ -187,9 +191,9 @@ export default class Pipeline extends Vue {
     }
 
     saveBlock(block) {
-        const nodeIndex = this.graphData.nodes.findIndex(node => node.id === block.id);
+        const nodeIndex = this.model.nodes.findIndex(node => node.id === block.id);
         if (nodeIndex > -1) {
-            this.graphData.nodes.splice(nodeIndex, 1, block);
+            this.model.nodes.splice(nodeIndex, 1, block);
         }
     }
 
@@ -201,8 +205,14 @@ export default class Pipeline extends Vue {
         });
     }
 
+    async stopPipeline() {
+        this.model.active = false;
+        await this.updatePipeline();
+        this.$buefy.toast.open('Pipeline stoped');
+    }
+
     async executePipeline() {
-        const celeryTasks = this.getCeleryTasks(this.graphData.nodes, this.graphData.edges);
+        const celeryTasks = generateCeleryTasks(this.model.nodes, this.model.edges);
 
         if (!celeryTasks) return;
         if (!celeryTasks.length) {
@@ -220,69 +230,27 @@ export default class Pipeline extends Vue {
                     config: JSON.stringify(task.config),
                 },
             });
-
             console.log('Celery Task Sent', task, 'Response: ', res);
         });
 
+        this.model.active = true;
         this.$buefy.toast.open('Pipeline executed');
     }
 
-    getCeleryTasks(nodes, edges) {
-        let tasks = [];
-        for (let node of nodes) {
-            if (node.type === 'flink-transform' || node.type === 'beam-transform') {
-                try {
-                    const inEdges = edges.filter(edge => edge.to === node.id);
-                    if (!inEdges.length)
-                        throw new TaskGenerationException('Missing incoming edge for node');
-
-                    const outEdges = edges.filter(edge => edge.from === node.id);
-                    if (!outEdges.length)
-                        throw new TaskGenerationException('Missing outgoing edge for node');
-
-                    const inNodeIds = inEdges.map(edge => edge.from);
-                    const inNodes = inNodeIds.map(id => nodes.find(node => node.id === id));
-
-                    const outNodeIds = outEdges.map(edge => edge.to);
-                    const outNodes = outNodeIds.map(id => nodes.find(node => node.id === id));
-
-                    const sourceNodes = inNodes.filter(node => node.type === 'source');
-                    if (!sourceNodes.length)
-                        throw new TaskGenerationException('Missing source node(s) for');
-
-                    const sinkNodes = outNodes.filter(node => node.type === 'sink');
-                    if (!sinkNodes.length)
-                        throw new TaskGenerationException('Missing sink node(s) for');
-
-                    let task;
-                    if (node.type === 'beam-transform') {
-                        task = generateBeamTask(sourceNodes, sinkNodes, node);
-                    }
-                    if (node.type === 'flink-transform') {
-                        task = generateFlinkTask(sourceNodes, sinkNodes, node);
-                    }
-                    if (task) tasks.push(task);
-                } catch (e) {
-                    if (!(e instanceof TaskGenerationException)) throw e;
-                    this.showErrorSnackbar(e.message, node.props.title);
-                    return;
-                }
-            }
-        }
-        return tasks;
+    async savePipeline() {
+        await this.updatePipeline();
+        this.$buefy.toast.open('Pipeline saved');
     }
 
-    async savePipeline() {
-        await this.$apollo.mutate({
+    updatePipeline() {
+        return this.$apollo.mutate({
             mutation: UPDATE_PIPELINE,
             variables: {
                 id: this.pipelineId,
                 label: this.pipeline.label,
-                config: JSON.stringify(this.graphData),
+                config: JSON.stringify(this.model),
             },
         });
-
-        this.$buefy.toast.open('Pipeline saved');
     }
 
     openDeletePipelineModal() {

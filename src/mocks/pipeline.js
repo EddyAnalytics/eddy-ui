@@ -1,4 +1,5 @@
 export const pipelineFlinkMock = {
+    active: false,
     config: {
         scale: 1,
         height: '80vh',
@@ -127,6 +128,7 @@ export const pipelineFlinkMock = {
 };
 
 export const pipelineBeamMock = {
+    active: false,
     config: {
         scale: 1,
         height: '80vh',
