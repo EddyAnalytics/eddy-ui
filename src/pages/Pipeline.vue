@@ -114,8 +114,8 @@ export default class Pipeline extends Vue {
     };
 
     created() {
-        this.projectId = this.$route.params.projectId;
-        this.pipelineId = this.$route.params.pipelineId;
+        this.projectId = +this.$route.params.projectId;
+        this.pipelineId = +this.$route.params.pipelineId;
 
         this.$apollo.addSmartQuery('blockTypes', {
             query: BLOCK_TYPES_QUERY,
@@ -228,6 +228,8 @@ export default class Pipeline extends Vue {
                 ...task,
                 config: {
                     ...task.config,
+                    projectId: this.projectId,
+                    pipelineId: this.pipelineId,
                     id: Math.random()
                         .toString(36)
                         .substr(2, 9),
