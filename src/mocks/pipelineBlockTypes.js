@@ -14,11 +14,13 @@ export const blockTypesMocks = [
         disabled: false,
         type: 'source',
         label: 'Kafka Subscriber',
+        propertiesComponent: 'KafkaSubscriberProperties',
     },
     {
         disabled: false,
         type: 'sink',
         label: 'Kafka Publisher',
+        propertiesComponent: 'KafkaPublisherProperties',
     },
     {
         disabled: true,
