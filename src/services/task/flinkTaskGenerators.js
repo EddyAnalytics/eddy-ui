@@ -1,4 +1,4 @@
-import { TaskGenerationException } from '@/helpers/exceptions';
+import { TaskGenerationException } from '@/services/task/exceptions';
 
 export const generateFlinkTask = (sourceNodes, sinkNodes, node) => {
     const sqlQuery = node.properties.sqlQuery;
