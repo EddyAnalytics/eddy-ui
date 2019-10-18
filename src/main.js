@@ -9,6 +9,7 @@ import i18n from '@/languages';
 import store from '@/store';
 import Raven from 'raven-js';
 import RavenVue from 'raven-js/plugins/vue';
+import VueAnalytics from 'vue-analytics';
 import '@/filters';
 
 Vue.use(Buefy);
@@ -75,7 +76,7 @@ function connectAnalytics() {
     // Connect analytics if enabled.
     let config = Vue.prototype.$config;
     if (!config.debug && config.analytics && config.analytics.enabled) {
-        const VueAnalytics = require('vue-analytics');
+        console.log('Register GA for: ', config.analytics.id);
         Vue.use(VueAnalytics, {
             id: config.analytics.id,
             router,
