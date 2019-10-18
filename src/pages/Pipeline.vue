@@ -212,7 +212,7 @@ export default class Pipeline extends Vue {
     }
 
     async executePipeline() {
-        const celeryTasks = generateCeleryTasks(this.model.nodes, this.model.edges);
+        let celeryTasks = generateCeleryTasks(this.model.nodes, this.model.edges);
 
         if (!celeryTasks) return;
         if (!celeryTasks.length) {
@@ -221,6 +221,19 @@ export default class Pipeline extends Vue {
         }
 
         console.log('Tasks to submit', celeryTasks);
+
+        // Add ids to celery tasks
+        celeryTasks = celeryTasks.map(task => {
+            return {
+                ...task,
+                config: {
+                    ...task.config,
+                    id: Math.random()
+                        .toString(36)
+                        .substr(2, 9),
+                },
+            };
+        });
 
         celeryTasks.forEach(async task => {
             const res = await this.$apollo.mutate({
