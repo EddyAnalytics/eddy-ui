@@ -3,13 +3,15 @@
         <div class="container">
             <div class="columns is-vcentered">
                 <div class="column">
-                    <img
-                        src="@/assets/img/elnino-logo-white.svg"
-                        alt="El Niño"
-                        title="El Niño"
-                        height="50"
-                        width="120"
-                    />
+                    <a href="https://www.elnino.tech" target="_blank">
+                        <img
+                            src="@/assets/img/elnino-logo-white.svg"
+                            alt="El Niño"
+                            title="El Niño"
+                            height="50"
+                            width="150"
+                        />
+                    </a>
                 </div>
                 <div class="column has-text-right">
                     &copy; {{ new Date().getFullYear() }} Eddy Analytics
