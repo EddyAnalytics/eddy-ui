@@ -43,9 +43,21 @@
                 </b-field>
             </template>
 
-            <b-field label="Schema">
-                <schema-tree :schema="properties.schema" />
-            </b-field>
+            <b-tabs
+                v-model="tab"
+                position="is-centered is-boxed"
+                :animated="false"
+                :destroy-on-hide="true"
+            >
+                <b-tab-item label="Schema">
+                    <b-field>
+                        <schema-tree :schema="properties.schema" />
+                    </b-field>
+                </b-tab-item>
+                <b-tab-item label="Sample events">
+                    <sample-events :topic="properties.topic" @fillSchema="fillSchema" />
+                </b-tab-item>
+            </b-tabs>
         </template>
 
         <template v-else>
@@ -57,19 +69,21 @@
 <script>
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import SchemaTree from '@/components/pipeline/block-properties/schema-tree/SchemaTree';
-
+import SampleEvents from '@/components/pipeline/block-properties/SampleEvents';
 import KAFKA_TOPICS from '@/graphql/subscriptions/kafkaTopics.gql';
 import PROJECT_QUERY from '@/graphql/queries/project.gql';
 
 @Component({
     components: {
         SchemaTree,
+        SampleEvents,
     },
 })
 export default class DBConnectorProperties extends Vue {
     @Prop() properties;
 
     editMode = true;
+    tab = 0;
 
     connector = null;
     database = null;
@@ -122,13 +136,11 @@ export default class DBConnectorProperties extends Vue {
             this.database +
             '.' +
             this.properties.table;
-
         this.editMode = false;
     }
 
     changeTopic() {
         this.editMode = true;
-        this.properties.topic = '';
     }
 
     created() {
@@ -161,29 +173,36 @@ export default class DBConnectorProperties extends Vue {
         });
     }
 
-    prefillSchema() {
-        this.$set(this.properties, 'schema', {
-            value: 'ROOT',
-            children: [
-                {
-                    name: 'payload',
-                    value: 'ROW',
-                    children: [
-                        { name: 'ts_ms', value: 'LONG' },
-                        {
-                            name: 'before',
-                            value: 'ROW',
-                            children: [{}],
-                        },
-                        {
-                            name: 'after',
-                            value: 'ROW',
-                            children: [{}],
-                        },
-                    ],
-                },
-            ],
-        });
+    fillSchema(schema) {
+        this.prefillSchema(schema);
+        this.tab = 0;
     }
+
+    prefillSchema(schema = this.DEFAULT_SCHEMA) {
+        this.$set(this.properties, 'schema', schema);
+    }
+
+    DEFAULT_SCHEMA = {
+        value: 'ROOT',
+        children: [
+            {
+                name: 'payload',
+                value: 'ROW',
+                children: [
+                    { name: 'ts_ms', value: 'LONG' },
+                    {
+                        name: 'before',
+                        value: 'ROW',
+                        children: [{}],
+                    },
+                    {
+                        name: 'after',
+                        value: 'ROW',
+                        children: [{}],
+                    },
+                ],
+            },
+        ],
+    };
 }
 </script>
