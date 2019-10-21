@@ -1,3 +1,0 @@
-query sample($topic: String) {
-    sample(topic: $topic)
-}

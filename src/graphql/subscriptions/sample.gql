@@ -1,0 +1,3 @@
+subscription sample($topic: String!, $rate: Float) {
+    sample(topic: $topic, rate: $rate)
+}
