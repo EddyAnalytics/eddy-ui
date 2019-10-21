@@ -16,7 +16,6 @@
                             v-for="(option, index) in dataConnectorTypes"
                             :value="option"
                             :key="option.label + '_' + index"
-                            :disabled="option.label !== 'Debezium'"
                         >
                             {{ option.label }}
                         </option>
