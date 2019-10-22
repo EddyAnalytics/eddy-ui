@@ -107,6 +107,7 @@ import { generateCeleryTasks } from '@/services/task/tasksService';
 import SEND_CELERY_TASK from '@/graphql/mutations/sendCeleryTask.gql';
 
 import KAFKA_TOPICS_ACTIVITY from '@/graphql/subscriptions/kafkaTopicsActivity.gql';
+import { TaskGenerationException } from '@/services/task/exceptions';
 
 @Component({
     components: {
@@ -253,45 +254,51 @@ export default class Pipeline extends Vue {
     }
 
     async executePipeline() {
-        let celeryTasks = generateCeleryTasks(this.model.nodes, this.model.edges);
+        try {
+            let celeryTasks = generateCeleryTasks(this.model.nodes, this.model.edges);
 
-        if (!celeryTasks) return;
-        if (!celeryTasks.length) {
-            this.showErrorSnackbar('Nothing to run. Define nodes and link them toghether.');
+            if (!celeryTasks) return;
+            if (!celeryTasks.length) {
+                this.showErrorSnackbar('Nothing to run. Define nodes and link them toghether.');
+                return;
+            }
+
+            console.log('Tasks to submit', celeryTasks);
+
+            // Add ids to celery tasks
+            celeryTasks = celeryTasks.map(task => {
+                return {
+                    ...task,
+                    config: {
+                        ...task.config,
+                        projectId: this.projectId,
+                        pipelineId: this.pipelineId,
+                        id: Math.random()
+                            .toString(36)
+                            .substr(2, 9),
+                    },
+                };
+            });
+
+            celeryTasks.forEach(async task => {
+                const res = await this.$apollo.mutate({
+                    mutation: SEND_CELERY_TASK,
+                    variables: {
+                        taskType: task.taskType,
+                        config: JSON.stringify(task.config),
+                    },
+                });
+                console.log('Celery Task Sent', task, 'Response: ', res);
+            });
+
+            this.model.status = 'pending';
+            this.savePipeline();
+            this.$buefy.toast.open('Pipeline executed');
+        } catch (e) {
+            if (!(e instanceof TaskGenerationException)) throw e;
+            this.showErrorSnackbar(e.message);
             return;
         }
-
-        console.log('Tasks to submit', celeryTasks);
-
-        // Add ids to celery tasks
-        celeryTasks = celeryTasks.map(task => {
-            return {
-                ...task,
-                config: {
-                    ...task.config,
-                    projectId: this.projectId,
-                    pipelineId: this.pipelineId,
-                    id: Math.random()
-                        .toString(36)
-                        .substr(2, 9),
-                },
-            };
-        });
-
-        celeryTasks.forEach(async task => {
-            const res = await this.$apollo.mutate({
-                mutation: SEND_CELERY_TASK,
-                variables: {
-                    taskType: task.taskType,
-                    config: JSON.stringify(task.config),
-                },
-            });
-            console.log('Celery Task Sent', task, 'Response: ', res);
-        });
-
-        this.model.status = 'pending';
-        this.savePipeline();
-        this.$buefy.toast.open('Pipeline executed');
     }
 
     async savePipeline() {

@@ -82,7 +82,18 @@ export const generateFlinkTask = (sourceNodes, sinkNodes, node) => {
 const getMainQuery = (schemas, sqlQuery) => {
     const inTopicNames = schemas.filter(s => s.type === 'source').map(s => s.name);
     const outTopicNames = schemas.filter(s => s.type === 'sink').map(s => s.name);
-    return `INSERT INTO ${outTopicNames.join(',')} ${sqlQuery} FROM ${inTopicNames.join(',')}`;
+
+    const groupIndex = sqlQuery.toLowerCase().indexOf('group');
+    if (groupIndex > -1) {
+        const groupByStatement = sqlQuery.slice(groupIndex, sqlQuery.length);
+        const querySubstring = sqlQuery.substring(0, groupIndex);
+        console.log(querySubstring, groupByStatement);
+        return `INSERT INTO ${outTopicNames.join(',')} ${querySubstring} FROM ${inTopicNames.join(
+            ',',
+        )} ${groupByStatement}`;
+    } else {
+        return `INSERT INTO ${outTopicNames.join(',')} ${sqlQuery} FROM ${inTopicNames.join(',')}`;
+    }
 };
 
 const getAgregateCountQuery = (aggInTable, aggOutTable) => {
