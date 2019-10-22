@@ -40,7 +40,11 @@
                         Pending
                     </b-button>
 
-                    <b-button type="is-primary" icon-left="content-save" @click="savePipeline()">
+                    <b-button
+                        type="is-primary"
+                        icon-left="content-save"
+                        @click="savePipeline(true)"
+                    >
                         Save
                     </b-button>
                 </div>
@@ -301,9 +305,9 @@ export default class Pipeline extends Vue {
         }
     }
 
-    async savePipeline() {
+    async savePipeline(showMessage = false) {
         await this.updatePipeline();
-        this.$buefy.toast.open('Pipeline saved');
+        if (showMessage) this.$buefy.toast.open('Pipeline saved');
     }
 
     updatePipeline() {
