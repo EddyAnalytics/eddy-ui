@@ -4,7 +4,9 @@
         <b-field label="Topic" expanded>
             <b-field>
                 <p class="control">
-                    <span class="button is-static">{{ this.projectId }}.</span>
+                    <span class="button is-static">
+                        {{ this.projectId }}.{{ this.pipelineId }}.
+                    </span>
                 </p>
                 <b-input v-model="properties.topicSlug" expanded></b-input>
             </b-field>
@@ -24,6 +26,7 @@ export default class KafkaPublisherProperties extends Vue {
     topics = [];
     created() {
         this.projectId = +this.$route.params.projectId;
+        this.pipelineId = +this.$route.params.pipelineId;
         this.$apollo.addSmartSubscription('topics', {
             query: KAFKA_TOPICS,
             result({ data: { topics } }) {
@@ -34,7 +37,8 @@ export default class KafkaPublisherProperties extends Vue {
 
     @Watch('properties.topicSlug')
     onTopicSlugChange() {
-        this.properties.topic = this.projectId + '.' + this.properties.topicSlug;
+        this.properties.topic =
+            this.projectId + '.' + this.pipelineId + '.' + this.properties.topicSlug;
     }
 }
 </script>
