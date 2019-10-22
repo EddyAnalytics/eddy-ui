@@ -1,5 +1,7 @@
 import { TaskGenerationException } from '@/services/task/exceptions';
 
+const COUNT_INTERVALS = [10, 60, 3600];
+
 export const generateFlinkTask = (sourceNodes, sinkNodes, node) => {
     const sqlQuery = node.properties.sqlQuery;
     if (!sqlQuery || !sqlQuery.length) throw new TaskGenerationException('Missing query for node');
@@ -20,13 +22,13 @@ export const generateFlinkTask = (sourceNodes, sinkNodes, node) => {
 
     // Only the first output topic is used
     const outputTopic = outputTopics[0];
-    const outputTable = outputTopic.split('.').join('_');
+    const outputTable = 'out_' + outputTopic.split('.').join('_');
 
-    let flinkTask = {
+    const flinkTask = {
         taskType: 'flink',
         config: {
             parallelism: 1,
-            queries: [sqlQuery],
+            queries: [],
             schemas: [
                 {
                     topic: outputTopic,
@@ -42,20 +44,18 @@ export const generateFlinkTask = (sourceNodes, sinkNodes, node) => {
         return {
             topic: node.properties.topic,
             type: 'source',
-            name: node.properties.topic.split('.').join('_'),
+            name: 'in_' + node.properties.topic.split('.').join('_'),
             schema: serializeFlinkSchema(node.properties.schema),
         };
     });
 
     flinkTask.config.schemas.push(...inputSchemasConfig);
 
-    const aggInTopic = outputTopic;
-    const aggInTable = outputTable + '_agg_source';
-    const aggOutTopic = outputTopic + '_count_10';
-    const aggOutTable = outputTable + '_count_10_agg_sink';
-    const aggCountQuery = getAgregateCountQuery(aggInTable, aggOutTable);
+    const mainQuery = getMainQuery(flinkTask.config.schemas, sqlQuery);
+    flinkTask.config.queries.push(mainQuery);
 
-    flinkTask.config.queries.push(aggCountQuery);
+    const aggInTopic = outputTopic;
+    const aggInTable = outputTable + '_agg_in';
 
     flinkTask.config.schemas.push({
         topic: aggInTopic,
@@ -63,6 +63,11 @@ export const generateFlinkTask = (sourceNodes, sinkNodes, node) => {
         name: aggInTable,
         schema: serializeFlinkSchema(outSchema),
     });
+
+    const aggOutTopic = outputTopic + '_count_10';
+    const aggOutTable = outputTable + '_count_10_agg_out';
+    const aggCountQuery = getAgregateCountQuery(aggInTable, aggOutTable);
+    flinkTask.config.queries.push(aggCountQuery);
 
     flinkTask.config.schemas.push({
         topic: aggOutTopic,
@@ -73,10 +78,15 @@ export const generateFlinkTask = (sourceNodes, sinkNodes, node) => {
 
     return flinkTask;
 };
+
+const getMainQuery = (schemas, sqlQuery) => {
+    const inTopicNames = schemas.filter(s => s.type === 'source').map(s => s.name);
+    const outTopicNames = schemas.filter(s => s.type === 'sink').map(s => s.name);
+    return `INSERT INTO ${outTopicNames.join(',')} ${sqlQuery} FROM ${inTopicNames.join(',')}`;
+};
+
 const getAgregateCountQuery = (aggInTable, aggOutTable) => {
-    return `
-    INSERT INTO ${aggOutTable} SELECT COUNT(*) FROM ${aggInTable} GROUP BY TUMBLE(ts, INTERVAL '10' SECOND)
-    `;
+    return `INSERT INTO ${aggOutTable} SELECT COUNT(*) FROM ${aggInTable} GROUP BY TUMBLE(ts, INTERVAL '10' SECOND)`;
 };
 
 const serializeFlinkSchema = (schema, level = 0) => {

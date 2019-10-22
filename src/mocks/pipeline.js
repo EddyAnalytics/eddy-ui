@@ -1,18 +1,15 @@
 export const pipelineFlinkMock = {
-    active: false,
-    config: {
-        scale: 1,
-        height: '80vh',
-    },
+    status: 'inactive',
+    config: { scale: 1, height: '80vh' },
     nodes: [
         {
-            id: 0,
-            x: 100,
+            x: 99,
             y: 300,
+            id: 0,
             type: 'source',
+            props: { type: 'source', title: 'DB Connector Stream' },
             component: 'PipelineBuilderBlock',
             properties: {
-                component: 'DBConnectorProperties',
                 topic: '33.56.inventory.orders',
                 schema: {
                     value: 'ROOT',
@@ -21,114 +18,95 @@ export const pipelineFlinkMock = {
                             name: 'payload',
                             value: 'ROW',
                             children: [
-                                { name: 'ts_ms', value: 'LONG' },
                                 {
                                     name: 'before',
                                     value: 'ROW',
                                     children: [
-                                        {
-                                            name: 'id',
-                                            value: 'LONG',
-                                        },
-                                        {
-                                            name: 'first_name',
-                                            value: 'VARCHAR',
-                                        },
-                                        {
-                                            name: 'last_name',
-                                            value: 'VARCHAR',
-                                        },
-                                        {
-                                            name: 'email',
-                                            value: 'VARCHAR',
-                                        },
+                                        { name: 'order_number', value: 'LONG' },
+                                        { name: 'order_date', value: 'LONG' },
+                                        { name: 'purchaser', value: 'LONG' },
+                                        { name: 'quantity', value: 'LONG' },
+                                        { name: 'product_id', value: 'LONG' },
                                     ],
                                 },
                                 {
                                     name: 'after',
                                     value: 'ROW',
                                     children: [
-                                        {
-                                            name: 'id',
-                                            value: 'LONG',
-                                        },
-                                        {
-                                            name: 'first_name',
-                                            value: 'VARCHAR',
-                                        },
-                                        {
-                                            name: 'last_name',
-                                            value: 'VARCHAR',
-                                        },
-                                        {
-                                            name: 'email',
-                                            value: 'VARCHAR',
-                                        },
+                                        { name: 'order_number', value: 'LONG' },
+                                        { name: 'order_date', value: 'LONG' },
+                                        { name: 'purchaser', value: 'LONG' },
+                                        { name: 'quantity', value: 'LONG' },
+                                        { name: 'product_id', value: 'LONG' },
                                     ],
                                 },
+                                {
+                                    name: 'source',
+                                    value: 'ROW',
+                                    children: [
+                                        { name: 'version', value: 'VARCHAR' },
+                                        { name: 'connector', value: 'VARCHAR' },
+                                        { name: 'name', value: 'VARCHAR' },
+                                        { name: 'server_id', value: 'LONG' },
+                                        { name: 'ts_sec', value: 'LONG' },
+                                        { name: 'gtid', value: 'VARCHAR' },
+                                        { name: 'file', value: 'VARCHAR' },
+                                        { name: 'pos', value: 'LONG' },
+                                        { name: 'row', value: 'LONG' },
+                                        { name: 'snapshot', value: 'VARCHAR' },
+                                        { name: 'thread', value: 'LONG' },
+                                        { name: 'db', value: 'VARCHAR' },
+                                        { name: 'table', value: 'VARCHAR' },
+                                        { name: 'query', value: 'VARCHAR' },
+                                    ],
+                                },
+                                { name: 'op', value: 'VARCHAR' },
+                                { name: 'ts_ms', value: 'LONG' },
                             ],
                         },
                     ],
                 },
-            },
-            props: {
-                title: 'DB Connector Stream',
-                type: 'source',
+                component: 'DBConnectorProperties',
             },
         },
         {
+            x: 399,
+            y: 301,
             id: 1,
-            x: 400,
-            y: 300,
             type: 'flink-transform',
+            props: { type: 'flink-transform', title: 'Flink SQL Snippet' },
             component: 'PipelineBuilderBlock',
             properties: {
-                component: 'FlinkSQLProperties',
                 schema: {
                     value: 'ROOT',
-                    children: [
-                        {
-                            name: 'id',
-                            value: 'LONG',
-                        },
-                        {
-                            name: 'value',
-                            value: 'LONG',
-                        },
-                    ],
+                    children: [{ name: 'id', value: 'LONG' }, { name: 'value', value: 'LONG' }],
                 },
-                sqlQuery: `INSERT INTO sql_results \nSELECT payload.after.id, payload.before.id \nFROM mysql1_inventory_customers`,
-            },
-            props: {
-                title: 'Flink SQL Snippet',
-                type: 'flink-transform',
+                sqlQuery: 'SELECT payload.after.id, payload.before.id',
+                component: 'FlinkSQLProperties',
             },
         },
         {
-            id: 2,
             x: 700,
             y: 300,
+            id: 2,
             type: 'sink',
+            props: { type: 'sink', title: 'Kafka Publisher', iconSrc: '/img/pipeline/sink.png' },
             component: 'PipelineBuilderBlock',
             properties: {
+                topic: '40.sql_results',
                 component: 'KafkaPublisherProperties',
-                topic: 'sql_results',
-            },
-            props: {
-                title: 'Kafka Publisher',
-                type: 'sink',
-                iconSrc: '/img/pipeline/sink.png',
+                topicSlug: 'sql_results',
             },
         },
     ],
     edges: [
-        { id: 1, from: 0, fromLink: 'right', to: 1, toLink: 'left' },
-        { id: 2, from: 1, fromLink: 'right', to: 2, toLink: 'left' },
+        { id: 1, to: 1, from: 0, toLink: 'left', fromLink: 'right' },
+        { id: 2, to: 2, from: 1, toLink: 'left', fromLink: 'right' },
     ],
 };
 
 export const pipelineBeamMock = {
-    active: false,
+    status: 'inactive',
     config: {
         scale: 1,
         height: '80vh',

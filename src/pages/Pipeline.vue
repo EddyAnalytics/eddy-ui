@@ -13,7 +13,7 @@
                 <div class="column has-text-right">
                     <b-button
                         outlined
-                        v-if="model.active"
+                        v-if="model.status === 'active'"
                         type="is-danger"
                         icon-left="stop"
                         class="m-r-sm"
@@ -22,7 +22,7 @@
                         Stop
                     </b-button>
                     <b-button
-                        v-else
+                        v-if="model.status === 'inactive'"
                         outlined
                         type="is-info"
                         icon-left="play"
@@ -31,6 +31,15 @@
                     >
                         Execute
                     </b-button>
+                    <b-button
+                        v-if="model.status === 'pending'"
+                        type="is-warning"
+                        icon-left="dots-horizontal"
+                        class="m-r-sm"
+                    >
+                        Pending
+                    </b-button>
+
                     <b-button type="is-primary" icon-left="content-save" @click="savePipeline()">
                         Save
                     </b-button>
@@ -70,6 +79,11 @@
 }
 </style>
 
+<style lang="scss">
+.snackbar {
+    max-width: none !important;
+}
+</style>
 <script>
 import { Component, Vue } from 'vue-property-decorator';
 import GoBackButton from '@/components/general/GoBackButton.vue';
@@ -92,6 +106,8 @@ import DELETE_PIPELINE from '@/graphql/mutations/deletePipeline.gql';
 import { generateCeleryTasks } from '@/services/task/tasksService';
 import SEND_CELERY_TASK from '@/graphql/mutations/sendCeleryTask.gql';
 
+import KAFKA_TOPICS_ACTIVITY from '@/graphql/subscriptions/kafkaTopicsActivity.gql';
+
 @Component({
     components: {
         GoBackButton,
@@ -104,7 +120,7 @@ export default class Pipeline extends Vue {
     pipeline = {};
 
     model = {
-        active: false,
+        status: 'inactive',
         config: {
             scale: 1,
             height: '80vh',
@@ -134,9 +150,13 @@ export default class Pipeline extends Vue {
             result(res) {
                 const pipelineConfigJSON = res.data.pipeline.config;
                 const pipelineConfig = JSON.parse(pipelineConfigJSON);
+                console.log('Pipeline config', { config: pipelineConfigJSON });
                 console.log('Deserialized pipeline config', pipelineConfig);
 
-                this.model.active = pipelineConfig.active;
+                if (pipelineConfig.status) {
+                    this.model.status = pipelineConfig.status;
+                }
+
                 if (pipelineConfig.config) {
                     this.model.config = pipelineConfig.config;
                 }
@@ -146,6 +166,27 @@ export default class Pipeline extends Vue {
                 if (pipelineConfig.edges) {
                     this.model.edges = pipelineConfig.edges;
                 }
+            },
+        });
+
+        this.$apollo.addSmartSubscription('topicsActivity', {
+            query: KAFKA_TOPICS_ACTIVITY,
+            variables() {
+                return {
+                    topics: [`${this.projectId}.${this.pipelineId}.feedback`],
+                };
+            },
+            result({ data: { topicsActivity } }) {
+                this.model.status = topicsActivity.success ? 'active' : 'inactive';
+                this.savePipeline();
+                this.$buefy.snackbar.open({
+                    message: topicsActivity.success
+                        ? 'Succesfully started execution'
+                        : topicsActivity.error.slice(620, 1000),
+                    type: topicsActivity.success ? 'is-info' : 'is-danger',
+                    queue: true,
+                    indefinite: !topicsActivity.success,
+                });
             },
         });
     }
@@ -206,9 +247,9 @@ export default class Pipeline extends Vue {
     }
 
     async stopPipeline() {
-        this.model.active = false;
+        this.model.status = 'inactive';
         await this.updatePipeline();
-        this.$buefy.toast.open('Pipeline stoped');
+        this.$buefy.toast.open('Pipeline stopped');
     }
 
     async executePipeline() {
@@ -248,7 +289,8 @@ export default class Pipeline extends Vue {
             console.log('Celery Task Sent', task, 'Response: ', res);
         });
 
-        this.model.active = true;
+        this.model.status = 'pending';
+        this.savePipeline();
         this.$buefy.toast.open('Pipeline executed');
     }
 
