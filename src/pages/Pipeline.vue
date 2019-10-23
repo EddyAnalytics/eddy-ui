@@ -213,9 +213,9 @@ export default class Pipeline extends Vue {
         }
     }
 
-    deleteNode(nodeId) {
-        const index = this.model.nodes.findIndex(node => node.id === nodeId);
-        if (index > -1) this.model.nodes.splice(index, 1);
+    deleteNode(id) {
+        this.model.edges = this.model.edges.filter(edge => edge.from !== id && edge.to !== id);
+        this.model.nodes = this.model.nodes.filter(node => node.id !== id);
     }
 
     addBlock(block) {
