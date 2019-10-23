@@ -7,7 +7,7 @@ export const pipelineFlinkMock = {
             y: 300,
             id: 0,
             type: 'source',
-            props: { type: 'source', title: 'DB Connector Stream' },
+            props: { type: 'source', title: 'DB Connector Stream', icon: '/img/pipeline/sink.png' },
             component: 'PipelineBuilderBlock',
             properties: {
                 topic: '33.56.inventory.orders',
@@ -90,7 +90,7 @@ export const pipelineFlinkMock = {
             y: 300,
             id: 2,
             type: 'sink',
-            props: { type: 'sink', title: 'Kafka Publisher', iconSrc: '/img/pipeline/sink.png' },
+            props: { type: 'sink', title: 'Kafka Publisher', icon: '/img/pipeline/sink.png' },
             component: 'PipelineBuilderBlock',
             properties: {
                 topic: '40.sql_results',
@@ -124,6 +124,7 @@ export const pipelineBeamMock = {
             },
             props: {
                 title: 'DB Connector Stream',
+                icon: '/img/pipeline/sink.png',
                 type: 'source',
             },
         },
@@ -155,7 +156,7 @@ export const pipelineBeamMock = {
             props: {
                 title: 'Kafka Publisher',
                 type: 'sink',
-                iconSrc: '/img/pipeline/sink.png',
+                icon: '/img/pipeline/sink.png',
             },
         },
     ],

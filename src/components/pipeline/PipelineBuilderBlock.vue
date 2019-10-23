@@ -3,7 +3,7 @@
         <figure class="media-left">
             <div class="image is-48x48 is-square m-t-sm">
                 <slot name="icon">
-                    <img :src="iconSrc || `/img/pipeline/${type}.png`" />
+                    <img :src="icon || `/img/pipeline/${type}.png`" />
                 </slot>
             </div>
         </figure>
@@ -37,7 +37,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class PipelineBuilderBlock extends Vue {
-    @Prop() iconSrc;
+    @Prop() icon;
     @Prop() type;
     @Prop() title;
 }

@@ -3,6 +3,7 @@ export const blockTypesMocks = [
         disabled: false,
         type: 'source',
         label: 'DB Connector Stream',
+        icon: '/img/pipeline/debezium.png',
         propertiesComponent: 'DBConnectorProperties',
     },
     {

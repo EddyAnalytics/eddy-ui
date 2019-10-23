@@ -232,6 +232,7 @@ export default class Pipeline extends Vue {
             props: {
                 title: block.label,
                 type: block.type,
+                icon: block.icon,
             },
         });
     }
