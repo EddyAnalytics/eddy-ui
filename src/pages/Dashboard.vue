@@ -71,6 +71,17 @@
             </div>
         </section>
 
+        <section class="section">
+            <div class="columns">
+                <div class="column">
+                    <b-datepicker v-model="startDate" />
+                </div>
+                <div class="column"></div>
+                <div class="column"></div>
+                <div class="column"></div>
+            </div>
+        </section>
+
         <section class="section" v-show="showTopicsActivity">
             <h1 class="subtitle">Live topics activity</h1>
             <div class="columns">
@@ -194,22 +205,9 @@ export default class Dashboard extends Vue {
             i: 0,
             type: 'AddWidget',
         },
-        {
-            type: 'LineChartWidget',
-            x: 1,
-            y: 0,
-            w: 1,
-            h: 1,
-            i: 1,
-            config: {
-                topics: ['mysql1.inventory.customers'],
-                useReceiveTimeScale: true,
-                xAxisKey: null,
-                yAxisKey: 'payload.after.id',
-                showLegend: false,
-            },
-        },
     ];
+
+    startDate = new Date();
 
     created() {
         this.projectId = this.$route.params.projectId;
@@ -222,7 +220,7 @@ export default class Dashboard extends Vue {
         this.$apollo.addSmartSubscription('topics', {
             query: KAFKA_TOPICS,
             result({ data: { topics } }) {
-                this.topics = topics;
+                this.topics = topics.sort();
             },
         });
 

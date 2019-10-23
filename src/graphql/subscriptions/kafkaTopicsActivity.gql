@@ -1,3 +1,3 @@
-subscription kafkaTopicsActivity($topics: [String!]!) {
-    topicsActivity: kafka(topics: $topics)
+subscription kafkaTopicsActivity($topics: [String!]!, $from: Int) {
+    topicsActivity: kafka(topics: $topics, from: $from)
 }

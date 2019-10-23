@@ -15,11 +15,12 @@
             </b-step-item>
             <b-step-item label="Data" :clickable="true">
                 <b-field label="Topic">
-                    <b-select v-model="topic" :expanded="true">
-                        <option v-for="topic in topics" :value="topic" :key="topic">
-                            {{ topic }}
-                        </option>
-                    </b-select>
+                    <b-autocomplete
+                        v-model="topic"
+                        open-on-focus
+                        :data="filteredTopics"
+                        @select="option => (topic = option)"
+                    ></b-autocomplete>
                 </b-field>
 
                 <b-checkbox v-model="useReceiveTimeScale">Use receive time scale</b-checkbox>
@@ -70,12 +71,12 @@ export default class AddWidget extends Vue {
     chartTypes = [
         { id: 0, type: 'BarChartWidget', label: 'Bar', icon: 'chart-bar' },
         { id: 1, type: 'LineChartWidget', label: 'Line', icon: 'chart-line' },
-        { id: 2, type: 'PieChartWidget', label: 'Pie', icon: 'chart-donut', disabled: true },
+        { id: 2, type: 'PieChartWidget', label: 'Pie', icon: 'chart-donut' },
         { id: 3, type: 'AreaChartWidget', label: 'Area', icon: 'chart-areaspline', disabled: true },
     ];
     chartTypeIndex = 0;
 
-    topic = null;
+    topic = '';
     useReceiveTimeScale = true;
     xAxisKey = null;
     yAxisKey = null;
@@ -92,6 +93,18 @@ export default class AddWidget extends Vue {
                 yAxisKey: this.yAxisKey,
                 showLegend: this.showLegend,
             },
+        });
+    }
+
+    get filteredTopics() {
+        if (!this.topics) return [];
+        return this.topics.filter(topic => {
+            return (
+                topic
+                    .toString()
+                    .toLowerCase()
+                    .indexOf(this.topic.toLowerCase()) >= 0
+            );
         });
     }
 }

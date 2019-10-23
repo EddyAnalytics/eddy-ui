@@ -54,10 +54,9 @@ export default class BaseWidget extends Vue {
     created() {
         this.$apollo.addSmartSubscription('barChartWidgetSubscription', {
             query: KAFKA_TOPICS_ACTIVITY,
-            variables() {
-                return {
-                    topics: this.widget.config.topics,
-                };
+            variables: {
+                topics: this.widget.config.topics,
+                from: 0,
             },
             result({ data: { topicsActivity } }) {
                 const label = this.widget.config.useReceiveTimeScale
