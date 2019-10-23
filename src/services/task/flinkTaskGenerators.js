@@ -64,16 +64,17 @@ export const generateFlinkTask = (sourceNodes, sinkNodes, node) => {
         schema: serializeFlinkSchema(outSchema),
     });
 
-    const aggOutTopic = outputTopic + '_count_10';
-    const aggOutTable = outputTable + '_count_10_agg_out';
-    const aggCountQuery = getAgregateCountQuery(aggInTable, aggOutTable);
-    flinkTask.config.queries.push(aggCountQuery);
-
-    flinkTask.config.schemas.push({
-        topic: aggOutTopic,
-        type: 'sink',
-        name: aggOutTable,
-        schema: { count: 'LONG' },
+    COUNT_INTERVALS.forEach(interval => {
+        const aggOutTopic = outputTopic + '_count_' + interval;
+        const aggOutTable = outputTable + '_count_' + interval + '_agg_out';
+        const aggCountQuery = getAgregateCountQuery(aggInTable, aggOutTable, interval);
+        flinkTask.config.queries.push(aggCountQuery);
+        flinkTask.config.schemas.push({
+            topic: aggOutTopic,
+            type: 'sink',
+            name: aggOutTable,
+            schema: { count: 'LONG' },
+        });
     });
 
     return flinkTask;
@@ -87,7 +88,6 @@ const getMainQuery = (schemas, sqlQuery) => {
     if (groupIndex > -1) {
         const groupByStatement = sqlQuery.slice(groupIndex, sqlQuery.length);
         const querySubstring = sqlQuery.substring(0, groupIndex);
-        console.log(querySubstring, groupByStatement);
         return `INSERT INTO ${outTopicNames.join(',')} ${querySubstring} FROM ${inTopicNames.join(
             ',',
         )} ${groupByStatement}`;
@@ -96,8 +96,13 @@ const getMainQuery = (schemas, sqlQuery) => {
     }
 };
 
-const getAgregateCountQuery = (aggInTable, aggOutTable) => {
-    return `INSERT INTO ${aggOutTable} SELECT COUNT(*) FROM ${aggInTable} GROUP BY TUMBLE(ts, INTERVAL '10' SECOND)`;
+const getAgregateCountQuery = (aggInTable, aggOutTable, interval) => {
+    if (interval >= 60) {
+        const minutes = Math.floor(interval / 60);
+        return `INSERT INTO ${aggOutTable} SELECT COUNT(*) FROM ${aggInTable} GROUP BY TUMBLE(ts, INTERVAL '${minutes}' MINUTE)`;
+    } else {
+        return `INSERT INTO ${aggOutTable} SELECT COUNT(*) FROM ${aggInTable} GROUP BY TUMBLE(ts, INTERVAL '${interval}' SECOND)`;
+    }
 };
 
 const serializeFlinkSchema = (schema, level = 0) => {
