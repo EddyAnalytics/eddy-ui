@@ -57,7 +57,7 @@ export default class BaseWidget extends Vue {
             query: KAFKA_TOPICS_ACTIVITY,
             variables: {
                 topics: this.widget.config.topics,
-                from: 0,
+                from: this.start,
             },
             result({ data: { topicsActivity } }) {
                 const label = this.widget.config.useReceiveTimeScale

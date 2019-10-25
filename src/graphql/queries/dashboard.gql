@@ -1,0 +1,11 @@
+query dashboard($id: IntID!) {
+    dashboard(id: $id) {
+        id,
+        label,
+        widgets {
+            id,
+            label,
+            config
+        }
+    }
+}

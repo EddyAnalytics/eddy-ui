@@ -71,17 +71,6 @@
             </div>
         </section>
 
-        <section class="section">
-            <div class="columns">
-                <div class="column">
-                    <b-datepicker v-model="startDate" />
-                </div>
-                <div class="column"></div>
-                <div class="column"></div>
-                <div class="column"></div>
-            </div>
-        </section>
-
         <section class="section" v-show="showTopicsActivity">
             <h1 class="subtitle">Live topics activity</h1>
             <div class="columns">
@@ -107,8 +96,44 @@
             </div>
         </section>
 
+        <section class="section">
+            <div class="columns">
+                <div class="column">
+                    <h1 class="title">
+                        Widgets
+                    </h1>
+                    <b-button
+                        outlined
+                        class="m-r-sm"
+                        icon-left="plus"
+                        @click="openAddWidgetModal()"
+                    >
+                        Add widget
+                    </b-button>
+                    <b-button
+                        v-if="selectedWidgets.length"
+                        outlined
+                        type="is-danger"
+                        class="m-r-sm"
+                        icon-left="delete"
+                        @click="deleteSelectedWidgets()"
+                    >
+                        Delete selected
+                    </b-button>
+                </div>
+                <div class="column"></div>
+                <div class="column has-text-right">
+                    <!-- <strong>Start date:</strong> -->
+                </div>
+                <div class="column">
+                    <b-datepicker v-model="startDate" />
+                </div>
+            </div>
+        </section>
+
         <div class="grid p-sm">
             <grid-layout
+                v-if="widgets && widgets.length"
                 class="grid__layout"
                 :layout.sync="widgets"
                 :row-height="350"
@@ -127,16 +152,18 @@
                     :h="widget.h"
                     :i="widget.i"
                     :key="widget.i"
-                    :static="widget.type === 'AddWidget'"
                 >
                     <component
                         :is="widget.type"
-                        @addWidget="addWidget"
                         :topics="topics"
                         :widget="widget"
+                        :start="+startDate"
                     />
                 </grid-item>
             </grid-layout>
+            <div v-else class="has-text-centered">
+                No widgets available. Start by adding a widget.
+            </div>
         </div>
     </main>
 </template>
@@ -168,9 +195,10 @@ import VueGridLayout from 'vue-grid-layout';
 import KAFKA_TOPICS from '@/graphql/subscriptions/kafkaTopics.gql';
 import KAFKA_TOPICS_ACTIVITY from '@/graphql/subscriptions/kafkaTopicsActivity.gql';
 
+import DASHBOARD_QUERY from '@/graphql/queries/dashboard.gql';
 import DELETE_DASHBOARD from '@/graphql/mutations/deleteDashboard.gql';
 
-import AddWidget from '@/components/dashboard/AddWidget';
+import AddWidgetForm from '@/components/dashboard/AddWidgetForm';
 import BarChartWidget from '@/components/dashboard/BarChartWidget';
 import LineChartWidget from '@/components/dashboard/LineChartWidget';
 import PieChartWidget from '@/components/dashboard/PieChartWidget';
@@ -181,7 +209,7 @@ import AreaChartWidget from '@/components/dashboard/AreaChartWidget';
         GoBackButton,
         GridLayout: VueGridLayout.GridLayout,
         GridItem: VueGridLayout.GridItem,
-        AddWidget,
+        AddWidgetForm,
         BarChartWidget,
         LineChartWidget,
         PieChartWidget,
@@ -196,18 +224,11 @@ export default class Dashboard extends Vue {
     topicsActivityCount = 1;
     minutes = 1;
 
-    widgets = [
-        {
-            x: 0,
-            y: 0,
-            w: 1,
-            h: 1,
-            i: 0,
-            type: 'AddWidget',
-        },
-    ];
-
+    widgets = [];
     startDate = new Date();
+    dashboard = {};
+
+    selectedWidgets = [];
 
     created() {
         this.projectId = this.$route.params.projectId;
@@ -216,6 +237,16 @@ export default class Dashboard extends Vue {
         setInterval(() => {
             this.minutes++;
         }, 1000);
+
+        this.$apollo.addSmartQuery('dashboard', {
+            query: DASHBOARD_QUERY,
+            variables() {
+                return {
+                    id: this.dashboardId,
+                };
+            },
+            fetchPolicy: 'cache-and-network',
+        });
 
         this.$apollo.addSmartSubscription('topics', {
             query: KAFKA_TOPICS,
@@ -235,6 +266,21 @@ export default class Dashboard extends Vue {
                 this.topicsActivity = topicsActivity;
                 this.topicsActivityCount++;
             },
+        });
+    }
+    deleteSelectedWidgets() {
+        console.log('Delete selected widgets');
+    }
+
+    openAddWidgetModal() {
+        this.$buefy.modal.open({
+            parent: this,
+            component: AddWidgetForm,
+            hasModalCard: true,
+            props: {
+                topics: this.topics,
+            },
+            events: { addWidget: this.addWidget },
         });
     }
 
