@@ -11,6 +11,7 @@ import KAFKA_TOPICS_ACTIVITY from '@/graphql/subscriptions/kafkaTopicsActivity.g
 @Component
 export default class BaseWidget extends Vue {
     @Prop() widget;
+    @Prop({ type: Number, default: 0 }) start;
 
     MAX_DP = 4;
 
@@ -67,8 +68,7 @@ export default class BaseWidget extends Vue {
                 if (!this.widget.config.useReceiveTimeScale) {
                     this.labels.push(label);
                 }
-                console.log('Add data point', topicsActivity, label, point);
-                this.data.push({ x: label, y: point });
+                this.data.push(point);
             },
         });
     }

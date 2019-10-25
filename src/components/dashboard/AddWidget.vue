@@ -14,22 +14,38 @@
                 </b-tabs>
             </b-step-item>
             <b-step-item label="Data" :clickable="true">
-                <b-field label="Topic">
+                <b-field v-if="project.pipelines" label="Pipeline">
+                    <b-select v-model="pipelineId" placeholder="Select a pipeline" expanded>
+                        <option
+                            v-for="option in project.pipelines"
+                            :value="option.id"
+                            :key="option.id"
+                        >
+                            {{ option.label }}
+                        </option>
+                    </b-select>
+                </b-field>
+                <b-field v-if="pipelineId" label="Topic">
                     <b-autocomplete
-                        v-model="topic"
+                        v-model="topicAutocompleteModel"
                         open-on-focus
                         :data="filteredTopics"
-                        @select="option => (topic = option)"
+                        @select="selectTopic"
                     ></b-autocomplete>
                 </b-field>
 
-                <b-checkbox v-model="useReceiveTimeScale">Use receive time scale</b-checkbox>
+                <b-checkbox v-if="widgetType !== 'PieChartWidget'" v-model="useReceiveTimeScale">
+                    Use receive time scale
+                </b-checkbox>
 
-                <b-field v-if="!useReceiveTimeScale" label="X-Axis Key">
+                <b-field
+                    v-if="!useReceiveTimeScale || widgetType === 'PieChartWidget'"
+                    :label="labelsKeyLabel"
+                >
                     <b-input v-model="xAxisKey" />
                 </b-field>
 
-                <b-field label="Y-Axis Key">
+                <b-field :label="valuesKeyLabel">
                     <b-input v-model="yAxisKey" />
                 </b-field>
             </b-step-item>
@@ -62,6 +78,7 @@
 
 <script>
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import PROJECT_QUERY from '@/graphql/queries/project.gql';
 
 @Component
 export default class AddWidget extends Vue {
@@ -77,15 +94,30 @@ export default class AddWidget extends Vue {
     chartTypeIndex = 0;
 
     topic = '';
+    topicAutocompleteModel = '';
     useReceiveTimeScale = true;
     xAxisKey = null;
     yAxisKey = null;
-
     showLegend = false;
+    project = {};
+    pipelineId = null;
+
+    created() {
+        this.projectId = this.$route.params.projectId;
+        this.$apollo.addSmartQuery('project', {
+            query: PROJECT_QUERY,
+            variables() {
+                return {
+                    id: this.projectId,
+                };
+            },
+            fetchPolicy: 'cache-and-network',
+        });
+    }
 
     addWidget() {
         this.$emit('addWidget', {
-            type: this.chartTypes[this.chartTypeIndex].type,
+            type: this.widgetType,
             config: {
                 topics: [this.topic],
                 useReceiveTimeScale: this.useReceiveTimeScale,
@@ -96,16 +128,48 @@ export default class AddWidget extends Vue {
         });
     }
 
+    get widgetType() {
+        return this.chartTypes[this.chartTypeIndex].type;
+    }
+
+    get labelsKeyLabel() {
+        switch (this.widgetType) {
+            case 'PieChartWidget':
+                return 'Labels key';
+            default:
+                return 'X-Axis Values Key';
+        }
+    }
+
+    get valuesKeyLabel() {
+        switch (this.widgetType) {
+            case 'PieChartWidget':
+                return 'Values key';
+            default:
+                return 'Y-Axis values key';
+        }
+    }
+
+    selectTopic(option) {
+        if (!option) return;
+        this.topic = this.projectId + '.' + this.pipelineId + '.' + option;
+    }
+
     get filteredTopics() {
         if (!this.topics) return [];
-        return this.topics.filter(topic => {
-            return (
-                topic
+        const filteredTopics = this.topics.filter(topic => {
+            const parts = topic.split('.');
+            const isInProject = parts[0] && parts[0] == this.projectId;
+            const isInPipeline = parts[1] && parts[1] == this.pipelineId;
+            const matchesSearch =
+                parts[2] &&
+                parts[2]
                     .toString()
                     .toLowerCase()
-                    .indexOf(this.topic.toLowerCase()) >= 0
-            );
+                    .indexOf(this.topicAutocompleteModel.toLowerCase()) >= 0;
+            return isInProject && isInPipeline && matchesSearch;
         });
+        return filteredTopics.map(topic => topic.split('.')[2]);
     }
 }
 </script>

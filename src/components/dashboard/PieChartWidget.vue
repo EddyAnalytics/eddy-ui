@@ -22,9 +22,9 @@ import DoughnutChart from '@/components/charts/DoughnutChart.js';
 })
 export default class PieChartWidget extends Vue {
     @Prop() widget;
+    @Prop({ type: Number, default: 0 }) start;
 
     dataPoints = {};
-
     labels = [];
     data = [];
 
@@ -44,19 +44,9 @@ export default class PieChartWidget extends Vue {
         return {
             responsive: true,
             maintainAspectRatio: false,
-            legend: this.widget.config.showLegend,
             animation: {
                 animateScale: true,
                 animateRotate: true,
-            },
-            scales: {
-                xAxes: [
-                    this.widget.config.useReceiveTimeScale
-                        ? {
-                              type: 'time',
-                          }
-                        : {},
-                ],
             },
         };
     }
@@ -66,26 +56,21 @@ export default class PieChartWidget extends Vue {
             query: KAFKA_TOPICS_ACTIVITY,
             variables: {
                 topics: this.widget.config.topics,
-                from: Math.floor((1571738202690 - 60 * 1000) / 1000),
+                from: this.start,
             },
             result({ data: { topicsActivity } }) {
-                const label = this.widget.config.useReceiveTimeScale
-                    ? new Date()
-                    : this.getVal(topicsActivity, this.widget.config.xAxisKey);
+                const label = this.getVal(topicsActivity, this.widget.config.xAxisKey);
                 const point = this.getVal(topicsActivity, this.widget.config.yAxisKey);
 
                 this.dataPoints[label] = point;
 
                 this.labels = [];
                 this.data = [];
-
                 for (let [key, value] of Object.entries(this.dataPoints)) {
                     if (key) {
                         this.labels.push(key);
                         this.data.push(value);
                     }
-
-                    console.log('Add pie data point', key + '', value);
                 }
             },
         });
