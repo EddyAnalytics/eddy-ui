@@ -35,10 +35,15 @@ export default class BaseWidget extends Vue {
             maintainAspectRatio: false,
             legend: {
                 display: this.widget.config.showLegend,
+                position: 'bottom',
             },
             animation: {
                 animateScale: true,
                 animateRotate: true,
+            },
+            title: {
+                display: this.widget.config.showTitle,
+                text: this.widget.label,
             },
             scales: this.getScalesOptions(),
         };

@@ -132,6 +132,7 @@ export default class AddWidgetForm extends Vue {
                 xAxisKey: this.xAxisKey,
                 yAxisKey: this.yAxisKey,
                 showLegend: this.showLegend,
+                showTitle: this.showTitle,
             },
         });
         this.$parent.close();
