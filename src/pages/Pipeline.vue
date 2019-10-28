@@ -13,7 +13,7 @@
                 <div class="column has-text-right">
                     <b-button
                         outlined
-                        v-if="model.status === 'active'"
+                        v-if="model.status === 'active' || model.status === 'pending'"
                         type="is-danger"
                         icon-left="stop"
                         class="m-r-sm"

@@ -1,9 +1,6 @@
 <template>
     <div>
         <b-tabs position="is-centered is-boxed" :animated="false" :destroy-on-hide="true">
-            <b-tab-item label="Input Schema">
-                WIP
-            </b-tab-item>
             <b-tab-item label="BeamSQL Query">
                 <div class="codemirror-wrapper">
                     <codemirror v-model="properties.sqlQuery" :options="sqlQueryOptions" />
@@ -33,16 +30,6 @@ export default class BeamSQLProperties extends Vue {
     options = {
         theme: 'neo',
         lineNumbers: true,
-    };
-
-    inSchemaOptions = {
-        ...this.options,
-        mode: 'application/ld+json',
-    };
-
-    outSchemaOptions = {
-        ...this.options,
-        mode: 'application/ld+json',
     };
 
     sqlQueryOptions = {
