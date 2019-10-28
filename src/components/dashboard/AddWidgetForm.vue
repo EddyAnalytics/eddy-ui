@@ -4,7 +4,7 @@
             <header class="modal-card-head">
                 <p class="modal-card-title">Add a new widget</p>
             </header>
-            <section class="modal-card-body">
+            <section class="modal-card-body" v-if="chartTypes.length">
                 <b-steps type="is-small" :animated="false" v-model="step">
                     <b-step-item label="Type" :clickable="true">
                         <br />
@@ -84,18 +84,14 @@
 <script>
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import PROJECT_QUERY from '@/graphql/queries/project.gql';
+import WIDGET_TYPES_QUERY from '@/graphql/queries/widgetTypes.gql';
 
 @Component
 export default class AddWidgetForm extends Vue {
     @Prop() topics;
 
     step = 0;
-    chartTypes = [
-        { id: 0, type: 'BarChartWidget', label: 'Bar', icon: 'chart-bar' },
-        { id: 1, type: 'LineChartWidget', label: 'Line', icon: 'chart-line' },
-        { id: 2, type: 'PieChartWidget', label: 'Pie', icon: 'chart-donut' },
-        { id: 3, type: 'AreaChartWidget', label: 'Area', icon: 'chart-areaspline', disabled: true },
-    ];
+    chartTypes = [];
     chartTypeIndex = 0;
 
     topic = '';
@@ -117,6 +113,14 @@ export default class AddWidgetForm extends Vue {
                 };
             },
             fetchPolicy: 'cache-and-network',
+        });
+
+        this.$apollo.addSmartQuery('widgetTypes', {
+            query: WIDGET_TYPES_QUERY,
+            result({ data: { widgetTypes } }) {
+                console.log(widgetTypes);
+                this.chartTypes = widgetTypes.map(widget => JSON.parse(widget.config));
+            },
         });
     }
 
