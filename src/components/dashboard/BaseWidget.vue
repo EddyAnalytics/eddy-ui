@@ -1,5 +1,10 @@
+<style lang="scss">
+.widget__chart {
+    max-height: 280px;
+}
+</style>
 <script>
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Watch, Vue } from 'vue-property-decorator';
 import KAFKA_TOPICS_ACTIVITY from '@/graphql/subscriptions/kafkaTopicsActivity.gql';
 
 @Component
@@ -7,8 +12,7 @@ export default class BaseWidget extends Vue {
     @Prop() widget;
     @Prop({ type: Number, default: 0 }) start;
 
-    MAX_DP = 4;
-
+    dataPoints = {};
     labels = [];
     data = [];
 
@@ -17,7 +21,7 @@ export default class BaseWidget extends Vue {
             labels: this.labels,
             datasets: [
                 {
-                    label: 'Label 1',
+                    label: this.widget.config.yAxisKey,
                     backgroundColor: '#12c2e9',
                     data: this.data,
                 },
@@ -29,40 +33,61 @@ export default class BaseWidget extends Vue {
         return {
             responsive: true,
             maintainAspectRatio: false,
-            legend: this.widget.config.showLegend,
+            legend: {
+                display: this.widget.config.showLegend,
+            },
             animation: {
                 animateScale: true,
                 animateRotate: true,
             },
-            scales: {
-                xAxes: [
-                    this.widget.config.useReceiveTimeScale
-                        ? {
-                              type: 'time',
-                          }
-                        : {},
-                ],
-            },
+            scales: this.getScalesOptions(),
+        };
+    }
+
+    getScalesOptions() {
+        const xAxes = [];
+        if (this.widget.type !== 'PieChartWidget') {
+            xAxes.push({ type: 'time' });
+        }
+        return {
+            xAxes,
         };
     }
 
     created() {
-        this.$apollo.addSmartSubscription('barChartWidgetSubscription', {
+        this.subscribeToData();
+    }
+
+    @Watch('start')
+    onStartChange() {
+        this.dataPoints = {};
+        this.data = [];
+        this.$apollo.subscriptions.chartData.refresh();
+    }
+
+    subscribeToData() {
+        this.$apollo.addSmartSubscription('chartData', {
             query: KAFKA_TOPICS_ACTIVITY,
-            variables: {
-                topics: this.widget.config.topics,
-                from: this.start,
+            variables() {
+                return {
+                    topics: this.widget.config.topics,
+                    from: this.start,
+                };
             },
             result({ data: { topicsActivity } }) {
-                const label = this.widget.config.useReceiveTimeScale
-                    ? new Date()
-                    : this.getVal(topicsActivity, this.widget.config.xAxisKey);
+                const label = this.getVal(topicsActivity, this.widget.config.xAxisKey);
                 const point = this.getVal(topicsActivity, this.widget.config.yAxisKey);
 
-                if (!this.widget.config.useReceiveTimeScale) {
-                    this.labels.push(label);
+                this.dataPoints[label] = point;
+                this.labels = [];
+                this.data = [];
+
+                for (let [key, value] of Object.entries(this.dataPoints)) {
+                    if (key) {
+                        this.labels.push(key);
+                        this.data.push(value);
+                    }
                 }
-                this.data.push(point);
             },
         });
     }

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="widget__chart">
+        <div>
             <slot></slot>
         </div>
         <div v-if="showControls" class="level is-mobile">
@@ -20,11 +20,6 @@
         </div>
     </div>
 </template>
-<style lang="scss">
-.widget__chart {
-    max-height: 280px;
-}
-</style>
 
 <script>
 import { Component, Prop, Vue } from 'vue-property-decorator';

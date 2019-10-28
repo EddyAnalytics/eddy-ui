@@ -144,6 +144,8 @@
                     :h="widget.h"
                     :i="widget.i"
                     :key="widget.i"
+                    @resized="updateWidget(widget)"
+                    @moved="updateWidget(widget)"
                 >
                     <widget-wrapper
                         :showControls="editMode"
@@ -154,7 +156,7 @@
                             :is="widget.type"
                             :topics="topics"
                             :widget="widget"
-                            :start="+startDate"
+                            :start="startDate / 1000"
                         />
                     </widget-wrapper>
                 </grid-item>
@@ -196,7 +198,7 @@ import KAFKA_TOPICS_ACTIVITY from '@/graphql/subscriptions/kafkaTopicsActivity.g
 import DASHBOARD_QUERY from '@/graphql/queries/dashboard.gql';
 import DELETE_DASHBOARD from '@/graphql/mutations/deleteDashboard.gql';
 import CREATE_WIDGET from '@/graphql/mutations/createWidget.gql';
-// import UPDATE_WIDGET from '@/graphql/mutations/updateWidget.gql';
+import UPDATE_WIDGET from '@/graphql/mutations/updateWidget.gql';
 import DELETE_WIDGET from '@/graphql/mutations/deleteWidget.gql';
 
 import WidgetWrapper from '@/components/dashboard/WidgetWrapper';
@@ -228,7 +230,7 @@ export default class Dashboard extends Vue {
     minutes = 1;
 
     widgets = [];
-    startDate = new Date();
+    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
     dashboard = {};
 
     editMode = true;
@@ -249,8 +251,9 @@ export default class Dashboard extends Vue {
                     id: this.dashboardId,
                 };
             },
-            result({ data: { dashboard } }) {
-                this.widgets = dashboard.widgets.map(widget => {
+            result({ data }) {
+                if (!data || !data.dashboard) return;
+                this.widgets = data.dashboard.widgets.map(widget => {
                     return {
                         ...widget,
                         ...JSON.parse(widget.config),
@@ -320,8 +323,19 @@ export default class Dashboard extends Vue {
         this.$buefy.toast.open('Widget added');
     }
 
-    async editWidget() {
+    editWidget() {
         this.$buefy.snackbar.open('Editing widgets is not implemented yet');
+    }
+
+    updateWidget(widget) {
+        this.$apollo.mutate({
+            mutation: UPDATE_WIDGET,
+            variables: {
+                id: widget.id,
+                label: widget.label,
+                config: JSON.stringify(widget),
+            },
+        });
     }
 
     async deleteWidget(widget) {

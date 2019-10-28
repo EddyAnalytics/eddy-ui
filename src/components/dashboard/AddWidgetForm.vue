@@ -39,17 +39,7 @@
                             ></b-autocomplete>
                         </b-field>
 
-                        <b-checkbox
-                            v-if="widgetType !== 'PieChartWidget'"
-                            v-model="useReceiveTimeScale"
-                        >
-                            Use receive time scale
-                        </b-checkbox>
-
-                        <b-field
-                            v-if="!useReceiveTimeScale || widgetType === 'PieChartWidget'"
-                            :label="labelsKeyLabel"
-                        >
+                        <b-field :label="labelsKeyLabel">
                             <b-input v-model="xAxisKey" />
                         </b-field>
 
@@ -99,7 +89,6 @@ export default class AddWidgetForm extends Vue {
 
     topic = '';
     topicAutocompleteModel = '';
-    useReceiveTimeScale = true;
     xAxisKey = null;
     yAxisKey = null;
     showTitle = false;
@@ -140,7 +129,6 @@ export default class AddWidgetForm extends Vue {
             label: this.label,
             config: {
                 topics: [this.topic],
-                useReceiveTimeScale: this.useReceiveTimeScale,
                 xAxisKey: this.xAxisKey,
                 yAxisKey: this.yAxisKey,
                 showLegend: this.showLegend,
