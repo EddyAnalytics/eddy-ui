@@ -1,14 +1,8 @@
 <template>
     <article>
-        <doughnut-chart class="widget__chart" :chart-data="chartData" :options="options" />
+        <doughnut-chart :chart-data="chartData" :options="options" />
     </article>
 </template>
-
-<style lang="scss" scoped>
-.widget__chart {
-    max-height: 300px;
-}
-</style>
 
 <script>
 import { Component, Prop, Vue } from 'vue-property-decorator';

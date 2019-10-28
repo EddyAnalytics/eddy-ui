@@ -1,9 +1,3 @@
-<style lang="scss" scoped>
-.widget__chart {
-    max-height: 300px;
-}
-</style>
-
 <script>
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import KAFKA_TOPICS_ACTIVITY from '@/graphql/subscriptions/kafkaTopicsActivity.gql';

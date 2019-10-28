@@ -62,6 +62,14 @@ let router = new Router({
             },
         },
         {
+            path: '/project/:projectId/dashboard/:dashboardId/:mode',
+            name: 'DashboardView',
+            component: Dashboard,
+            meta: {
+                auth: true,
+            },
+        },
+        {
             path: '/project/:projectId/dashboard/:dashboardId',
             name: 'Dashboard',
             component: Dashboard,

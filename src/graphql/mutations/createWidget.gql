@@ -1,0 +1,9 @@
+mutation createWidget($dashboardId: IntID!, $widgetTypeId: IntID!, $config: JSONString!, $label: String!) {
+  createWidget(dashboardId: $dashboardId, widgetTypeId: $widgetTypeId, config: $config, label: $label) {
+    widget {
+        id,
+        label,
+        config,
+    }
+  }
+}

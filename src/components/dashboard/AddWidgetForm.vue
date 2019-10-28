@@ -58,11 +58,14 @@
                         </b-field>
                     </b-step-item>
                     <b-step-item label="Options" :clickable="true">
-                        <b-checkbox>Title</b-checkbox>
+                        <b-checkbox v-model="showTitle">Title</b-checkbox>
                         <br />
-                        <b-checkbox>Legend</b-checkbox>
+                        <b-field v-if="showTitle">
+                            <b-input v-model="label" />
+                        </b-field>
+                        <b-checkbox v-model="showLegend">Legend</b-checkbox>
                         <br />
-                        <b-checkbox>Use logaritmic scale</b-checkbox>
+                        <b-checkbox disabled>Use logaritmic scale</b-checkbox>
                     </b-step-item>
                 </b-steps>
             </section>
@@ -99,6 +102,8 @@ export default class AddWidgetForm extends Vue {
     useReceiveTimeScale = true;
     xAxisKey = null;
     yAxisKey = null;
+    showTitle = false;
+    label = '';
     showLegend = false;
     project = {};
     pipelineId = null;
@@ -118,8 +123,12 @@ export default class AddWidgetForm extends Vue {
         this.$apollo.addSmartQuery('widgetTypes', {
             query: WIDGET_TYPES_QUERY,
             result({ data: { widgetTypes } }) {
-                console.log(widgetTypes);
-                this.chartTypes = widgetTypes.map(widget => JSON.parse(widget.config));
+                this.chartTypes = widgetTypes.map(widgetType => {
+                    return {
+                        ...widgetType,
+                        ...JSON.parse(widgetType.config),
+                    };
+                });
             },
         });
     }
@@ -127,6 +136,8 @@ export default class AddWidgetForm extends Vue {
     addWidget() {
         this.$emit('addWidget', {
             type: this.widgetType,
+            typeId: this.widgetTypeId,
+            label: this.label,
             config: {
                 topics: [this.topic],
                 useReceiveTimeScale: this.useReceiveTimeScale,
@@ -140,6 +151,10 @@ export default class AddWidgetForm extends Vue {
 
     get widgetType() {
         return this.chartTypes[this.chartTypeIndex].type;
+    }
+
+    get widgetTypeId() {
+        return this.chartTypes[this.chartTypeIndex].id;
     }
 
     get labelsKeyLabel() {

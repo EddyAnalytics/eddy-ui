@@ -1,0 +1,9 @@
+mutation updateWidget($id: IntID!, $label: String!, $config: JSONString) {
+  updateWidget(id: $id, label: $label, config: $config) {
+    widget {
+        id,
+        label,
+        config,
+    }
+  }
+}

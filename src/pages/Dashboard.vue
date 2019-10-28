@@ -5,11 +5,12 @@
                 <div class="column">
                     <h1 class="title">
                         <go-back-button :projectId="projectId" />
-                        Dashboard Builder
+                        <span v-if="editMode">Dashboard Builder -&nbsp;</span>
+                        <span v-if="dashboard && dashboard.label">{{ dashboard.label }}</span>
                     </h1>
                 </div>
-                <div class="column has-text-right">
-                    <b-button outlined class="m-r-sm" icon-left="share-variant">
+                <div v-if="editMode" class="column has-text-right">
+                    <b-button outlined class="m-r-sm" icon-left="share-variant" @click="share()">
                         Share
                     </b-button>
                     <b-button
@@ -21,9 +22,9 @@
                     >
                         Delete
                     </b-button>
-                    <b-button type="is-primary" icon-left="content-save" @click="saveDashboard()">
+                    <!-- <b-button type="is-primary" icon-left="content-save" @click="saveDashboard()">
                         Save
-                    </b-button>
+                    </b-button> -->
                 </div>
             </div>
         </section>
@@ -103,22 +104,13 @@
                         Widgets
                     </h1>
                     <b-button
+                        v-if="editMode"
                         outlined
                         class="m-r-sm"
                         icon-left="plus"
                         @click="openAddWidgetModal()"
                     >
                         Add widget
-                    </b-button>
-                    <b-button
-                        v-if="selectedWidgets.length"
-                        outlined
-                        type="is-danger"
-                        class="m-r-sm"
-                        icon-left="delete"
-                        @click="deleteSelectedWidgets()"
-                    >
-                        Delete selected
                     </b-button>
                 </div>
                 <div class="column"></div>
@@ -153,12 +145,18 @@
                     :i="widget.i"
                     :key="widget.i"
                 >
-                    <component
-                        :is="widget.type"
-                        :topics="topics"
-                        :widget="widget"
-                        :start="+startDate"
-                    />
+                    <widget-wrapper
+                        :showControls="editMode"
+                        @edit="editWidget(widget)"
+                        @delete="deleteWidget(widget)"
+                    >
+                        <component
+                            :is="widget.type"
+                            :topics="topics"
+                            :widget="widget"
+                            :start="+startDate"
+                        />
+                    </widget-wrapper>
                 </grid-item>
             </grid-layout>
             <div v-else class="has-text-centered">
@@ -197,7 +195,11 @@ import KAFKA_TOPICS_ACTIVITY from '@/graphql/subscriptions/kafkaTopicsActivity.g
 
 import DASHBOARD_QUERY from '@/graphql/queries/dashboard.gql';
 import DELETE_DASHBOARD from '@/graphql/mutations/deleteDashboard.gql';
+import CREATE_WIDGET from '@/graphql/mutations/createWidget.gql';
+// import UPDATE_WIDGET from '@/graphql/mutations/updateWidget.gql';
+import DELETE_WIDGET from '@/graphql/mutations/deleteWidget.gql';
 
+import WidgetWrapper from '@/components/dashboard/WidgetWrapper';
 import AddWidgetForm from '@/components/dashboard/AddWidgetForm';
 import BarChartWidget from '@/components/dashboard/BarChartWidget';
 import LineChartWidget from '@/components/dashboard/LineChartWidget';
@@ -209,6 +211,7 @@ import AreaChartWidget from '@/components/dashboard/AreaChartWidget';
         GoBackButton,
         GridLayout: VueGridLayout.GridLayout,
         GridItem: VueGridLayout.GridItem,
+        WidgetWrapper,
         AddWidgetForm,
         BarChartWidget,
         LineChartWidget,
@@ -228,11 +231,12 @@ export default class Dashboard extends Vue {
     startDate = new Date();
     dashboard = {};
 
-    selectedWidgets = [];
+    editMode = true;
 
     created() {
         this.projectId = this.$route.params.projectId;
         this.dashboardId = this.$route.params.dashboardId;
+        this.editMode = this.$route.params.mode !== 'view';
 
         setInterval(() => {
             this.minutes++;
@@ -244,6 +248,14 @@ export default class Dashboard extends Vue {
                 return {
                     id: this.dashboardId,
                 };
+            },
+            result({ data: { dashboard } }) {
+                this.widgets = dashboard.widgets.map(widget => {
+                    return {
+                        ...widget,
+                        ...JSON.parse(widget.config),
+                    };
+                });
             },
             fetchPolicy: 'cache-and-network',
         });
@@ -268,9 +280,6 @@ export default class Dashboard extends Vue {
             },
         });
     }
-    deleteSelectedWidgets() {
-        console.log('Delete selected widgets');
-    }
 
     openAddWidgetModal() {
         this.$buefy.modal.open({
@@ -284,13 +293,13 @@ export default class Dashboard extends Vue {
         });
     }
 
-    addWidget(widget) {
-        const lastWidgetIndex = this.widgets.reduce((maxIndex, widget) => {
-            return Math.max(maxIndex, widget.x);
-        }, 0);
+    async addWidget(widget) {
+        const lastWidgetIndex = this.widgets.length
+            ? Math.max(...this.widgets.map(widget => widget.i))
+            : 0;
 
         const newWidget = {
-            x: 1,
+            x: 0,
             y: 0,
             w: 1,
             h: 1,
@@ -298,11 +307,44 @@ export default class Dashboard extends Vue {
             ...widget,
         };
 
-        this.widgets.push(newWidget);
+        await this.$apollo.mutate({
+            mutation: CREATE_WIDGET,
+            variables: {
+                dashboardId: this.dashboardId,
+                widgetTypeId: newWidget.typeId,
+                label: newWidget.label,
+                config: JSON.stringify(newWidget),
+            },
+        });
+        this.$apollo.queries.dashboard.refetch();
+        this.$buefy.toast.open('Widget added');
     }
 
-    saveDashboard() {
-        this.$buefy.toast.open('Dashoard saved');
+    async editWidget() {
+        this.$buefy.snackbar.open('Editing widgets is not implemented yet');
+    }
+
+    async deleteWidget(widget) {
+        await this.$apollo.mutate({
+            mutation: DELETE_WIDGET,
+            variables: {
+                id: widget.id,
+            },
+        });
+        this.$apollo.queries.dashboard.refetch();
+        this.$buefy.toast.open('Widget removed');
+    }
+
+    async saveDashboard() {
+        this.$buefy.toast.open('Dashboard saved');
+    }
+
+    share() {
+        const routeData = this.$router.resolve({
+            name: 'DashboardView',
+            params: { projectId: this.projectId, dashboardId: this.dashboardId, mode: 'view' },
+        });
+        window.open(routeData.href, '_blank');
     }
 
     openDeleteDashboardModal() {
