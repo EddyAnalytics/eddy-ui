@@ -73,7 +73,7 @@ export const generateFlinkTask = (sourceNodes, sinkNodes, node) => {
             topic: aggOutTopic,
             type: 'sink',
             name: aggOutTable,
-            schema: { count: 'LONG' },
+            schema: { count: 'LONG', start: 'TIMESTAMP', end: 'TIMESTAMP' },
         });
     });
 
@@ -99,9 +99,22 @@ const getMainQuery = (schemas, sqlQuery) => {
 const getAgregateCountQuery = (aggInTable, aggOutTable, interval) => {
     if (interval >= 60) {
         const minutes = Math.floor(interval / 60);
-        return `INSERT INTO ${aggOutTable} SELECT COUNT(*) FROM ${aggInTable} GROUP BY TUMBLE(ts, INTERVAL '${minutes}' MINUTE)`;
+        return `
+        INSERT INTO ${aggOutTable}
+        SELECT
+            COUNT(*),
+            TUMBLE_START(ts, INTERVAL '${minutes}' MINUTE),
+            TUMBLE_END(ts, INTERVAL '${minutes}' MINUTE)
+        FROM ${aggInTable}
+        GROUP BY TUMBLE(ts, INTERVAL '${minutes}' MINUTE)`;
     } else {
-        return `INSERT INTO ${aggOutTable} SELECT COUNT(*) FROM ${aggInTable} GROUP BY TUMBLE(ts, INTERVAL '${interval}' SECOND)`;
+        return `INSERT INTO ${aggOutTable}
+        SELECT
+            COUNT(*),
+            TUMBLE_START(ts, INTERVAL '${interval}' SECOND),
+            TUMBLE_END(ts, INTERVAL '${interval}' SECOND)
+        FROM ${aggInTable}
+        GROUP BY TUMBLE(ts, INTERVAL '${interval}' SECOND)`;
     }
 };
 
