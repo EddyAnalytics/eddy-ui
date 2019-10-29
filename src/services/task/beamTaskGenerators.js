@@ -4,6 +4,12 @@ export const generateBeamTask = (sourceNodes, sinkNodes, node) => {
     const sqlQuery = node.properties.sqlQuery;
     if (!sqlQuery || !sqlQuery.length) throw new TaskGenerationException('Missing query for node');
 
+    const inputType = node.properties.inputType;
+    if (!inputType) throw new TaskGenerationException('Missing input type for node');
+
+    const outputType = node.properties.outputType;
+    if (!outputType) throw new TaskGenerationException('Missing output type for node');
+
     const inSchemas = sourceNodes.map(node => node.properties.schema);
     if (!inSchemas) throw new TaskGenerationException('Missing input schema(s) for node');
 
@@ -22,21 +28,21 @@ export const generateBeamTask = (sourceNodes, sinkNodes, node) => {
     let beamTask = {
         taskType: 'beam',
         config: {
-            'windowing-strategy': {
-                type: 'sliding',
-                duration: 10,
-                interval: 5,
+            windowing_strategy: {
+                type: node.properties.windowType || 'sliding',
+                duration: node.properties.duration || 10,
+                interval: node.properties.interval || 5,
             },
             transforms: [],
-            'DAG-mapping': [[0, 1], [1, 2]],
+            DAG_mapping: [[0, 1], [1, 2]],
         },
     };
 
     beamTask.config.transforms.push({
         type: 'kafka_input',
-        'data-type': 'csv',
+        data_type: inputType.toLowerCase(),
         topic: inputTopic,
-        columns: [
+        fields: [
             {
                 name: 'street',
                 type: 'STRING',
@@ -67,7 +73,7 @@ export const generateBeamTask = (sourceNodes, sinkNodes, node) => {
 
     beamTask.config.transforms.push({
         type: 'kafka_output',
-        'data-type': 'json',
+        data_type: outputType.toLowerCase(),
         topic: outputTopic,
     });
 
