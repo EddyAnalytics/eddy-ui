@@ -207,6 +207,7 @@ import BarChartWidget from '@/components/dashboard/BarChartWidget';
 import LineChartWidget from '@/components/dashboard/LineChartWidget';
 import PieChartWidget from '@/components/dashboard/PieChartWidget';
 import AreaChartWidget from '@/components/dashboard/AreaChartWidget';
+import CounterWidget from '@/components/dashboard/CounterWidget';
 
 @Component({
     components: {
@@ -219,6 +220,7 @@ import AreaChartWidget from '@/components/dashboard/AreaChartWidget';
         LineChartWidget,
         PieChartWidget,
         AreaChartWidget,
+        CounterWidget,
     },
 })
 export default class Dashboard extends Vue {
