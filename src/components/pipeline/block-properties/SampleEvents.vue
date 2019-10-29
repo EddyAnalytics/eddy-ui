@@ -75,33 +75,52 @@ export default class SampleEvents extends Vue {
     }
 
     prefillSchema() {
-        const rawSchema = this.samples[this.sampleIndex].schema;
         const schema = {
             value: 'ROOT',
-            children: [
-                {
+            children: [],
+        };
+
+        const rawSample = this.samples[this.sampleIndex];
+        // Try to parse the sample as JSON, if that trows an explicit JSON parsing exception then try CSV
+        try {
+            const sampleJSON = JSON.parse(rawSample);
+            // Map from Debezium schema if available, from JSON otherwise
+            if (sampleJSON && sampleJSON.schema) {
+                schema.children.push({
                     name: 'payload',
                     value: 'ROW',
                     children: [],
-                },
-            ],
-        };
-
-        // Map from Debezium schema if available, from JSON otherwise
-        if (this.samples[this.sampleIndex].schema) {
-            schema.children[0].children = this.mapSchemaFields(rawSchema.fields);
-        } else {
-            // TODO: Implement schema inference from JSON
-            // schema.children = this.mapJSONFields();
+                });
+                schema.children[0].children = this.mapSchemaFields(sampleJSON.schema.fields);
+            } else {
+                // TODO: Implement schema inference from JSON
+                // schema.children = this.mapJSONFields();
+            }
+        } catch (e) {
+            if (e instanceof SyntaxError) {
+                // TODO: Implement schema inference from CSV
+                // schema.children = this.mapCSVFields(rawSample);
+            } else {
+                throw e;
+            }
         }
+
         this.$emit('fillSchema', schema);
     }
 
-    mapJSONFields(fields) {
+    mapCSVFields(fields) {
         return fields.map(this.mapSchemaField);
     }
 
-    mapJSONFied(field) {
+    mapCSVField(field) {
+        return { field };
+    }
+
+    mapJSONFields(fields) {
+        return fields.map(this.mapJSONField);
+    }
+
+    mapJSONField(field) {
         return { field };
     }
 
