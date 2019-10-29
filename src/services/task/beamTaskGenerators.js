@@ -34,16 +34,28 @@ export const generateBeamTask = (sourceNodes, sinkNodes, node) => {
 
     beamTask.config.transforms.push({
         type: 'kafka_input',
-        'data-type': 'json',
+        'data-type': 'csv',
         topic: inputTopic,
         columns: [
             {
-                name: 'from',
+                name: 'street',
                 type: 'STRING',
+                index: 0,
             },
             {
-                name: 'to',
+                name: 'city',
                 type: 'STRING',
+                index: 1,
+            },
+            {
+                name: 'zip',
+                type: 'STRING',
+                index: 2,
+            },
+            {
+                name: 'beds',
+                type: 'STRING',
+                index: 3,
             },
         ],
     });
@@ -55,6 +67,7 @@ export const generateBeamTask = (sourceNodes, sinkNodes, node) => {
 
     beamTask.config.transforms.push({
         type: 'kafka_output',
+        'data-type': 'json',
         topic: outputTopic,
     });
 
