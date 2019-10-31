@@ -93,8 +93,7 @@ export default class SampleEvents extends Vue {
                 });
                 schema.children[0].children = this.mapSchemaFields(sampleJSON.schema.fields);
             } else {
-                // TODO: Implement schema inference from JSON
-                // schema.children = this.mapJSONFields();
+                schema.children = this.mapJSONFields(sampleJSON);
             }
         } catch (e) {
             if (e instanceof SyntaxError) {
@@ -107,8 +106,8 @@ export default class SampleEvents extends Vue {
         this.$emit('fillSchema', schema);
     }
 
-    mapCSVFields(fields) {
-        return fields.split(',').map((value, index) => {
+    mapCSVFields(sample) {
+        return sample.split(',').map((value, index) => {
             return {
                 name: 'field_' + index,
                 value: 'VARCHAR',
@@ -116,12 +115,39 @@ export default class SampleEvents extends Vue {
         });
     }
 
-    mapJSONFields(fields) {
-        return fields.map(this.mapJSONField);
+    mapJSONFields(sample) {
+        return Object.entries(sample).map(this.mapJSONField);
     }
 
-    mapJSONField(field) {
-        return { field };
+    mapJSONField([key, value]) {
+        if (!value) return;
+        if (typeof value === 'object') {
+            return {
+                name: key,
+                value: 'ROW',
+                children: this.mapJSONFields(value),
+            };
+        } else {
+            return {
+                name: key,
+                value: this.mapJSONFieldType(value),
+            };
+        }
+    }
+
+    mapJSONFieldType(value) {
+        switch (typeof value) {
+            case 'number':
+                return 'LONG';
+            case 'bigint':
+                return 'LONG';
+            case 'string':
+                return 'VARCHAR';
+            case 'boolean':
+                return 'VARCHAR';
+            default:
+                return 'VARCHAR';
+        }
     }
 
     mapSchemaFields(fields) {
