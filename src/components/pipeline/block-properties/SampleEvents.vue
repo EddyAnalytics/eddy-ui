@@ -98,8 +98,7 @@ export default class SampleEvents extends Vue {
             }
         } catch (e) {
             if (e instanceof SyntaxError) {
-                // TODO: Implement schema inference from CSV
-                // schema.children = this.mapCSVFields(rawSample);
+                schema.children = this.mapCSVFields(rawSample);
             } else {
                 throw e;
             }
@@ -109,11 +108,12 @@ export default class SampleEvents extends Vue {
     }
 
     mapCSVFields(fields) {
-        return fields.map(this.mapSchemaField);
-    }
-
-    mapCSVField(field) {
-        return { field };
+        return fields.split(',').map((value, index) => {
+            return {
+                name: 'field_' + index,
+                value: 'VARCHAR',
+            };
+        });
     }
 
     mapJSONFields(fields) {

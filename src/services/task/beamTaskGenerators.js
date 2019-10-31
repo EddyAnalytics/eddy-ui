@@ -23,6 +23,7 @@ export const generateBeamTask = (sourceNodes, sinkNodes, node) => {
 
     // Only the first input/output topic are used
     const inputTopic = inputTopics[0];
+    const inSchema = inSchemas[0];
     const outputTopic = outputTopics[0];
 
     let beamTask = {
@@ -42,28 +43,7 @@ export const generateBeamTask = (sourceNodes, sinkNodes, node) => {
         type: 'kafka_input',
         data_type: inputType.toLowerCase(),
         topic: inputTopic,
-        fields: [
-            {
-                name: 'street',
-                type: 'STRING',
-                index: 0,
-            },
-            {
-                name: 'city',
-                type: 'STRING',
-                index: 1,
-            },
-            {
-                name: 'zip',
-                type: 'STRING',
-                index: 2,
-            },
-            {
-                name: 'beds',
-                type: 'STRING',
-                index: 3,
-            },
-        ],
+        fields: generateBeamInputSchema(inSchema, inputType),
     });
 
     beamTask.config.transforms.push({
@@ -78,4 +58,18 @@ export const generateBeamTask = (sourceNodes, sinkNodes, node) => {
     });
 
     return beamTask;
+};
+
+const generateBeamInputSchema = (schema, type) => {
+    if (type === 'CSV') {
+        return schema.children.map((field, index) => {
+            return {
+                name: field.name,
+                type: 'STRING',
+                index,
+            };
+        });
+    } else {
+        return [];
+    }
 };
