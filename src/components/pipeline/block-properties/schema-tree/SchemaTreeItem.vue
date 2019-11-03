@@ -64,7 +64,9 @@
 
 <script>
 import { Component, Prop, Vue } from 'vue-property-decorator';
-@Component
+@Component({
+    name: 'SchemaTreeItem',
+})
 export default class SchemaTreeItem extends Vue {
     @Prop() item;
 
