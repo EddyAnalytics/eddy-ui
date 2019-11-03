@@ -1,5 +1,8 @@
 <template>
-    <schema-tree-item :item="schema" @addItem="addItem" @changeValue="changeValue" />
+    <div>
+        {{ schema }}
+        <schema-tree-item :item="schema" @addItem="addItem" @changeValue="changeValue" />
+    </div>
 </template>
 
 <style></style>
