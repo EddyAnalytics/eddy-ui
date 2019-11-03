@@ -70,6 +70,19 @@ const generateBeamInputSchema = (schema, type) => {
             };
         });
     } else {
-        return [];
+        return schema.children.flatMap(c => generateBeamJSONSchema(c, ''));
+    }
+};
+
+const generateBeamJSONSchema = (child, path = '') => {
+    if (child.value === 'ROW') {
+        return child.children.flatMap(grandchild =>
+            generateBeamJSONSchema(grandchild, path ? `${path}.${child.name}` : child.name),
+        );
+    } else {
+        return {
+            name: path ? `${path}.${child.name}` : child.name,
+            type: 'STRING',
+        };
     }
 };
