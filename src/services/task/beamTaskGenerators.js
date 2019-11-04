@@ -65,7 +65,7 @@ const generateBeamInputSchema = (schema, type) => {
         return schema.children.map((field, index) => {
             return {
                 name: field.name,
-                type: 'STRING',
+                type: mapBeamFieldType(field.value),
                 index,
             };
         });
@@ -82,7 +82,20 @@ const generateBeamJSONSchema = (child, path = '') => {
     } else {
         return {
             name: path ? `${path}.${child.name}` : child.name,
-            type: 'STRING',
+            type: mapBeamFieldType(child.value),
         };
+    }
+};
+
+const mapBeamFieldType = type => {
+    switch (type) {
+        case 'LONG':
+            return 'INTEGER';
+        case 'VARCHAR':
+            return 'STRING';
+        case 'TIMESTAMP':
+            return 'datyyyyMMdd';
+        default:
+            return 'STRING';
     }
 };
