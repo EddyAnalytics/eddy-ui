@@ -155,13 +155,16 @@ export default class DBConnectorProperties extends Vue {
             this.editMode = false;
         }
 
+        // Retrieve the Debezium DBdata connectors
         this.$apollo.addSmartQuery('project', {
             query: PROJECT_QUERY,
             variables: {
                 id: this.projectId,
             },
             result({ data }) {
-                this.connectors = data.project.dataConnectors;
+                this.connectors = data.project.dataConnectors.filter(
+                    connector => connector.dataConnectorType.label === 'Debezium',
+                );
             },
         });
 
