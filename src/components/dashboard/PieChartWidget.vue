@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { Component, Vue } from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import BaseWidget from '@/components/dashboard/BaseWidget';
 import DoughnutChart from '@/components/charts/DoughnutChart.js';
 

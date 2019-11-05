@@ -12,6 +12,8 @@ export default class BaseWidget extends Vue {
     @Prop() widget;
     @Prop({ type: Number, default: 0 }) start;
 
+    DEFAULT_COLORS = ['#11c2e9', '#00ccc3', '#48cd7d', '#a9c32d', '#ffa600'];
+
     dataPoints = {};
     labels = [];
     data = [];
@@ -22,7 +24,7 @@ export default class BaseWidget extends Vue {
             datasets: [
                 {
                     label: this.widget.config.yAxisKey,
-                    backgroundColor: '#12c2e9',
+                    backgroundColor: this.backgroundColors,
                     data: this.data,
                 },
             ],
@@ -47,6 +49,14 @@ export default class BaseWidget extends Vue {
             },
             scales: this.getScalesOptions(),
         };
+    }
+
+    get backgroundColors() {
+        if (this.widget.type === 'PieChartWidget') {
+            return new Array(this.data.length + 1).fill(this.DEFAULT_COLORS).flat();
+        } else {
+            return this.DEFAULT_COLORS[0];
+        }
     }
 
     getScalesOptions() {
