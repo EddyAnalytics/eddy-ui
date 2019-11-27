@@ -115,7 +115,8 @@ export default class DBConnectorProperties extends Vue {
                     parts[3]
                 );
             })
-            .map(topic => topic.split('.')[3]);
+            .map(topic => topic.split('.')[3])
+            .sort();
     }
 
     onDataConnectorSelected(connector) {
