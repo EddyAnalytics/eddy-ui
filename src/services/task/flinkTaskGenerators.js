@@ -40,12 +40,13 @@ export const generateFlinkTask = (sourceNodes, sinkNodes, node) => {
         },
     };
 
-    const inputSchemasConfig = sourceNodes.map(node => {
+    const inputSchemasConfig = sourceNodes.map(sn => {
         return {
-            topic: node.properties.topic,
+            topic: sn.properties.topic,
             type: 'source',
-            name: 'in_' + node.properties.topic.split('.').join('_'),
-            schema: serializeFlinkSchema(node.properties.schema),
+            name: 'in_' + sn.properties.topic.split('.').join('_'),
+            schema: serializeFlinkSchema(sn.properties.schema),
+            event_time_field: node.properties.eventTimeField,
         };
     });
 

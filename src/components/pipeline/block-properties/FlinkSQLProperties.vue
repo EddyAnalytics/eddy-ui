@@ -1,5 +1,8 @@
 <template>
     <div>
+        <b-field label="Event time field">
+            <b-input type="text" v-model="properties.eventTimeField" />
+        </b-field>
         <b-tabs position="is-centered is-boxed" :animated="false" :destroy-on-hide="true">
             <b-tab-item label="FinkSQL Query">
                 <div class="codemirror-wrapper">
