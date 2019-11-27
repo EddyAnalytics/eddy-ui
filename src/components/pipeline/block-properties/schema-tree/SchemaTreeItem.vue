@@ -71,7 +71,7 @@ export default class SchemaTreeItem extends Vue {
     @Prop() item;
 
     isOpen = true;
-    values = ['ROW', 'LONG', 'VARCHAR', 'TIMESTAMP'];
+    values = ['ROW', 'LONG', 'VARCHAR', 'DATE', 'TIMESTAMP'];
 
     get isRoot() {
         return this.item && this.item.value === 'ROOT';

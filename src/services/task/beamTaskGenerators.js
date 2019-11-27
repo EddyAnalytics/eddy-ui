@@ -93,8 +93,10 @@ const mapBeamFieldType = type => {
             return 'INTEGER';
         case 'VARCHAR':
             return 'STRING';
-        case 'TIMESTAMP':
+        case 'DATE':
             return 'dateyyyy-MM-dd HH:mm:ss';
+        case 'TIMESTAMP':
+            return 'TIMESTAMP';
         default:
             return 'STRING';
     }
