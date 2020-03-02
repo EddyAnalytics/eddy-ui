@@ -3,6 +3,7 @@ module.exports = {
     transform: {
         '^.+\\.vue$': 'vue-jest',
         '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub',
+        '\\.(gql|graphql)$': 'jest-transform-graphql',
         '^.+\\.jsx?$': 'babel-jest',
     },
     transformIgnorePatterns: ['/node_modules/'],

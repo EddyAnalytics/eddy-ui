@@ -19,7 +19,6 @@
 </style>
 
 <script>
-import '@mdi/font/css/materialdesignicons.css';
 import { Vue, Component } from 'vue-property-decorator';
 import TheFooter from '@/components/general/TheFooter';
 import TheHeader from '@/components/general/TheHeader';
@@ -32,6 +31,9 @@ import TheHeader from '@/components/general/TheHeader';
 })
 export default class App extends Vue {}
 </script>
+
+<!-- Import MDI Font -->
+<style lang="css" src="@mdi/font/css/materialdesignicons.min.css"></style>
 
 <!-- Import Bulma -->
 <style src="./assets/scss/bulma.scss" lang="scss"></style>
