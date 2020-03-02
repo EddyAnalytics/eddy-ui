@@ -23,7 +23,7 @@ jobs:
       - name: Unit tests
         run: yarn run test:unit
       - name: E2E tests
-        run: yarn run e2e:unit
+        run: yarn run test:e2e
       - name: Build app
         run: yarn run build
       - name: Build Docker image
