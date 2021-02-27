@@ -1,6 +1,8 @@
 # Eddy UI
 
-Frontend client implementation using the [Vue.js](https://vuejs.org/) framework.
+> Eddy - open-source streaming data analytics platform
+
+![Screenshot Eddy](docs/.vuepress/public/screenshot-eddy.png)
 
 ## Project Development Setup
 
