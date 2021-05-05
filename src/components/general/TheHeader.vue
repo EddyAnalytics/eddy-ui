@@ -21,7 +21,7 @@
         </template>
 
         <template #end>
-            <lang-dropdown />
+            <!-- <lang-dropdown /> -->
 
             <b-navbar-item tag="router-link" :to="{ name: 'Profile' }">
                 {{ username }}
