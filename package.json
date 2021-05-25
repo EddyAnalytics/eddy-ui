@@ -59,7 +59,7 @@
         "prettier": "^1.18.2",
         "sass-loader": "^7.1.0",
         "vue-class-component": "^6.0.0",
-        "vue-cli-plugin-apollo": "^0.21.0",
+        "vue-cli-plugin-apollo": "^0.22.2",
         "vue-property-decorator": "^6.0.0",
         "vue-template-compiler": "^2.6.10"
     }
