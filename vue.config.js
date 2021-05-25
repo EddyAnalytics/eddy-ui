@@ -47,8 +47,4 @@ module.exports = {
             lintGQL: true,
         },
     },
-
-    devServer: {
-        port: 8081,
-    },
 };
