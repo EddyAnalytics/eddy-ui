@@ -15,7 +15,6 @@
         "httpEndpoint": "https://api.eddy-analytics.org/graphql",
         "wsEndpoint": "wss://subscriptions.eddy-analytics.org/subscriptions"
     },
-    "resourcesRootPath": "https://api.eddy-analytics.org/",
     "errorTracking": {
         "enabled": false,
         "url": "XXX"
