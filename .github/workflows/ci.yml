@@ -25,9 +25,19 @@ jobs:
       - name: Build app
         run: yarn run build
       - name: Build Docker image
-        run: docker build . -t eddyanalytics/eddy-ui
+        run: docker build . -t eddyanalytics/eddy-ui:latest
       - name: Push Docker image
         run: |
           echo '${{ secrets.CI_REGISTRY_TOKEN }}' | docker login --username eddyanalytics --password-stdin
-          docker push eddyanalytics/eddy-ui
-
+          docker push eddyanalytics/eddy-ui:latest
+      - name: Check Tag
+        id: check_tag
+        run: |
+          if [[ ${{ github.event.ref }} =~ ^refs/tags/[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              echo ::set-output name=match::true
+          fi
+      - name: Release Version
+        if: steps.check_tag.outputs.match == 'true'
+        run: |
+          docker tag eddyanalytics/eddy-ui:latest eddyanalytics/eddy-ui:${{ github.ref }}
+          docker push eddyanalytics/eddy-ui:${{ github.ref }}
