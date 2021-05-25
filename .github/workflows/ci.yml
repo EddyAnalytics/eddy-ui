@@ -1,4 +1,4 @@
-name: Continous Integration
+name: Continuos Integration
 on: [push]
 jobs:
   build:
@@ -39,5 +39,5 @@ jobs:
       - name: Release Version
         if: steps.check_tag.outputs.match == 'true'
         run: |
-          docker tag eddyanalytics/eddy-ui:latest eddyanalytics/eddy-ui:${{ github.ref }}
-          docker push eddyanalytics/eddy-ui:${{ github.ref }}
+          docker tag eddyanalytics/eddy-ui:latest eddyanalytics/eddy-ui:${GITHUB_REF##*/}
+          docker push eddyanalytics/eddy-ui:${GITHUB_REF##*/}
