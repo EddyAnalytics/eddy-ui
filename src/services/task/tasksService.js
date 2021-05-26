@@ -1,11 +1,15 @@
-import { generateBeamTask } from './beamTaskGenerators';
-import { generateFlinkTask } from './flinkTaskGenerators';
+import { generateBeamSQLTask } from './beamTaskGenerators';
+import { generateFlinkSQLTask } from './flinkTaskGenerators';
 import { TaskGenerationException } from './exceptions';
 
 const generateCeleryTasks = (nodes, edges) => {
     let tasks = [];
     for (let node of nodes) {
-        if (node.type === 'flink-transform' || node.type === 'beam-transform') {
+        if (
+            node.type === 'flink-sql-transform' ||
+            node.type === 'beam-sql-transform' ||
+            node.type === 'beam-python-transform'
+        ) {
             const inEdges = edges.filter(edge => edge.to === node.id);
             if (!inEdges.length)
                 throw new TaskGenerationException('Missing incoming edge for node');
@@ -28,11 +32,19 @@ const generateCeleryTasks = (nodes, edges) => {
             if (!sinkNodes.length) throw new TaskGenerationException('Missing sink node(s) for');
 
             let task;
-            if (node.type === 'beam-transform') {
-                task = generateBeamTask(sourceNodes, sinkNodes, node);
+            if (node.type === 'beam-sql-transform') {
+                task = generateBeamSQLTask(sourceNodes, sinkNodes, node);
             }
-            if (node.type === 'flink-transform') {
-                task = generateFlinkTask(sourceNodes, sinkNodes, node);
+            if (node.type === 'flink-sql-transform') {
+                task = generateFlinkSQLTask(sourceNodes, sinkNodes, node);
+            }
+            if (node.type === 'beam-python-transform') {
+                task = {
+                    taskType: 'beam-python',
+                    config: {
+                        beamScript: node.properties.beamScript,
+                    },
+                };
             }
             if (task) tasks.push(task);
         }

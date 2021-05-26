@@ -56,12 +56,6 @@
                         <b-button outlined type="is-danger" @click="openDeletePipelineModal()">
                             Delete pipeline
                         </b-button>
-                        <b-button outlined type="is-info" @click="loadMockPipeline('flink')">
-                            Load Flink demo
-                        </b-button>
-                        <b-button outlined type="is-info" @click="loadMockPipeline('beam')">
-                            Load Beam demo
-                        </b-button>
                     </div>
                 </div>
                 <div class="column">
@@ -100,8 +94,6 @@ import PipelineBlockForm from '@/components/pipeline/PipelineBlockForm.vue';
 Vue.component('PipelineBuilderBlock', PipelineBuilderBlock);
 
 import BLOCK_TYPES_QUERY from '@/graphql/queries/blockTypes.gql';
-
-import { pipelineFlinkMock, pipelineBeamMock } from '@/mocks/pipeline';
 
 import PIPELINE_QUERY from '@/graphql/queries/pipeline.gql';
 import UPDATE_PIPELINE from '@/graphql/mutations/updatePipeline.gql';
@@ -194,10 +186,6 @@ export default class Pipeline extends Vue {
                 });
             },
         });
-    }
-
-    loadMockPipeline(type) {
-        this.model = type === 'beam' ? pipelineBeamMock : pipelineFlinkMock;
     }
 
     editNode(nodeId) {

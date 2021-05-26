@@ -1,6 +1,6 @@
 import { TaskGenerationException } from '@/services/task/exceptions';
 
-export const generateBeamTask = (sourceNodes, sinkNodes, node) => {
+export const generateBeamSQLTask = (sourceNodes, sinkNodes, node) => {
     const sqlQuery = node.properties.sqlQuery;
     if (!sqlQuery || !sqlQuery.length) throw new TaskGenerationException('Missing query for node');
 
@@ -35,7 +35,10 @@ export const generateBeamTask = (sourceNodes, sinkNodes, node) => {
                 interval: node.properties.interval || 5,
             },
             transforms: [],
-            DAG_mapping: [[0, 1], [1, 2]],
+            DAG_mapping: [
+                [0, 1],
+                [1, 2],
+            ],
         },
     };
 
