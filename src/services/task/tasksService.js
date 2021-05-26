@@ -42,7 +42,7 @@ const generateCeleryTasks = (nodes, edges) => {
                 task = {
                     taskType: 'beam-python',
                     config: {
-                        beamScript: node.beamScript,
+                        beamScript: node.properties.beamScript,
                     },
                 };
             }
