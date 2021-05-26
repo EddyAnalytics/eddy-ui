@@ -2,7 +2,7 @@ import { TaskGenerationException } from '@/services/task/exceptions';
 
 const COUNT_INTERVALS = [10, 60, 3600];
 
-export const generateFlinkTask = (sourceNodes, sinkNodes, node) => {
+export const generateFlinkSQLTask = (sourceNodes, sinkNodes, node) => {
     const sqlQuery = node.properties.sqlQuery;
     if (!sqlQuery || !sqlQuery.length) throw new TaskGenerationException('Missing query for node');
 

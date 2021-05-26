@@ -24,6 +24,7 @@
 
 <script>
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import BeamPythonProperties from './block-properties/BeamPythonProperties';
 import BeamSQLProperties from './block-properties/BeamSQLProperties';
 import DBConnectorProperties from './block-properties/DBConnectorProperties';
 import FlinkSQLProperties from './block-properties/FlinkSQLProperties';
@@ -32,6 +33,7 @@ import KafkaSubscriberProperties from './block-properties/KafkaSubscriberPropert
 
 @Component({
     components: {
+        BeamPythonProperties,
         BeamSQLProperties,
         DBConnectorProperties,
         FlinkSQLProperties,

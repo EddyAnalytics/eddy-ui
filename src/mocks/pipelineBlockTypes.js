@@ -35,15 +35,21 @@ export const blockTypesMocks = [
     },
     {
         disabled: false,
-        type: 'flink-transform',
-        label: 'Flink SQL Snippet',
+        type: 'flink-sql-transform',
+        label: 'Flink SQL',
         propertiesComponent: 'FlinkSQLProperties',
     },
     {
         disabled: false,
-        type: 'beam-transform',
-        label: 'Beam SQL Snippet',
+        type: 'beam-sql-transform',
+        label: 'Beam SQL',
         propertiesComponent: 'BeamSQLProperties',
+    },
+    {
+        disabled: false,
+        type: 'beam-python-transform',
+        label: 'Beam Python',
+        propertiesComponent: 'BeamPythonProperties',
     },
     {
         disabled: true,
