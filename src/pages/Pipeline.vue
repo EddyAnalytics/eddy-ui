@@ -176,10 +176,11 @@ export default class Pipeline extends Vue {
             result({ data: { topicsActivity } }) {
                 this.model.status = topicsActivity.success ? 'active' : 'inactive';
                 this.savePipeline();
+                console.log('Pipeline submission feedback', topicsActivity);
                 this.$buefy.snackbar.open({
                     message: topicsActivity.success
                         ? 'Succesfully started execution'
-                        : topicsActivity.error.slice(620, 1000),
+                        : topicsActivity.error,
                     type: topicsActivity.success ? 'is-info' : 'is-danger',
                     queue: true,
                     indefinite: !topicsActivity.success,
