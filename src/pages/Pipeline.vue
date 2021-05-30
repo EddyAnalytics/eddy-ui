@@ -197,6 +197,7 @@ export default class Pipeline extends Vue {
                 component: PipelineBlockForm,
                 hasModalCard: true,
                 props: { block: node },
+                fullScreen: true,
                 events: { save: this.saveBlock },
             });
         }

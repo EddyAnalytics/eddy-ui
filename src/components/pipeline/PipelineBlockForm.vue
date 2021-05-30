@@ -1,6 +1,6 @@
 <template>
     <form @submit.prevent="save()">
-        <div class="modal-card">
+        <div class="modal-card" style="width: auto; min-height: 100vh;">
             <header class="modal-card-head">
                 <p class="modal-card-title">Block properties</p>
             </header>
@@ -56,3 +56,12 @@ export default class PipelineBlockForm extends Vue {
     }
 }
 </script>
+
+<style lang="scss">
+.codemirror-wrapper {
+    height: 100%;
+    .CodeMirror {
+        height: 100%;
+    }
+}
+</style>
