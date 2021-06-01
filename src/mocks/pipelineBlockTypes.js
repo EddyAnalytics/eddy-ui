@@ -40,7 +40,7 @@ export const blockTypesMocks = [
         propertiesComponent: 'FlinkSQLProperties',
     },
     {
-        disabled: false,
+        disabled: true,
         type: 'beam-sql-transform',
         label: 'Beam SQL',
         propertiesComponent: 'BeamSQLProperties',
